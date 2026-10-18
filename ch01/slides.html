@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>บทที่ 1 ไมโครคอนโทรลเลอร์</title>
+<meta name="description" content="สไลด์ประกอบการสอน บทที่ 1 ความรู้เบื้องต้นเกี่ยวกับไมโครคอนโทรลเลอร์ ระดับ ปวช.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Sarabun:wght@400;700&family=Prompt:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/theme.css">
+<link rel="stylesheet" href="../assets/css/deck.css">
+</head>
+<body>
+<!--
+  วิธีใช้: ← → / Space เลื่อนสไลด์และแสดงทีละขั้น · T สารบัญ · F เต็มจอ · ลิงก์ #หมายเลข ไปสไลด์นั้น
+  ป้าย "เสริม" = เนื้อหาเพิ่มจากแหล่งภายนอก มีเลขอ้างอิง [n] ลิงก์ไปสไลด์เอกสารอ้างอิง
+-->
+<div class="deck-viewport">
+<main class="deck-stage" id="deckStage" data-head="บทที่ 1" data-foot="">
+
+<!-- ============ เปิดบท ============ -->
+<section class="slide cover" data-title="ปก: บทที่ 1">
+  <div class="body center" style="top:0;bottom:0">
+    <div class="chapter reveal d1">บทที่ 1</div>
+    <h1 class="reveal d2">ความรู้เบื้องต้นเกี่ยวกับ<br>ไมโครคอนโทรลเลอร์</h1>
+    <div class="sub reveal d3">วิชาไมโครคอนโทรลเลอร์ · ระดับ ปวช.</div>
+    <div class="tiny reveal d4" style="margin-top:40px">เรียบเรียงจาก “เรียนรู้และลองเล่น Arduino เบื้องต้น” (ครูประภาส สุวรรณเพชร) และแหล่งอ้างอิงท้ายบท</div>
+  </div>
+  <div class="bits reveal d3">0010 1101<br><span>2D</span><sub>16</sub> = 45<sub>10</sub><br>1 AND 1 = <span>1</span></div>
+</section>
+
+<section class="slide sec-0" data-tag="เปิดบทเรียน" data-title="หัวข้อเรื่อง">
+  <div class="body">
+    <div class="kicker reveal">เราจะเรียนอะไรบ้าง</div>
+    <h2 class="title reveal d1">หัวข้อเรื่อง</h2>
+    <div class="grid g2" style="gap:34px">
+      <div class="box reveal d2" style="--sec:var(--orange)"><h3>1.1 ระบบตัวเลขและรหัส</h3><p class="small">เลขฐาน 2, 8, 10, 16 และการแปลงเลขฐาน</p></div>
+      <div class="box reveal d3"><h3>1.2 ดิจิทัลพื้นฐาน</h3><p class="small">ระดับลอจิก 0/1 และลอจิกเกต</p></div>
+      <div class="box reveal d4" style="--sec:var(--blue)"><h3>1.3 โครงสร้างพื้นฐานของระบบคอมพิวเตอร์</h3><p class="small">อินพุต · เอาต์พุต · CPU · หน่วยความจำ</p></div>
+      <div class="box reveal d5" style="--sec:#0f8a6c"><h3>1.4 ไมโครคอนโทรลเลอร์ Arduino</h3><p class="small">แพลตฟอร์ม บอร์ด และซอฟต์แวร์</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide sec-0" data-title="สาระสำคัญ">
+  <div class="body center">
+    <div class="kicker reveal">สาระสำคัญ</div>
+    <h2 class="title reveal d1">ก่อนจะใช้ไมโครคอนโทรลเลอร์ได้<br>ต้องเข้าใจ 3 เรื่องนี้ก่อน</h2>
+    <div class="grid g3">
+      <div class="box tint reveal d2"><div class="icon">🔢</div><h3>ระบบตัวเลข</h3><p class="small">คอมพิวเตอร์คิดด้วยเลข 0 กับ 1</p></div>
+      <div class="box tint reveal d3"><div class="icon">💡</div><h3>ดิจิทัลพื้นฐาน</h3><p class="small">ลอจิก 0/1 และเกตต่าง ๆ</p></div>
+      <div class="box tint reveal d4"><div class="icon">🧩</div><h3>Arduino</h3><p class="small">ไมโครคอนโทรลเลอร์ที่จะใช้ฝึก</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide sec-0" data-title="สมรรถนะและจุดประสงค์ทั่วไป">
+  <div class="body">
+    <div class="kicker reveal">สมรรถนะประจำหน่วย</div>
+    <h2 class="title reveal d1">แสดงความรู้เกี่ยวกับ<br>ไมโครคอนโทรลเลอร์ Arduino</h2>
+    <div class="box reveal d2">
+      <h3>จุดประสงค์ทั่วไป — เพื่อให้มีความรู้เกี่ยวกับ</h3>
+      <ol class="steps" style="margin-top:20px">
+        <li>ระบบตัวเลขและดิจิทัลพื้นฐาน</li>
+        <li>โครงสร้างพื้นฐานของระบบคอมพิวเตอร์</li>
+        <li>ไมโครคอนโทรลเลอร์ Arduino</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="slide sec-0" data-title="จุดประสงค์เชิงพฤติกรรม">
+  <div class="body">
+    <div class="kicker reveal">จุดประสงค์เชิงพฤติกรรม</div>
+    <h2 class="title reveal d1">เรียนจบบทนี้แล้ว นักเรียนสามารถ…</h2>
+    <ol class="steps">
+      <li class="reveal d2">บอกวิธีการแปลงเลขฐานในระบบตัวเลขและดิจิทัลพื้นฐานได้</li>
+      <li class="reveal d3">บอกเกี่ยวกับโครงสร้างพื้นฐานของระบบคอมพิวเตอร์ได้</li>
+      <li class="reveal d4">บอกเกี่ยวกับไมโครคอนโทรลเลอร์ Arduino ได้</li>
+      <li class="reveal d5">ทำแบบฝึกหัดเสร็จทันเวลาและทำแบบทดสอบผ่านเกณฑ์ที่กำหนด</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ บทนำ: ไมโครคอนโทรลเลอร์คืออะไร ============ -->
+<section class="slide sec-0" data-tag="บทนำ" data-title="ไมโครคอนโทรลเลอร์คืออะไร">
+  <div class="body">
+    <div class="kicker reveal">บทนำ</div>
+    <h2 class="title reveal d1">ไมโครคอนโทรลเลอร์ <span class="en">(Microcontroller)</span></h2>
+    <div class="row center" style="margin-top:20px">
+      <div class="box orange reveal d2" style="text-align:center"><div class="mono" style="font-size:72px;color:var(--orange);font-weight:700">Micro</div><p class="lead" style="margin:0">ไมโคร = <b>ขนาดเล็ก</b></p></div>
+      <div class="reveal d3" style="flex:0 0 auto;font-size:90px;color:var(--ink-soft)">+</div>
+      <div class="box tint reveal d3" style="text-align:center"><div class="mono" style="font-size:72px;color:var(--teal);font-weight:700">Controller</div><p class="lead" style="margin:0">คอนโทรลเลอร์ = <b>ตัวควบคุม</b></p></div>
+    </div>
+    <p class="lead reveal d4" style="margin-top:50px;text-align:center">➜ <span class="hl">อุปกรณ์ควบคุมขนาดเล็ก</span> ที่มีความสามารถคล้ายคอมพิวเตอร์</p>
+  </div>
+</section>
+
+<section class="slide sec-0" data-title="ภายในไมโครคอนโทรลเลอร์">
+  <div class="body">
+    <div class="kicker reveal">บทนำ</div>
+    <h2 class="title reveal d1">ข้างในชิปเดียว มีครบเหมือนคอมพิวเตอร์</h2>
+    <div class="row center">
+      <div class="diagram reveal d2" style="flex:1.2">
+        <svg viewBox="0 0 760 520" aria-label="แผนภาพภายในไมโครคอนโทรลเลอร์">
+          <g fill="none" stroke="#a8a1b0" stroke-width="10" stroke-linecap="round">
+            <path d="M150 60v-40M230 60v-40M310 60v-40M390 60v-40M470 60v-40M550 60v-40M630 60v-40"/>
+            <path d="M150 460v40M230 460v40M310 460v40M390 460v40M470 460v40M550 460v40M630 460v40"/>
+          </g>
+          <rect x="90" y="60" width="600" height="400" rx="36" fill="#2a2733"/>
+          <g class="blk main"><rect x="130" y="100" width="250" height="150" rx="22"/><text x="255" y="160">CPU</text><text class="sub" x="255" y="205">ประมวลผล</text></g>
+          <g class="blk"><rect x="400" y="100" width="250" height="150" rx="22"/><text x="525" y="160">หน่วยความจำ</text><text class="sub" x="525" y="205">ROM / RAM</text></g>
+          <g class="blk"><rect x="130" y="270" width="520" height="150" rx="22"/><text x="390" y="330">พอร์ตอินพุต/เอาต์พุต (I/O)</text><text class="sub" x="390" y="375">ต่อสวิตช์ เซนเซอร์ LED มอเตอร์</text></g>
+        </svg>
+      </div>
+      <div class="reveal d3">
+        <ul class="pts">
+          <li>รวม <b>หน่วยประมวลผล</b></li>
+          <li>รวม <b>หน่วยความจำ</b></li>
+          <li>รวม <b>พอร์ต I/O</b></li>
+        </ul>
+        <p class="small c-sec" style="margin-top:30px">…บรรจุไว้ใน “ตัวถังเดียวกัน”</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide sec-0" data-title="ไมโครคอนโทรลเลอร์ กับ ไมโครโปรเซสเซอร์">
+  <div class="body">
+    <div class="kicker reveal">บทนำ</div>
+    <h2 class="title reveal d1">ไมโครคอนโทรลเลอร์ ≠ ไมโครโปรเซสเซอร์</h2>
+    <div class="grid g2">
+      <div class="box reveal d2">
+        <h3 style="color:var(--blue)">ไมโครโปรเซสเซอร์ (MPU)</h3>
+        <div class="diagram"><svg viewBox="0 0 600 230" aria-label="ไมโครโปรเซสเซอร์ต้องต่ออุปกรณ์ภายนอก">
+          <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path class="arrow-head" d="M0 0L10 5L0 10z"/></marker></defs>
+          <g class="blk main" style="--sec:var(--blue);--sec-soft:var(--blue-soft)"><rect x="210" y="70" width="180" height="90" rx="16"/><text x="300" y="117">CPU</text></g>
+          <g class="blk" style="--sec:var(--blue)"><rect x="0" y="20" width="175" height="80" rx="16"/><text x="87" y="62" style="font-size:24px">หน่วยความจำ</text></g>
+          <g class="blk" style="--sec:var(--blue)"><rect x="0" y="135" width="175" height="80" rx="16"/><text x="87" y="177" style="font-size:26px">I/O</text></g>
+          <g class="blk" style="--sec:var(--blue)"><rect x="430" y="75" width="170" height="80" rx="16"/><text x="515" y="117" style="font-size:24px">อุปกรณ์อื่น</text></g>
+          <path class="arr" d="M205 100 L180 75"/><path class="arr" d="M205 135 L180 165"/><path class="arr" d="M392 115 L425 115"/>
+        </svg></div>
+        <p class="small">ต้องทำงานร่วมกับ<b>อุปกรณ์ภายนอก</b> เช่น หน่วยความจำ, I/O</p>
+      </div>
+      <div class="box tint reveal d3">
+        <h3>ไมโครคอนโทรลเลอร์ (MCU)</h3>
+        <div class="diagram"><svg viewBox="0 0 600 230" aria-label="ไมโครคอนโทรลเลอร์มีทุกส่วนในชิปเดียว">
+          <rect x="60" y="15" width="480" height="200" rx="28" fill="#2a2733"/>
+          <g class="blk main"><rect x="85" y="40" width="130" height="150" rx="16"/><text x="150" y="117">CPU</text></g>
+          <g class="blk"><rect x="235" y="40" width="130" height="150" rx="16"/><text x="300" y="117" style="font-size:26px">Memory</text></g>
+          <g class="blk"><rect x="385" y="40" width="130" height="150" rx="16"/><text x="450" y="117">I/O</text></g>
+        </svg></div>
+        <p class="small"><b>สมบูรณ์ในตัวเอง</b> ส่วนประกอบครบในชิปเดียว</p>
+      </div>
+    </div>
+    <div class="src">ที่มา: หนังสือต้นฉบับ <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-0" data-title="ลองคิด: อุปกรณ์รอบตัว">
+  <div class="body center">
+    <div class="kicker reveal">ชวนคิด</div>
+    <h2 class="title reveal d1">ในบ้านเรา มีอุปกรณ์อะไรบ้าง<br>ที่น่าจะมีไมโครคอนโทรลเลอร์อยู่ข้างใน?</h2>
+    <div class="grid g4 reveal d2" style="font-size:90px;text-align:center">
+      <div class="box">🧺</div><div class="box">📺</div><div class="box">❄️</div><div class="box">🍚</div>
+    </div>
+    <p class="small muted reveal d3" style="margin-top:34px">คำใบ้: อุปกรณ์ที่ “กดปุ่มตั้งค่า” แล้วทำงานเองได้</p>
+  </div>
+</section>
+
+<section class="slide sec-0" data-title="พื้นฐานที่ต้องรู้ก่อน">
+  <div class="body center">
+    <div class="kicker reveal">ก่อนเริ่ม</div>
+    <h2 class="title reveal d1">ไมโครคอนโทรลเลอร์ทำงานด้วย…</h2>
+    <div class="row">
+      <div class="box orange reveal d2"><h3 style="color:var(--orange)">ระบบตัวเลข</h3><p class="small">เลขฐาน 2, 16</p></div>
+      <div class="box blue reveal d3"><h3 style="color:var(--blue)">ระบบการเข้ารหัส</h3><p class="small">แทนตัวอักษรด้วยเลข</p></div>
+      <div class="box tint reveal d4"><h3>ระบบลอจิกเกต</h3><p class="small">AND OR NOT …</p></div>
+    </div>
+    <p class="lead reveal d5" style="margin-top:44px">ทั้งหมดคือ <span class="hl">การทำงานภายในคอมพิวเตอร์</span> — เริ่มกันเลย!</p>
+  </div>
+</section>
+
+<!-- ============ 1.1 ระบบตัวเลขและรหัส ============ -->
+<section class="slide section sec-1" data-tag="1.1 ระบบตัวเลขและรหัส" data-title="1.1 ระบบตัวเลขและรหัส">
+  <div class="big-no">1.1</div>
+  <div class="body center">
+    <div class="label reveal">หัวข้อที่ 1.1</div>
+    <h2 class="reveal d1">ระบบตัวเลขและรหัส</h2>
+    <p class="lead reveal d2">มนุษย์นับเลขอย่างไร · คอมพิวเตอร์นับเลขอย่างไร · แปลงเลขฐานไปมา</p>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="การนับในสมัยโบราณ">
+  <div class="body">
+    <div class="kicker reveal">จุดเริ่มต้นของการนับ</div>
+    <h2 class="title reveal d1">มนุษย์ใช้วิธี “จับคู่” สิ่งของ</h2>
+    <div class="grid g3">
+      <div class="box reveal d2" style="text-align:center"><div class="icon">✋</div><h3>นิ้วมือ</h3><p class="small">1 นิ้ว แทนสัตว์ 1 ตัว</p></div>
+      <div class="box reveal d3" style="text-align:center"><div class="icon">🪨</div><h3>ก้อนหิน</h3><p class="small">ใช้บันทึกจำนวน</p></div>
+      <div class="box reveal d4" style="text-align:center"><div class="icon">🌳</div><h3>ขีด / สลัก</h3><p class="small">บนพื้นดิน หรือต้นไม้</p></div>
+    </div>
+    <p class="lead reveal d5" style="margin-top:40px">ต่อมาใช้ <b>สัญลักษณ์</b> แทนจำนวน — แต่ในสมัยโบราณยัง <span class="hl">ไม่มี “ศูนย์”</span></p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="เส้นทางของตัวเลขฮินดู-อารบิก">
+  <div class="body">
+    <div class="kicker reveal">ตัวเลขที่เราใช้ทุกวันนี้</div>
+    <h2 class="title reveal d1">เลขฮินดู-อารบิก <span class="en">(Hindu-Arabic numerals)</span></h2>
+    <div class="grid g4" style="gap:24px">
+      <div class="box orange reveal d2"><h3 style="color:var(--orange)">อินเดีย</h3><p class="small">ราวศตวรรษที่ 3 ก่อน ค.ศ. มีตัวเลขพราหมี (ยังไม่มีค่าประจำตำแหน่ง)</p></div>
+      <div class="box orange reveal d3"><h3 style="color:var(--orange)">ค.ศ. 594</h3><p class="small">หลักฐานเก่าสุดที่ใช้ <b>ค่าประจำตำแหน่ง</b> ในอินเดีย</p></div>
+      <div class="box orange reveal d4"><h3 style="color:var(--orange)">โลกอาหรับ</h3><p class="small">ชาวอาหรับรับไปใช้ ยุโรปจึงเรียกว่า “ตัวเลขอารบิก”</p></div>
+      <div class="box orange reveal d5"><h3 style="color:var(--orange)">ค.ศ. 1202</h3><p class="small">ฟีโบนัชชี (Leonardo Pisano) เผยแพร่ในยุโรปผ่านหนังสือ <i>Liber Abaci</i></p></div>
+    </div>
+    <p class="small reveal d5" style="margin-top:34px">ปัจจุบันใช้ 10 ตัว: <span class="mono">0 1 2 3 4 5 6 7 8 9</span> ทั่วโลก <span class="extra">เสริม</span></p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [2] [3]</a></sup> · หมายเหตุ: ค.ศ. 1202 อยู่ใน<b>คริสต์ศตวรรษที่ 13</b></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="ค่าประจำตำแหน่งและเลขศูนย์">
+  <div class="body">
+    <div class="kicker reveal">ระบบตัวเลขฮินดู</div>
+    <h2 class="title reveal d1">ค่าของตัวเลข ขึ้นกับ “ตำแหน่ง”</h2>
+    <div class="row center">
+      <div class="box reveal d2" style="text-align:center">
+        <div class="mono" style="font-size:120px;line-height:1.2"><span class="c-orange">2</span>05</div>
+        <p class="small">“2” อยู่หลักร้อย = <b>200</b></p>
+      </div>
+      <div class="box reveal d3" style="text-align:center">
+        <div class="mono" style="font-size:120px;line-height:1.2"><span class="c-orange">2</span>5</div>
+        <p class="small">“2” อยู่หลักสิบ = <b>20</b></p>
+      </div>
+    </div>
+    <p class="lead reveal d4" style="margin-top:36px">“2” ใน 205 มีค่าเป็น <b>10 เท่า</b> ของ “2” ใน 25 → ต้องมี <b class="c-orange">0</b> บอกว่าหลักสิบว่าง</p>
+    <p class="small reveal d5"><b>0</b> จึงเรียกว่า <span class="hl">ตัวรั้งตำแหน่ง (Place holder)</span></p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="ทำไมคอมพิวเตอร์ใช้เลขฐาน 2">
+  <div class="body">
+    <div class="kicker reveal">คอมพิวเตอร์นับเลขอย่างไร</div>
+    <h2 class="title reveal d1">คอมพิวเตอร์รับรู้ได้แค่ <span class="c-orange">2 สภาวะ</span></h2>
+    <div class="grid g2">
+      <div class="box orange reveal d2" style="text-align:center"><div class="mono" style="font-size:140px;color:var(--orange);font-weight:700;line-height:1.1">1</div><h3 style="color:var(--orange)">มีแรงดันไฟฟ้า</h3><p class="small">ประมาณ 5 V (วงจรความเร็วต่ำ)</p></div>
+      <div class="box reveal d3" style="text-align:center"><div class="mono" style="font-size:140px;color:var(--lo);font-weight:700;line-height:1.1">0</div><h3 style="color:var(--ink-soft)">ไม่มีแรงดันไฟฟ้า</h3><p class="small">ประมาณ 0 V</p></div>
+    </div>
+    <p class="small reveal d4" style="margin-top:30px">ใช้ 2 สภาวะเพื่อ <b>ป้องกันการผิดพลาดของข้อมูล</b> · คอมพิวเตอร์ความเร็วสูงลดแรงดันลอจิก 1 ลง เพื่อลดความร้อนของ CPU</p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="เลขฐานที่ใช้บ่อย">
+  <div class="body">
+    <div class="kicker reveal">ระบบเลขฐาน</div>
+    <h2 class="title reveal d1">เลขฐานที่ต้องรู้จัก</h2>
+    <table class="t left reveal d2" style="width:100%">
+      <tr><th>เลขฐาน</th><th>ชื่อเรียก</th><th>ตัวเลขที่ใช้</th><th>ตัวอย่าง</th></tr>
+      <tr><td><b>ฐาน 2</b></td><td>Binary (ไบนารี)</td><td class="mono">0 1</td><td class="mono">101101<sub>2</sub></td></tr>
+      <tr><td><b>ฐาน 8</b></td><td>Octal (ออกทัล)</td><td class="mono">0 – 7</td><td class="mono">76543<sub>8</sub></td></tr>
+      <tr><td><b>ฐาน 10</b></td><td>Decimal (เดซิมอล)</td><td class="mono">0 – 9</td><td class="mono">45<sub>10</sub></td></tr>
+      <tr><td><b>ฐาน 16</b></td><td>Hexadecimal (เฮกซ์)</td><td class="mono">0 – 9, A – F</td><td class="mono">2D<sub>16</sub> หรือ 2D<sub>H</sub></td></tr>
+    </table>
+    <p class="small reveal d3" style="margin-top:28px">💡 ตัวเลขห้อยท้าย (<span class="mono">₂ ₈ ₁₀ ₁₆</span>) บอกว่าเป็น <b>เลขฐานอะไร</b> · การเขียนโปรแกรมใช้หลัก ๆ คือฐาน <b>2, 10, 16</b></p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="บิต ไบต์ LSB MSB">
+  <div class="body">
+    <div class="kicker reveal">คำศัพท์สำคัญ <span class="extra">เสริม</span></div>
+    <h2 class="title reveal d1">บิต (bit) และ ไบต์ (byte)</h2>
+    <div class="row center">
+      <div class="reveal d2" style="flex:1.3">
+        <div class="nibbles" style="justify-content:center">
+          <div class="nib"><div class="b" style="background:var(--orange-soft)">1</div><div class="tiny">MSB</div></div>
+          <div class="nib"><div class="b">0</div></div><div class="nib"><div class="b">1</div></div><div class="nib"><div class="b">1</div></div>
+          <div class="nib"><div class="b">0</div></div><div class="nib"><div class="b">1</div></div><div class="nib"><div class="b">0</div></div>
+          <div class="nib"><div class="b" style="background:var(--orange-soft)">1</div><div class="tiny">LSB</div></div>
+        </div>
+        <p class="small" style="text-align:center;margin-top:16px">8 บิต = 1 ไบต์</p>
+      </div>
+      <ul class="pts reveal d3 small">
+        <li><b>บิต</b> = เลขฐาน 2 หนึ่งหลัก (0 หรือ 1)</li>
+        <li><b>4 บิต</b> = เลขฐาน 16 หนึ่งหลัก</li>
+        <li><b>1 ไบต์</b> = 8 บิต แทนค่าได้ 0 – 255</li>
+        <li><b>MSB</b> บิตซ้ายสุด ค่ามากสุด · <b>LSB</b> บิตขวาสุด ค่าน้อยสุด</li>
+      </ul>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [4]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="วิธีแปลงเลขฐาน 10 เป็นฐานใด ๆ">
+  <div class="body">
+    <div class="kicker reveal">การแปลงเลขฐาน 10 → ฐานใด ๆ</div>
+    <h2 class="title reveal d1">ใช้วิธี “หารซ้ำ เก็บเศษ”</h2>
+    <ol class="steps">
+      <li class="reveal d2">นำเลขฐาน 10 <b>หารด้วยฐานที่ต้องการ</b> แล้วเก็บ <b class="c-orange">เศษ</b> ไว้</li>
+      <li class="reveal d3">เศษครั้งแรก = บิตต่ำสุด <b>(LSB)</b></li>
+      <li class="reveal d4">นำ <b>ผลลัพธ์</b> ไปหารต่อ จนกว่าผลลัพธ์จะเป็น <b>0</b></li>
+      <li class="reveal d5">อ่านเศษ <span class="hl">จากล่างขึ้นบน</span> (MSB → LSB) = คำตอบ</li>
+    </ol>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="ตัวอย่าง: 45 ฐาน 10 เป็นฐาน 2">
+  <div class="body">
+    <div class="kicker">ตัวอย่าง · กด → เพื่อดูทีละขั้น</div>
+    <h2 class="title">แปลง 45<sub>10</sub> เป็นเลขฐาน 2</h2>
+    <div class="row">
+      <div class="ladder" style="flex:1.6">
+        <div class="lrow h"><span>หาร</span><span></span><span>ผลลัพธ์</span><span class="r">เศษ</span><span></span></div>
+        <div class="lrow frag"><span>45 ÷ 2</span><span>=</span><span>22</span><span class="r">1</span><span class="note">← LSB</span></div>
+        <div class="lrow frag"><span>22 ÷ 2</span><span>=</span><span>11</span><span class="r">0</span><span></span></div>
+        <div class="lrow frag"><span>11 ÷ 2</span><span>=</span><span>5</span><span class="r">1</span><span></span></div>
+        <div class="lrow frag"><span>5 ÷ 2</span><span>=</span><span>2</span><span class="r">1</span><span></span></div>
+        <div class="lrow frag"><span>2 ÷ 2</span><span>=</span><span>1</span><span class="r">0</span><span></span></div>
+        <div class="lrow frag"><span>1 ÷ 2</span><span>=</span><span>0</span><span class="r">1</span><span class="note">← MSB (ผลลัพธ์เป็น 0 หยุด)</span></div>
+      </div>
+      <div class="frag" style="flex:1;align-self:center;text-align:center">
+        <div class="readup">↑ อ่านเศษจากล่างขึ้นบน</div>
+        <div class="answer" style="margin-top:20px">45<sub>10</sub> = 101101<sub>2</sub></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="ตัวอย่าง: 45 ฐาน 10 เป็นฐาน 3">
+  <div class="body">
+    <div class="kicker">ตัวอย่าง · หลักการเดียวกัน ใช้ได้กับทุกฐาน</div>
+    <h2 class="title">แปลง 45<sub>10</sub> เป็นเลขฐาน 3</h2>
+    <div class="row">
+      <div class="ladder" style="flex:1.6">
+        <div class="lrow h"><span>หาร</span><span></span><span>ผลลัพธ์</span><span class="r">เศษ</span><span></span></div>
+        <div class="lrow frag"><span>45 ÷ 3</span><span>=</span><span>15</span><span class="r">0</span><span class="note">← LSB</span></div>
+        <div class="lrow frag"><span>15 ÷ 3</span><span>=</span><span>5</span><span class="r">0</span><span></span></div>
+        <div class="lrow frag"><span>5 ÷ 3</span><span>=</span><span>1</span><span class="r">2</span><span></span></div>
+        <div class="lrow frag"><span>1 ÷ 3</span><span>=</span><span>0</span><span class="r">1</span><span class="note">← MSB</span></div>
+      </div>
+      <div class="frag" style="flex:1;align-self:center;text-align:center">
+        <div class="readup">↑ อ่านเศษจากล่างขึ้นบน</div>
+        <div class="answer" style="margin-top:20px">45<sub>10</sub> = 1200<sub>3</sub></div>
+        <p class="tiny" style="margin-top:20px">ตรวจ: 1×27 + 2×9 + 0×3 + 0×1 = 45 ✓</p>
+      </div>
+    </div>
+    <div class="src">หมายเหตุ: ในหนังสือ <sup class="ref"><a href="#refs">[1]</a></sup> พิมพ์คำตอบเป็น “25<sub>10</sub>” ที่ถูกต้องคือ 45<sub>10</sub></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="ตัวอย่าง: 45 ฐาน 10 เป็นฐาน 4">
+  <div class="body">
+    <div class="kicker">ตัวอย่าง</div>
+    <h2 class="title">แปลง 45<sub>10</sub> เป็นเลขฐาน 4</h2>
+    <div class="row">
+      <div class="ladder" style="flex:1.6">
+        <div class="lrow h"><span>หาร</span><span></span><span>ผลลัพธ์</span><span class="r">เศษ</span><span></span></div>
+        <div class="lrow frag"><span>45 ÷ 4</span><span>=</span><span>11</span><span class="r">1</span><span class="note">← LSB</span></div>
+        <div class="lrow frag"><span>11 ÷ 4</span><span>=</span><span>2</span><span class="r">3</span><span></span></div>
+        <div class="lrow frag"><span>2 ÷ 4</span><span>=</span><span>0</span><span class="r">2</span><span class="note">← MSB</span></div>
+      </div>
+      <div class="frag" style="flex:1;align-self:center;text-align:center">
+        <div class="readup">↑ อ่านเศษจากล่างขึ้นบน</div>
+        <div class="answer" style="margin-top:20px">45<sub>10</sub> = 231<sub>4</sub></div>
+        <p class="tiny" style="margin-top:20px">ตรวจ: 2×16 + 3×4 + 1×1 = 45 ✓</p>
+      </div>
+    </div>
+    <div class="src">หมายเหตุ: ในหนังสือ <sup class="ref"><a href="#refs">[1]</a></sup> พิมพ์คำตอบเป็น “25<sub>10</sub>” ที่ถูกต้องคือ 45<sub>10</sub></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="วิธีแปลงเลขฐานใด ๆ เป็นฐาน 10">
+  <div class="body">
+    <div class="kicker reveal">การแปลงเลขฐานใด ๆ → ฐาน 10</div>
+    <h2 class="title reveal d1">ใช้ “น้ำหนักประจำหลัก” คูณแล้วบวก</h2>
+    <table class="w reveal d2" style="margin:10px 0 30px">
+      <tr class="wt"><th>น้ำหนัก</th><td>… ฐาน<sup>3</sup></td><td>ฐาน<sup>2</sup></td><td>ฐาน<sup>1</sup></td><td>ฐาน<sup>0</sup> = 1</td></tr>
+      <tr class="dg"><th>หลัก</th><td>…</td><td>หลักที่ 3</td><td>หลักที่ 2</td><td>หลักขวาสุด (LSB)</td></tr>
+    </table>
+    <ol class="steps">
+      <li class="reveal d3">หลักขวาสุดมีน้ำหนัก = ฐาน<sup>0</sup> = 1 · หลักถัดไป = ฐาน<sup>1</sup>, ฐาน<sup>2</sup>, …</li>
+      <li class="reveal d4">นำ <b>ตัวเลขแต่ละหลัก × น้ำหนัก</b> แล้วนำผลคูณทั้งหมดมา <b>บวกกัน</b></li>
+    </ol>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="ตัวอย่าง: 76543 ฐาน 8 เป็นฐาน 10">
+  <div class="body">
+    <div class="kicker">ตัวอย่าง · กด → เพื่อดูทีละขั้น</div>
+    <h2 class="title">แปลง 76543<sub>8</sub> เป็นเลขฐาน 10</h2>
+    <table class="w">
+      <tr class="wt"><th>น้ำหนัก</th><td>8<sup>4</sup></td><td>8<sup>3</sup></td><td>8<sup>2</sup></td><td>8<sup>1</sup></td><td>8<sup>0</sup></td></tr>
+      <tr class="dg"><th>เลข</th><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td></tr>
+      <tr class="pr frag"><th>ผลคูณ</th><td>7×4096<br>= 28672</td><td>6×512<br>= 3072</td><td>5×64<br>= 320</td><td>4×8<br>= 32</td><td>3×1<br>= 3</td></tr>
+    </table>
+    <div class="frag" style="margin-top:30px">
+      <span class="mono" style="font-size:40px">28672 + 3072 + 320 + 32 + 3 = </span>
+      <span class="answer">32099<sub>10</sub></span>
+    </div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="ตัวอย่าง: 43421 ฐาน 5 เป็นฐาน 10">
+  <div class="body">
+    <div class="kicker">ตัวอย่าง · เคล็ดลับ: คำนวณน้ำหนักไว้ก่อน จะง่ายขึ้น</div>
+    <h2 class="title">แปลง 43421<sub>5</sub> เป็นเลขฐาน 10</h2>
+    <table class="w">
+      <tr class="wt"><th>น้ำหนัก</th><td>5<sup>4</sup> = 625</td><td>5<sup>3</sup> = 125</td><td>5<sup>2</sup> = 25</td><td>5<sup>1</sup> = 5</td><td>5<sup>0</sup> = 1</td></tr>
+      <tr class="dg"><th>เลข</th><td>4</td><td>3</td><td>4</td><td>2</td><td>1</td></tr>
+      <tr class="pr frag"><th>ผลคูณ</th><td>2500</td><td>375</td><td>100</td><td>10</td><td>1</td></tr>
+    </table>
+    <div class="frag" style="margin-top:30px">
+      <span class="mono" style="font-size:40px">2500 + 375 + 100 + 10 + 1 = </span>
+      <span class="answer">2986<sub>10</sub></span>
+    </div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="ตัวอย่าง: 11010 ฐาน 2 เป็นฐาน 10">
+  <div class="body">
+    <div class="kicker">ตัวอย่าง</div>
+    <h2 class="title">แปลง 11010<sub>2</sub> เป็นเลขฐาน 10</h2>
+    <table class="w">
+      <tr class="wt"><th>น้ำหนัก</th><td>2<sup>4</sup> = 16</td><td>2<sup>3</sup> = 8</td><td>2<sup>2</sup> = 4</td><td>2<sup>1</sup> = 2</td><td>2<sup>0</sup> = 1</td></tr>
+      <tr class="dg"><th>เลข</th><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+      <tr class="pr frag"><th>ผลคูณ</th><td>16</td><td>8</td><td>0</td><td>2</td><td>0</td></tr>
+    </table>
+    <div class="frag" style="margin-top:30px">
+      <span class="mono" style="font-size:40px">16 + 8 + 0 + 2 + 0 = </span>
+      <span class="answer">26<sub>10</sub></span>
+    </div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="น้ำหนักของเลขฐาน 2">
+  <div class="body">
+    <div class="kicker reveal">ท่องให้คล่อง!</div>
+    <h2 class="title reveal d1">น้ำหนักประจำหลักของเลขฐาน 2</h2>
+    <table class="w reveal d2" style="width:100%">
+      <tr class="wt"><td>2<sup>10</sup></td><td>2<sup>9</sup></td><td>2<sup>8</sup></td><td>2<sup>7</sup></td><td>2<sup>6</sup></td><td>2<sup>5</sup></td><td>2<sup>4</sup></td><td>2<sup>3</sup></td><td>2<sup>2</sup></td><td>2<sup>1</sup></td><td>2<sup>0</sup></td></tr>
+      <tr class="dg"><td>1024</td><td>512</td><td>256</td><td>128</td><td>64</td><td>32</td><td>16</td><td>8</td><td>4</td><td>2</td><td>1</td></tr>
+    </table>
+    <p class="lead reveal d3" style="margin-top:40px">หลักไปทางซ้ายทีละ 1 หลัก → น้ำหนัก <b class="c-orange">× 2</b></p>
+    <p class="small reveal d4">ใช้ได้ทั้งแปลงฐาน 2 → 10 (บวกน้ำหนักของหลักที่เป็น 1) และ 10 → 2 (กระจายตามน้ำหนัก)</p>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="ระบบเลขฐาน 16">
+  <div class="body">
+    <div class="kicker reveal">ระบบเลขฐาน 16 (HEX: Hexadecimal)</div>
+    <h2 class="title reveal d1">ทำไมต้องใช้เลขฐาน 16?</h2>
+    <div class="box reveal d2" style="text-align:center">
+      <div class="mono" style="font-size:66px;letter-spacing:4px">100010010110<sub>2</sub></div>
+      <div style="font-size:50px;color:var(--ink-soft)">⬇ เขียนสั้นลงเหลือ</div>
+      <div class="mono c-orange" style="font-size:90px;font-weight:700">896<sub>16</sub></div>
+    </div>
+    <p class="small reveal d3" style="margin-top:30px">เลขฐาน 2 ยาวมาก อ่านยาก → ใช้ฐาน 16 แทน · มี 16 ตัว: <span class="mono">0–9</span> และ <span class="mono c-orange">A B C D E F</span> (แทน 10–15)</p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="ตารางที่ 1-1 ความสัมพันธ์ของเลขฐาน">
+  <div class="body">
+    <div class="kicker reveal">ตารางที่ 1-1</div>
+    <h2 class="title reveal d1" style="margin-bottom:20px">ความสัมพันธ์ของเลขฐาน 10, 2, 16</h2>
+    <div class="row reveal d2" style="gap:30px">
+      <table class="t compact mono"><tr><th>ฐาน 10</th><th>ฐาน 2</th><th>ฐาน 16</th></tr>
+        <tr><td>0</td><td>0000</td><td>0</td></tr><tr><td>1</td><td>0001</td><td>1</td></tr><tr><td>2</td><td>0010</td><td>2</td></tr><tr><td>3</td><td>0011</td><td>3</td></tr>
+        <tr><td>4</td><td>0100</td><td>4</td></tr><tr><td>5</td><td>0101</td><td>5</td></tr><tr><td>6</td><td>0110</td><td>6</td></tr><tr><td>7</td><td>0111</td><td>7</td></tr>
+      </table>
+      <table class="t compact mono"><tr><th>ฐาน 10</th><th>ฐาน 2</th><th>ฐาน 16</th></tr>
+        <tr><td>8</td><td>1000</td><td>8</td></tr><tr><td>9</td><td>1001</td><td>9</td></tr><tr class="hit"><td>10</td><td>1010</td><td><b>A</b></td></tr><tr class="hit"><td>11</td><td>1011</td><td><b>B</b></td></tr>
+        <tr class="hit"><td>12</td><td>1100</td><td><b>C</b></td></tr><tr class="hit"><td>13</td><td>1101</td><td><b>D</b></td></tr><tr class="hit"><td>14</td><td>1110</td><td><b>E</b></td></tr><tr class="hit"><td>15</td><td>1111</td><td><b>F</b></td></tr>
+      </table>
+      <div class="box sun" style="align-self:center"><p class="small" style="margin:0">เลขฐาน 16 <b>1 หลัก</b><br>= เลขฐาน 2 <b>4 บิต</b> พอดี</p></div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="ฐาน 2 เป็นฐาน 16: จัดกลุ่ม 4 บิต">
+  <div class="body">
+    <div class="kicker">การแปลงฐาน 2 → ฐาน 16</div>
+    <h2 class="title">แบ่งกลุ่มละ 4 บิต <span class="c-orange">จากขวาไปซ้าย</span></h2>
+    <p class="small">โจทย์: แปลง <span class="mono">100111110101<sub>2</sub></span> เป็นเลขฐาน 16</p>
+    <div class="nibbles" style="margin:24px 0 34px">
+      <div class="nib frag"><div class="b">1001</div><div class="arrow">⬇</div><div class="h">9</div></div>
+      <div class="nib frag"><div class="b">1111</div><div class="arrow">⬇</div><div class="h">F</div></div>
+      <div class="nib frag"><div class="b">0101</div><div class="arrow">⬇</div><div class="h">5</div></div>
+    </div>
+    <div class="frag"><span class="answer">100111110101<sub>2</sub> = 9F5<sub>16</sub></span></div>
+    <div class="src">ถ้ากลุ่มซ้ายสุดไม่ครบ 4 บิต ให้เติม 0 ข้างหน้า · ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="ฐาน 16 เป็นฐาน 2">
+  <div class="body">
+    <div class="kicker">การแปลงฐาน 16 → ฐาน 2</div>
+    <h2 class="title">เปลี่ยนเลขฐาน 16 ทีละหลัก เป็น 4 บิต</h2>
+    <p class="small">โจทย์: แปลง <span class="mono">A72B<sub>16</sub></span> เป็นเลขฐาน 2</p>
+    <div class="nibbles" style="margin:24px 0 34px">
+      <div class="nib frag"><div class="h">A</div><div class="arrow">⬇</div><div class="b">1010</div></div>
+      <div class="nib frag"><div class="h">7</div><div class="arrow">⬇</div><div class="b">0111</div></div>
+      <div class="nib frag"><div class="h">2</div><div class="arrow">⬇</div><div class="b">0010</div></div>
+      <div class="nib frag"><div class="h">B</div><div class="arrow">⬇</div><div class="b">1011</div></div>
+    </div>
+    <div class="frag"><span class="answer">A72B<sub>16</sub> = 1010011100101011<sub>2</sub></span></div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="ฐาน 10 เป็นฐาน 16 วิธีที่ 1">
+  <div class="body">
+    <div class="kicker">การแปลงฐาน 10 → ฐาน 16 · วิธีที่ 1</div>
+    <h2 class="title">แปลงเป็นฐาน 2 ก่อน แล้วจัดกลุ่ม 4 บิต</h2>
+    <p class="small">โจทย์: แปลง <span class="mono">45<sub>10</sub></span> เป็นเลขฐาน 16 — กระจายตามน้ำหนักบิต</p>
+    <table class="w" style="margin-bottom:20px">
+      <tr class="wt"><th>น้ำหนัก</th><td>32</td><td>16</td><td>8</td><td>4</td><td>2</td><td>1</td></tr>
+      <tr class="dg frag"><th>45 ได้</th><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+    </table>
+    <p class="mono frag" style="font-size:40px">45 = 32+0+8+4+0+1 = 101101<sub>2</sub></p>
+    <p class="mono frag" style="font-size:40px">= <span style="background:var(--blue-soft);border-radius:10px;padding:0 10px">0010</span> <span style="background:var(--blue-soft);border-radius:10px;padding:0 10px">1101</span> = <span class="answer" style="font-size:46px">2D<sub>16</sub></span></p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="ตัวอย่าง: 1714 เป็นฐาน 16">
+  <div class="body">
+    <div class="kicker">การแปลงฐาน 10 → ฐาน 16 · วิธีที่ 1</div>
+    <h2 class="title">แปลง 1714<sub>10</sub> เป็นเลขฐาน 16</h2>
+    <table class="w" style="width:100%">
+      <tr class="wt"><td>1024</td><td>512</td><td>256</td><td>128</td><td>64</td><td>32</td><td>16</td><td>8</td><td>4</td><td>2</td><td>1</td></tr>
+      <tr class="dg frag"><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+    </table>
+    <p class="mono frag small" style="margin-top:22px">1024+512+128+32+16+2 = 1714 → 11010110010<sub>2</sub></p>
+    <div class="nibbles frag" style="margin-top:6px">
+      <div class="nib"><div class="b">0110</div><div class="h">6</div></div>
+      <div class="nib"><div class="b">1011</div><div class="h">B</div></div>
+      <div class="nib"><div class="b">0010</div><div class="h">2</div></div>
+      <div class="nib" style="align-self:center"><span class="answer">= 6B2<sub>16</sub></span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="ฐาน 10 เป็นฐาน 16 วิธีที่ 2">
+  <div class="body">
+    <div class="kicker">การแปลงฐาน 10 → ฐาน 16 · วิธีที่ 2</div>
+    <h2 class="title">หารด้วย 16 โดยตรง (เศษ 10–15 = A–F)</h2>
+    <div class="grid g2" style="gap:50px">
+      <div>
+        <p class="small"><b>45<sub>10</sub></b></p>
+        <div class="ladder narrow">
+          <div class="lrow h"><span>หาร</span><span></span><span>ผลหาร</span><span class="r">เศษ</span><span></span></div>
+          <div class="lrow frag"><span>45 ÷ 16</span><span>=</span><span>2</span><span class="r">13</span><span class="note">= D</span></div>
+          <div class="lrow frag"><span>2 ÷ 16</span><span>=</span><span>0</span><span class="r">2</span><span class="note">= 2</span></div>
+        </div>
+        <div class="frag" style="margin-top:22px"><span class="answer">45<sub>10</sub> = 2D<sub>16</sub></span></div>
+      </div>
+      <div>
+        <p class="small"><b>234<sub>10</sub></b></p>
+        <div class="ladder narrow">
+          <div class="lrow h"><span>หาร</span><span></span><span>ผลหาร</span><span class="r">เศษ</span><span></span></div>
+          <div class="lrow frag"><span>234 ÷ 16</span><span>=</span><span>14</span><span class="r">10</span><span class="note">= A</span></div>
+          <div class="lrow frag"><span>14 ÷ 16</span><span>=</span><span>0</span><span class="r">14</span><span class="note">= E</span></div>
+        </div>
+        <div class="frag" style="margin-top:22px"><span class="answer">234<sub>10</sub> = EA<sub>16</sub></span></div>
+      </div>
+    </div>
+    <div class="src">อ่านเศษจากล่างขึ้นบนเหมือนเดิม · ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="ฐาน 16 เป็นฐาน 10 วิธีที่ 1">
+  <div class="body">
+    <div class="kicker">การแปลงฐาน 16 → ฐาน 10 · วิธีที่ 1</div>
+    <h2 class="title">แปลงเป็นฐาน 2 ก่อน แล้วรวมน้ำหนัก</h2>
+    <p class="small">โจทย์: แปลง <span class="mono">6B2<sub>16</sub></span> เป็นเลขฐาน 10</p>
+    <div class="nibbles frag" style="margin-bottom:20px">
+      <div class="nib"><div class="h">6</div><div class="b">0110</div></div>
+      <div class="nib"><div class="h">B</div><div class="b">1011</div></div>
+      <div class="nib"><div class="h">2</div><div class="b">0010</div></div>
+    </div>
+    <table class="w frag" style="width:100%">
+      <tr class="wt"><td>1024</td><td>512</td><td>256</td><td>128</td><td>64</td><td>32</td><td>16</td><td>8</td><td>4</td><td>2</td><td>1</td></tr>
+      <tr class="dg"><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+    </table>
+    <div class="frag" style="margin-top:20px"><span class="mono small">1024+512+128+32+16+2 = </span><span class="answer">1714<sub>10</sub></span></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="ฐาน 16 เป็นฐาน 10 วิธีที่ 2">
+  <div class="body">
+    <div class="kicker">การแปลงฐาน 16 → ฐาน 10 · วิธีที่ 2</div>
+    <h2 class="title">รวมจากน้ำหนักของแต่ละหลักโดยตรง</h2>
+    <div class="grid g2" style="gap:40px">
+      <div class="box">
+        <h3 class="mono" style="color:var(--orange)">6B2<sub>16</sub></h3>
+        <p class="mono small frag">= 6×16<sup>2</sup> + 11×16<sup>1</sup> + 2×16<sup>0</sup></p>
+        <p class="mono small frag">= 1536 + 176 + 2</p>
+        <div class="frag"><span class="answer">= 1714<sub>10</sub></span></div>
+      </div>
+      <div class="box">
+        <h3 class="mono" style="color:var(--orange)">ABC<sub>16</sub></h3>
+        <p class="mono small frag">= 10×16<sup>2</sup> + 11×16<sup>1</sup> + 12×16<sup>0</sup></p>
+        <p class="mono small frag">= 2560 + 176 + 12</p>
+        <div class="frag"><span class="answer">= 2748<sub>10</sub></span></div>
+      </div>
+    </div>
+    <p class="tiny" style="margin-top:20px">จำ: 16<sup>0</sup> = 1 · 16<sup>1</sup> = 16 · 16<sup>2</sup> = 256 · 16<sup>3</sup> = 4096 · A=10 B=11 C=12 D=13 E=14 F=15</p>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="สรุปวิธีแปลงเลขฐาน">
+  <div class="body">
+    <div class="kicker reveal">สรุป</div>
+    <h2 class="title reveal d1">แผนที่การแปลงเลขฐาน</h2>
+    <div class="grid g2" style="gap:30px">
+      <div class="box orange reveal d2"><h3 style="color:var(--orange)">ฐาน 10 → ฐานใด ๆ</h3><p class="small">หารด้วยฐานซ้ำ ๆ เก็บเศษ อ่านจาก<b>ล่างขึ้นบน</b></p></div>
+      <div class="box blue reveal d3"><h3 style="color:var(--blue)">ฐานใด ๆ → ฐาน 10</h3><p class="small">ตัวเลขแต่ละหลัก × น้ำหนัก (ฐาน<sup>n</sup>) แล้ว<b>บวกกัน</b></p></div>
+      <div class="box tint reveal d4"><h3>ฐาน 2 → ฐาน 16</h3><p class="small">แบ่งกลุ่ม<b>ละ 4 บิต</b> จากขวาไปซ้าย</p></div>
+      <div class="box sun reveal d5"><h3 style="color:#9a6a00">ฐาน 16 → ฐาน 2</h3><p class="small">แต่ละหลัก → <b>4 บิต</b> (ดูตารางที่ 1-1)</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="รหัส BCD">
+  <div class="body">
+    <div class="kicker reveal">ระบบรหัส <span class="extra">เสริม</span></div>
+    <h2 class="title reveal d1">รหัส BCD <span class="en">(Binary-Coded Decimal)</span></h2>
+    <p class="small reveal d2">แทนเลขฐาน 10 <b>ทีละหลัก</b> ด้วยเลขฐาน 2 ขนาด 4 บิต (ใช้รหัส 8421 แทนเลข 0–9)</p>
+    <div class="row center reveal d3" style="margin-top:20px">
+      <div class="box tint" style="text-align:center">
+        <div class="mono" style="font-size:44px">4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5</div>
+        <div class="mono" style="font-size:48px;font-weight:700;color:var(--teal)">0100 0101</div>
+        <p class="small" style="margin:6px 0 0">45 ในรหัส <b>BCD</b></p>
+      </div>
+      <div style="flex:0 0 auto;font-size:60px">≠</div>
+      <div class="box orange" style="text-align:center">
+        <div class="mono" style="font-size:44px">45</div>
+        <div class="mono" style="font-size:48px;font-weight:700;color:var(--orange)">101101</div>
+        <p class="small" style="margin:6px 0 0">45 ใน <b>เลขฐาน 2</b></p>
+      </div>
+    </div>
+    <p class="small reveal d4" style="margin-top:30px">ใช้กับงานที่แสดงตัวเลขทีละหลัก เช่น นาฬิกาดิจิทัล ตัวแสดงผล 7 ส่วน</p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[4]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="รหัส ASCII">
+  <div class="body">
+    <div class="kicker reveal">ระบบรหัส <span class="extra">เสริม</span></div>
+    <h2 class="title reveal d1">รหัส ASCII — คอมพิวเตอร์เก็บตัวอักษรอย่างไร</h2>
+    <p class="small reveal d2">ASCII เป็นรหัส <b>7 บิต</b> (128 ตัว) กำหนดเลขประจำตัวอักษรภาษาอังกฤษ ตัวเลข และสัญลักษณ์</p>
+    <table class="t reveal d3" style="width:100%;margin-top:14px">
+      <tr><th>อักขระ</th><th>ฐาน 10</th><th>ฐาน 16</th><th>ฐาน 2</th></tr>
+      <tr><td class="mono"><b>A</b></td><td class="mono">65</td><td class="mono">41</td><td class="mono">100 0001</td></tr>
+      <tr><td class="mono"><b>a</b></td><td class="mono">97</td><td class="mono">61</td><td class="mono">110 0001</td></tr>
+      <tr><td class="mono"><b>0</b> (ตัวอักษรศูนย์)</td><td class="mono">48</td><td class="mono">30</td><td class="mono">011 0000</td></tr>
+      <tr><td>ช่องว่าง (space)</td><td class="mono">32</td><td class="mono">20</td><td class="mono">010 0000</td></tr>
+    </table>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[4] [5]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="ฝึกคิด 1.1">
+  <div class="body">
+    <div class="kicker">ฝึกคิด · ลองทำในกระดาษก่อน แล้วกด → ดูเฉลย</div>
+    <h2 class="title">ทดสอบความเข้าใจ 1.1</h2>
+    <div class="grid g3">
+      <div class="box"><h3>ข้อ 1</h3><p class="mono">13<sub>10</sub> = ?<sub>2</sub></p><div class="frag"><span class="answer" style="font-size:44px">1101<sub>2</sub></span><p class="tiny" style="margin-top:12px">8+4+0+1 = 13</p></div></div>
+      <div class="box"><h3>ข้อ 2</h3><p class="mono">1111<sub>2</sub> = ?<sub>10</sub></p><div class="frag"><span class="answer" style="font-size:44px">15<sub>10</sub></span><p class="tiny" style="margin-top:12px">8+4+2+1 = 15</p></div></div>
+      <div class="box"><h3>ข้อ 3</h3><p class="mono">1F<sub>16</sub> = ?<sub>10</sub></p><div class="frag"><span class="answer" style="font-size:44px">31<sub>10</sub></span><p class="tiny" style="margin-top:12px">1×16 + 15×1 = 31</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 1.2 ดิจิทัลพื้นฐาน ============ -->
+<section class="slide section sec-2" data-tag="1.2 ดิจิทัลพื้นฐาน" data-title="1.2 ดิจิทัลพื้นฐาน">
+  <div class="big-no">1.2</div>
+  <div class="body center">
+    <div class="label reveal">หัวข้อที่ 1.2</div>
+    <h2 class="reveal d1">ดิจิทัลพื้นฐาน</h2>
+    <p class="lead reveal d2">ระดับลอจิก 0 กับ 1 · ลอจิกเกต 6 ชนิด</p>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="ดิจิทัลคืออะไร">
+  <div class="body">
+    <div class="kicker reveal">ความหมาย</div>
+    <h2 class="title reveal d1">ดิจิทัล (Digital)</h2>
+    <p class="lead reveal d2">เทคโนโลยีอิเล็กทรอนิกส์ที่ สร้าง เก็บ และประมวลผลข้อมูลใน <span class="hl">2 สถานะ</span></p>
+    <div class="grid g2 reveal d3" style="margin-top:20px">
+      <div class="box orange" style="text-align:center"><div class="mono" style="font-size:110px;color:var(--orange);font-weight:700;line-height:1.1">1</div><h3 style="color:var(--orange)">บวก (มีไฟ)</h3></div>
+      <div class="box" style="text-align:center"><div class="mono" style="font-size:110px;color:var(--lo);font-weight:700;line-height:1.1">0</div><h3 style="color:var(--ink-soft)">ไม่บวก (ไม่มีไฟ)</h3></div>
+    </div>
+    <p class="small reveal d4" style="margin-top:26px">เรียกว่า <b>Binary digital</b> — เกี่ยวข้องกับไมโครคอนโทรลเลอร์ทั้งฮาร์ดแวร์และซอฟต์แวร์</p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="ระดับลอจิก (รูปที่ 1-1)">
+  <div class="body">
+    <div class="kicker reveal">ระดับลอจิก</div>
+    <h2 class="title reveal d1">ลอจิก 0 และ 1 ไม่ต้องเป๊ะ 0 V / 5 V</h2>
+    <div class="row center">
+      <div class="reveal d2" style="flex:1.1">
+        <svg viewBox="0 0 640 420" aria-label="รูปที่ 1-1 ระดับแรงดันของลอจิก">
+          <rect x="0" y="0" width="640" height="420" rx="26" fill="#eef8f8"/>
+          <line x1="90" y1="30" x2="90" y2="370" stroke="#2a2733" stroke-width="5"/>
+          <line x1="90" y1="370" x2="610" y2="370" stroke="#2a2733" stroke-width="5"/>
+          <g font-family="Prompt" font-size="26" fill="#5d5866" text-anchor="end">
+            <text x="70" y="378">0</text><text x="70" y="310">1</text><text x="70" y="242">2</text><text x="70" y="174">3</text><text x="70" y="106">4</text><text x="70" y="40">5</text>
+          </g>
+          <rect x="110" y="34" width="480" height="90" rx="14" fill="#fde6d4" stroke="#e8742c" stroke-width="3"/>
+          <text x="350" y="90" text-anchor="middle" font-family="Kanit" font-size="34" fill="#b5531a">ระดับลอจิก 1</text>
+          <rect x="110" y="300" width="480" height="64" rx="14" fill="#dcf3e3" stroke="#2e9b57" stroke-width="3"/>
+          <text x="350" y="343" text-anchor="middle" font-family="Kanit" font-size="34" fill="#1f6e3d">ระดับลอจิก 0</text>
+          <text x="40" y="210" font-family="Kanit" font-size="24" fill="#5d5866" transform="rotate(-90 40 210)" text-anchor="middle">แรงดัน (V)</text>
+        </svg>
+        <p class="tiny" style="text-align:center">รูปที่ 1-1 ระดับแรงดันของลอจิก (วาดใหม่จาก <sup class="ref"><a href="#refs">[1]</a></sup>)</p>
+      </div>
+      <ul class="pts reveal d3 small">
+        <li>ลอจิก 0 ≈ <b>0 V</b> สูงกว่าเล็กน้อยก็ยังเป็น 0</li>
+        <li>ลอจิก 1 ≈ <b>5 V</b> ต่ำกว่าเล็กน้อยก็ยังเป็น 1</li>
+        <li>MCU บางรุ่นใช้ไฟเลี้ยงต่ำกว่า 5 V (เช่น 3.3 V) → ลอจิก 1 ก็ต่ำลงตาม</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="ช่วงแรงดันจริงของ ATmega328P">
+  <div class="body">
+    <div class="kicker reveal">ตัวอย่างจริง: ชิปบนบอร์ด Arduino UNO <span class="extra">เสริม</span></div>
+    <h2 class="title reveal d1">ATmega328P อ่านค่าลอจิกที่ไฟเลี้ยง 5 V</h2>
+    <div class="row center">
+      <div class="reveal d2" style="flex:0 0 560px">
+        <svg viewBox="0 0 560 520" aria-label="ช่วงแรงดันอินพุตของ ATmega328P ที่ไฟเลี้ยง 5 โวลต์">
+          <rect x="150" y="20" width="140" height="210" rx="10" fill="#e8742c"/>
+          <rect x="150" y="230" width="140" height="150" rx="0" fill="#f4ead8"/>
+          <g stroke="#d9cbb3" stroke-width="10"><line x1="150" y1="250" x2="290" y2="250"/><line x1="150" y1="290" x2="290" y2="290"/><line x1="150" y1="330" x2="290" y2="330"/><line x1="150" y1="370" x2="290" y2="370"/></g>
+          <rect x="150" y="380" width="140" height="120" rx="10" fill="#a8a1b0"/>
+          <g font-family="Prompt" font-size="28" fill="#2a2733" text-anchor="end">
+            <text x="135" y="30">5.0 V</text><text x="135" y="240">3.0 V</text><text x="135" y="390">1.5 V</text><text x="135" y="505">0 V</text>
+          </g>
+          <g font-family="Kanit" font-size="30">
+            <text x="310" y="130" fill="#b5531a">HIGH = 1</text>
+            <text x="310" y="315" fill="#5d5866">ไม่แน่นอน</text>
+            <text x="310" y="450" fill="#5d5866">LOW = 0</text>
+          </g>
+        </svg>
+      </div>
+      <ul class="pts reveal d3 small">
+        <li>แรงดันอินพุต <b>≥ 3.0 V</b> (0.6×VCC) อ่านเป็น <b class="c-orange">1</b></li>
+        <li>แรงดันอินพุต <b>≤ 1.5 V</b> (0.3×VCC) อ่านเป็น <b>0</b></li>
+        <li>ช่วง 1.5 – 3.0 V <b>ไม่รับประกัน</b> ว่าจะอ่านได้ค่าใด → ควรหลีกเลี่ยง</li>
+      </ul>
+    </div>
+    <div class="src">ที่มา: ATmega328P datasheet หัวข้อ DC Characteristics (V<sub>IL</sub>, V<sub>IH</sub> เมื่อ VCC = 2.7–5.5 V) <sup class="ref"><a href="#refs">[6]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="ลอจิกเกต 6 ชนิด">
+  <div class="body">
+    <div class="kicker reveal">ลอจิกเกตของเลขฐาน 2</div>
+    <h2 class="title reveal d1">วงจรลอจิกเกต (Logic gate) 6 ชนิด</h2>
+    <div class="grid g3" style="gap:24px">
+      <div class="box reveal d2" style="text-align:center;padding:18px"><span data-gate="AND" data-cls="gate-svg mini" data-labels="no"></span><h3>AND</h3></div>
+      <div class="box reveal d2" style="text-align:center;padding:18px"><span data-gate="OR" data-cls="gate-svg mini" data-labels="no"></span><h3>OR</h3></div>
+      <div class="box reveal d3" style="text-align:center;padding:18px"><span data-gate="XOR" data-cls="gate-svg mini" data-labels="no"></span><h3>XOR</h3></div>
+      <div class="box reveal d3" style="text-align:center;padding:18px"><span data-gate="NAND" data-cls="gate-svg mini" data-labels="no"></span><h3>NAND</h3></div>
+      <div class="box reveal d4" style="text-align:center;padding:18px"><span data-gate="NOR" data-cls="gate-svg mini" data-labels="no"></span><h3>NOR</h3></div>
+      <div class="box reveal d4" style="text-align:center;padding:18px"><span data-gate="NOT" data-cls="gate-svg mini" data-labels="no"></span><h3>NOT</h3></div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [4]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="แอนด์เกต (AND gate)">
+  <div class="body">
+    <div class="kicker reveal">แอนด์เกต (AND gate)</div>
+    <h2 class="title reveal d1">AND: เป็น 1 เมื่อ <span class="c-orange">ทุกอินพุต</span> เป็น 1</h2>
+    <div class="row center">
+      <div class="reveal d2" style="text-align:center"><span data-gate="AND"></span></div>
+      <table class="truth reveal d3"><tr><th>A</th><th>B</th><th class="q">Q</th></tr>
+        <tr><td>0</td><td>0</td><td class="q">0</td></tr><tr><td>0</td><td>1</td><td class="q">0</td></tr><tr><td>1</td><td>0</td><td class="q">0</td></tr><tr><td>1</td><td>1</td><td class="q one">1</td></tr></table>
+      <div class="box sun reveal d4"><p class="small" style="margin:0">🔌 เหมือน <b>สวิตช์ 2 ตัวต่ออนุกรม</b> ต้องกดทั้ง 2 ตัว หลอดจึงติด</p></div>
+    </div>
+    <p class="small reveal d4" style="margin-top:24px">มีอินพุตตั้งแต่ 2 อินพุตขึ้นไป · ถ้าอินพุตใดเป็น 0 → เอาต์พุตเป็น 0</p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="ออร์เกต (OR gate)">
+  <div class="body">
+    <div class="kicker reveal">ออร์เกต (OR gate)</div>
+    <h2 class="title reveal d1">OR: เป็น 1 เมื่อ <span class="c-orange">อินพุตใดอินพุตหนึ่ง</span> เป็น 1</h2>
+    <div class="row center">
+      <div class="reveal d2" style="text-align:center"><span data-gate="OR"></span></div>
+      <table class="truth reveal d3"><tr><th>A</th><th>B</th><th class="q">Q</th></tr>
+        <tr><td>0</td><td>0</td><td class="q">0</td></tr><tr><td>0</td><td>1</td><td class="q one">1</td></tr><tr><td>1</td><td>0</td><td class="q one">1</td></tr><tr><td>1</td><td>1</td><td class="q one">1</td></tr></table>
+      <div class="box sun reveal d4"><p class="small" style="margin:0">🔌 เหมือน <b>สวิตช์ 2 ตัวต่อขนาน</b> กดตัวไหนก็ได้ หลอดก็ติด</p></div>
+    </div>
+    <p class="small reveal d4" style="margin-top:24px">เอาต์พุตเป็น 0 เฉพาะเมื่อ <b>ทุกอินพุตเป็น 0</b></p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="เอ็กซ์คลูซีฟออร์เกต (XOR gate)">
+  <div class="body">
+    <div class="kicker reveal">เอ็กซ์คลูซีฟออร์เกต (XOR gate)</div>
+    <h2 class="title reveal d1">XOR: เป็น 1 เมื่ออินพุต <span class="c-orange">ต่างกัน</span></h2>
+    <div class="row center">
+      <div class="reveal d2" style="text-align:center"><span data-gate="XOR"></span></div>
+      <table class="truth reveal d3"><tr><th>A</th><th>B</th><th class="q">Q</th></tr>
+        <tr><td>0</td><td>0</td><td class="q">0</td></tr><tr><td>0</td><td>1</td><td class="q one">1</td></tr><tr><td>1</td><td>0</td><td class="q one">1</td></tr><tr><td>1</td><td>1</td><td class="q">0</td></tr></table>
+      <div class="box sun reveal d4"><p class="small" style="margin:0">💡 ช่วยจำ: <b>เหมือนกัน → 0</b><br><b>ต่างกัน → 1</b></p></div>
+    </div>
+    <p class="small reveal d4" style="margin-top:24px">ต่างจาก OR ตรงแถวสุดท้าย: 1 XOR 1 = <b>0</b></p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="น็อตเกต (NOT gate)">
+  <div class="body">
+    <div class="kicker reveal">น็อตเกต (NOT gate) หรือ อินเวอร์เตอร์ (Inverter)</div>
+    <h2 class="title reveal d1">NOT: เอาต์พุต <span class="c-orange">ตรงข้าม</span> กับอินพุต</h2>
+    <div class="row center">
+      <div class="reveal d2" style="text-align:center"><span data-gate="NOT"></span></div>
+      <table class="truth reveal d3"><tr><th>A</th><th class="q">Q</th></tr>
+        <tr><td>0</td><td class="q one">1</td></tr><tr><td>1</td><td class="q">0</td></tr></table>
+      <div class="box sun reveal d4"><p class="small" style="margin:0">มีอินพุต <b>เพียงอินพุตเดียว</b><br>วงกลมเล็ก ⚪ = การกลับค่า</p></div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="แนนด์เกต (NAND gate)">
+  <div class="body">
+    <div class="kicker reveal">แนนด์เกต (NAND gate)</div>
+    <h2 class="title reveal d1">NAND = AND + NOT</h2>
+    <div class="row center">
+      <div class="reveal d2" style="text-align:center"><span data-gate="NAND"></span><p class="tiny">เอาต์พุตของ AND ส่งเข้า NOT</p></div>
+      <table class="truth reveal d3"><tr><th>A</th><th>B</th><th>AND</th><th class="q">NAND</th></tr>
+        <tr><td>0</td><td>0</td><td>0</td><td class="q one">1</td></tr><tr><td>0</td><td>1</td><td>0</td><td class="q one">1</td></tr><tr><td>1</td><td>0</td><td>0</td><td class="q one">1</td></tr><tr><td>1</td><td>1</td><td>1</td><td class="q">0</td></tr></table>
+    </div>
+    <p class="small reveal d4" style="margin-top:24px">เอาต์พุตของ NAND <b>ตรงข้ามกับ AND</b> ทุกแถว</p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="นอร์เกต (NOR gate)">
+  <div class="body">
+    <div class="kicker reveal">นอร์เกต (NOR gate)</div>
+    <h2 class="title reveal d1">NOR = OR + NOT</h2>
+    <div class="row center">
+      <div class="reveal d2" style="text-align:center"><span data-gate="NOR"></span><p class="tiny">เอาต์พุตของ OR ส่งเข้า NOT</p></div>
+      <table class="truth reveal d3"><tr><th>A</th><th>B</th><th>OR</th><th class="q">NOR</th></tr>
+        <tr><td>0</td><td>0</td><td>0</td><td class="q one">1</td></tr><tr><td>0</td><td>1</td><td>1</td><td class="q">0</td></tr><tr><td>1</td><td>0</td><td>1</td><td class="q">0</td></tr><tr><td>1</td><td>1</td><td>1</td><td class="q">0</td></tr></table>
+    </div>
+    <p class="small reveal d4" style="margin-top:24px">เอาต์พุตของ NOR <b>ตรงข้ามกับ OR</b> ทุกแถว</p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="ตัวจำลองลอจิกเกต (ลองกดได้)">
+  <div class="body">
+    <div class="kicker">ลองเล่น · คลิกเลือกเกต แล้วคลิกปุ่ม A / B เพื่อสลับ 0 ↔ 1</div>
+    <h2 class="title" style="margin-bottom:20px">ตัวจำลองลอจิกเกต</h2>
+    <div class="sim" data-gate-sim="AND"></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="สรุปตารางความจริง">
+  <div class="body">
+    <div class="kicker reveal">สรุป</div>
+    <h2 class="title reveal d1">ตารางความจริงของทุกเกต (2 อินพุต)</h2>
+    <table class="t mono reveal d2" style="width:100%;font-size:40px">
+      <tr><th>A</th><th>B</th><th>AND</th><th>OR</th><th>XOR</th><th>NAND</th><th>NOR</th></tr>
+      <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td class="c-orange"><b>1</b></td><td class="c-orange"><b>1</b></td></tr>
+      <tr><td>0</td><td>1</td><td>0</td><td class="c-orange"><b>1</b></td><td class="c-orange"><b>1</b></td><td class="c-orange"><b>1</b></td><td>0</td></tr>
+      <tr><td>1</td><td>0</td><td>0</td><td class="c-orange"><b>1</b></td><td class="c-orange"><b>1</b></td><td class="c-orange"><b>1</b></td><td>0</td></tr>
+      <tr><td>1</td><td>1</td><td class="c-orange"><b>1</b></td><td class="c-orange"><b>1</b></td><td>0</td><td>0</td><td>0</td></tr>
+    </table>
+    <p class="small reveal d3" style="margin-top:26px">NOT: 0 → <b class="c-orange">1</b>, 1 → 0</p>
+  </div>
+</section>
+
+<!-- ============ 1.3 โครงสร้างพื้นฐานของระบบคอมพิวเตอร์ ============ -->
+<section class="slide section sec-3" data-tag="1.3 โครงสร้างพื้นฐานของระบบคอมพิวเตอร์" data-title="1.3 โครงสร้างพื้นฐานของระบบคอมพิวเตอร์">
+  <div class="big-no">1.3</div>
+  <div class="body center">
+    <div class="label reveal">หัวข้อที่ 1.3</div>
+    <h2 class="reveal d1">โครงสร้างพื้นฐาน<br>ของระบบคอมพิวเตอร์</h2>
+    <p class="lead reveal d2">อินพุต · เอาต์พุต · หน่วยประมวลผลกลาง · หน่วยความจำ</p>
+  </div>
+</section>
+
+<section class="slide sec-3" data-title="ระบบคอมพิวเตอร์ไม่จำเป็นต้องเป็น PC">
+  <div class="body">
+    <div class="kicker reveal">ระบบคอมพิวเตอร์</div>
+    <h2 class="title reveal d1">ไม่จำเป็นต้องหน้าตาเหมือน PC<br>ขอแค่มีครบ 4 ส่วน</h2>
+    <div class="grid g4">
+      <div class="box blue reveal d2" style="text-align:center"><div class="icon">⌨️</div><h3 style="color:var(--blue)">อินพุต</h3><p class="tiny">Input</p></div>
+      <div class="box blue reveal d3" style="text-align:center"><div class="icon">🧠</div><h3 style="color:var(--blue)">หน่วยประมวลผลกลาง</h3><p class="tiny">CPU</p></div>
+      <div class="box blue reveal d4" style="text-align:center"><div class="icon">🗄️</div><h3 style="color:var(--blue)">หน่วยความจำ</h3><p class="tiny">Memory</p></div>
+      <div class="box blue reveal d5" style="text-align:center"><div class="icon">🖥️</div><h3 style="color:var(--blue)">เอาต์พุต</h3><p class="tiny">Output</p></div>
+    </div>
+    <p class="small reveal d5" style="margin-top:30px">วงจรอิเล็กทรอนิกส์ใดที่มีครบ 4 ส่วน = <b>ระบบคอมพิวเตอร์</b> (ไมโครคอนโทรลเลอร์ก็เช่นกัน)</p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-3" data-title="รูปที่ 1-2 โครงสร้างพื้นฐาน">
+  <div class="body">
+    <div class="kicker reveal">รูปที่ 1-2</div>
+    <h2 class="title reveal d1">โครงสร้างพื้นฐานของระบบคอมพิวเตอร์</h2>
+    <div class="diagram reveal d2" style="margin-top:10px">
+      <svg viewBox="0 0 1700 560" aria-label="รูปที่ 1-2 อินพุต ไป หน่วยประมวลผลกลาง ไป เอาต์พุต และหน่วยประมวลผลกลางเชื่อมกับหน่วยความจำ">
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path fill="#2a2733" d="M0 0L10 5L0 10z"/></marker></defs>
+        <g class="blk"><rect x="20" y="60" width="380" height="150" rx="26"/><text x="210" y="120">อินพุต</text><text class="sub" x="210" y="168">รับข้อมูล</text></g>
+        <g class="blk main"><rect x="660" y="60" width="380" height="150" rx="26"/><text x="850" y="120">หน่วยประมวลผลกลาง</text><text class="sub" x="850" y="168">CPU (ALU)</text></g>
+        <g class="blk"><rect x="1300" y="60" width="380" height="150" rx="26"/><text x="1490" y="120">เอาต์พุต</text><text class="sub" x="1490" y="168">ส่งข้อมูล/แสดงผล</text></g>
+        <g class="blk"><rect x="660" y="380" width="380" height="150" rx="26"/><text x="850" y="440">หน่วยความจำ</text><text class="sub" x="850" y="488">เก็บโปรแกรม/ข้อมูล</text></g>
+        <path d="M405 135 H650" stroke="#2a2733" stroke-width="6" marker-end="url(#ah2)"/>
+        <path d="M1045 135 H1290" stroke="#2a2733" stroke-width="6" marker-end="url(#ah2)"/>
+        <path d="M800 215 V370" stroke="#2a2733" stroke-width="6" marker-end="url(#ah2)"/>
+        <path d="M900 375 V220" stroke="#2a2733" stroke-width="6" marker-end="url(#ah2)"/>
+      </svg>
+    </div>
+    <div class="src">วาดใหม่จาก <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-3" data-title="ส่วนรับข้อมูล (อินพุต)">
+  <div class="body">
+    <div class="kicker reveal">ส่วนที่ 1</div>
+    <h2 class="title reveal d1">ส่วนรับข้อมูล หรือ อินพุต <span class="en">(Input)</span></h2>
+    <ul class="pts reveal d2">
+      <li>เชื่อมคอมพิวเตอร์กับ <b>อุปกรณ์ภายนอก</b></li>
+      <li>แปลงสัญญาณภายนอก → <b>ระดับลอจิก</b> ที่วงจรภายในเข้าใจ</li>
+      <li>เรียกว่า <span class="hl">วงจรอินเตอร์เฟซ (Interface circuit)</span></li>
+    </ul>
+    <div class="box sun reveal d3" style="margin-top:20px">
+      <p class="small" style="margin:0">⌨️ ตัวอย่าง: วงจรแป้นพิมพ์ เปลี่ยน <b>การกดแป้น (พลังงานกล)</b> → <b>แรงดัน 5 V / 0 V</b> = ลอจิก 1 / 0</p>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-3" data-title="ส่วนส่งข้อมูล (เอาต์พุต)">
+  <div class="body">
+    <div class="kicker reveal">ส่วนที่ 2</div>
+    <h2 class="title reveal d1">ส่วนส่งข้อมูล หรือ เอาต์พุต <span class="en">(Output)</span></h2>
+    <ul class="pts reveal d2">
+      <li>รับสัญญาณจาก <b>หน่วยประมวลผล</b> (ลอจิก 1 / 0 ที่ 5 V / 0 V)</li>
+      <li>ส่งให้ <b>อุปกรณ์ภายนอก</b> นำแรงดันไปใช้งาน</li>
+    </ul>
+    <div class="grid g3 reveal d3" style="margin-top:20px">
+      <div class="box" style="text-align:center"><div class="icon">💡</div><p class="small" style="margin:0">หลอด LED</p></div>
+      <div class="box" style="text-align:center"><div class="icon">🔊</div><p class="small" style="margin:0">ลำโพง / บัซเซอร์</p></div>
+      <div class="box" style="text-align:center"><div class="icon">⚙️</div><p class="small" style="margin:0">มอเตอร์ (ผ่านวงจรขับ)</p></div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup> · ตัวอย่างอุปกรณ์: ผู้เรียบเรียง</div>
+  </div>
+</section>
+
+<section class="slide sec-3" data-title="หน่วยประมวลผลกลาง (CPU)">
+  <div class="body">
+    <div class="kicker reveal">ส่วนที่ 3</div>
+    <h2 class="title reveal d1">หน่วยประมวลผลกลาง <span class="en">(CPU: Central Processing Unit)</span></h2>
+    <div class="row">
+      <div class="box blue reveal d2"><h3 style="color:var(--blue)">หัวใจของระบบ</h3><p class="small">คิด ประมวลผล ตาม <b>ชุดคำสั่ง (โปรแกรม)</b> ที่เก็บไว้ในหน่วยความจำ</p></div>
+      <div class="box blue reveal d3"><h3 style="color:var(--blue)">ALU</h3><p class="small">Arithmetic and Logic Unit<br>ประมวลผล <b>คณิตศาสตร์</b> และ <b>ลอจิก</b></p></div>
+      <div class="box sun reveal d4"><h3 style="color:#9a6a00">CU <span class="extra">เสริม</span></h3><p class="small">Control Unit หน่วยควบคุม: อ่านคำสั่งและสั่งการให้ส่วนต่าง ๆ ทำงานตามลำดับ</p></div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [4]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-3" data-title="หน่วยความจำ 2 แบบ">
+  <div class="body">
+    <div class="kicker reveal">ส่วนที่ 4</div>
+    <h2 class="title reveal d1">หน่วยความจำ <span class="en">(Memory)</span> มี 2 แบบ</h2>
+    <div class="grid g2">
+      <div class="box blue reveal d2"><div class="icon">🔒</div><h3 style="color:var(--blue)">หน่วยความจำถาวร</h3><p class="small">เก็บ <b>โปรแกรม</b> · ข้อมูล <b>ไม่หาย</b> แม้ไม่มีไฟเลี้ยง</p><p class="mono small c-blue" style="margin:0">ROM</p></div>
+      <div class="box orange reveal d3"><div class="icon">📝</div><h3 style="color:var(--orange)">หน่วยความจำชั่วคราว</h3><p class="small">พักข้อมูลขณะประมวลผล · ข้อมูล <b>หาย</b> เมื่อไม่มีไฟเลี้ยง</p><p class="mono small c-orange" style="margin:0">RAM</p></div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-3" data-title="ROM, PROM, EPROM">
+  <div class="body">
+    <div class="kicker reveal">หน่วยความจำถาวร: ROM (Read Only Memory)</div>
+    <h2 class="title reveal d1">ตระกูล ROM (1)</h2>
+    <div class="grid g3">
+      <div class="box reveal d2"><h3>ROM</h3><p class="small">โปรแกรม <b>จากโรงงาน</b><br>ลบไม่ได้</p></div>
+      <div class="box reveal d3"><h3>PROM</h3><p class="small">โปรแกรมเองได้ <b>ครั้งเดียว</b><br>ลบไม่ได้</p></div>
+      <div class="box reveal d4"><h3>EPROM</h3><p class="small">โปรแกรมเองได้หลายครั้ง<br>ลบด้วย <b>แสง UV</b></p></div>
+    </div>
+    <p class="small reveal d5" style="margin-top:30px">ROM = หน่วยความจำที่ <b>อ่านได้อย่างเดียว</b> (ระหว่างใช้งานปกติ)</p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-3" data-title="E2PROM และ Flash memory">
+  <div class="body">
+    <div class="kicker reveal">หน่วยความจำถาวร</div>
+    <h2 class="title reveal d1">ตระกูล ROM (2): ลบได้ด้วยไฟฟ้า</h2>
+    <div class="grid g2">
+      <div class="box reveal d2"><h3>E²PROM (EEPROM)</h3><p class="small">โปรแกรมเองได้หลายครั้ง ลบด้วย <b>ไฟฟ้า</b></p>
+        <p class="small" style="margin:0">ลบ/แก้ไขได้ <b class="c-blue">ระดับไบต์</b></p></div>
+      <div class="box reveal d3"><h3>Flash memory</h3><p class="small">โปรแกรมเองได้หลายครั้ง ลบด้วย <b>ไฟฟ้า</b></p>
+        <p class="small" style="margin:0">ลบ/แก้ไขได้ <b class="c-blue">ทีละบล็อก (Block)</b></p></div>
+    </div>
+    <div class="box sun reveal d4" style="margin-top:28px"><p class="small" style="margin:0">ความแตกต่างสำคัญ: E²PROM แก้ได้ทีละ <b>ไบต์</b> · Flash แก้ได้ทีละ <b>บล็อก</b></p></div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-3" data-title="RAM">
+  <div class="body">
+    <div class="kicker reveal">หน่วยความจำชั่วคราว</div>
+    <h2 class="title reveal d1">RAM <span class="en">(Random Access Memory)</span></h2>
+    <ul class="pts reveal d2">
+      <li>ใช้ <b>พักข้อมูล</b> ระหว่างการประมวลผล</li>
+      <li><b>อ่านและเขียน</b> ได้ตามปกติ</li>
+      <li>อ่าน/เขียนแบบ <b>สุ่มตำแหน่ง</b> ได้ (Random access)</li>
+      <li>ข้อมูลคงอยู่ตราบที่มีไฟเลี้ยง และยังไม่ถูกเขียนทับ</li>
+      <li class="c-rose"><b>ไม่มีไฟเลี้ยง → ข้อมูลหาย</b></li>
+    </ul>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-3" data-title="เปรียบเทียบ ROM และ RAM">
+  <div class="body">
+    <div class="kicker reveal">สรุป</div>
+    <h2 class="title reveal d1">เปรียบเทียบหน่วยความจำ</h2>
+    <table class="t left reveal d2" style="width:100%;font-size:32px">
+      <tr><th>ชนิด</th><th>เขียนโปรแกรม</th><th>วิธีลบ</th><th>ไฟดับ ข้อมูล…</th></tr>
+      <tr><td><b>ROM</b></td><td>จากโรงงาน</td><td>ลบไม่ได้</td><td class="c-green">ไม่หาย</td></tr>
+      <tr><td><b>PROM</b></td><td>เองได้ 1 ครั้ง</td><td>ลบไม่ได้</td><td class="c-green">ไม่หาย</td></tr>
+      <tr><td><b>EPROM</b></td><td>เองได้หลายครั้ง</td><td>แสง UV</td><td class="c-green">ไม่หาย</td></tr>
+      <tr><td><b>E²PROM</b></td><td>เองได้หลายครั้ง</td><td>ไฟฟ้า (ทีละไบต์)</td><td class="c-green">ไม่หาย</td></tr>
+      <tr><td><b>Flash</b></td><td>เองได้หลายครั้ง</td><td>ไฟฟ้า (ทีละบล็อก)</td><td class="c-green">ไม่หาย</td></tr>
+      <tr><td><b>RAM</b></td><td colspan="2">อ่าน/เขียนได้ตลอดขณะทำงาน</td><td class="c-rose"><b>หาย</b></td></tr>
+    </table>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-3" data-title="หน่วยความจำใน Arduino UNO R3">
+  <div class="body">
+    <div class="kicker reveal">เชื่อมโยงกับของจริง <span class="extra">เสริม</span></div>
+    <h2 class="title reveal d1">ชิป ATmega328P บน Arduino UNO R3 มี…</h2>
+    <div class="grid g3">
+      <div class="box blue reveal d2" style="text-align:center"><div class="mono" style="font-size:80px;color:var(--blue);font-weight:700">32 kB</div><h3 style="color:var(--blue)">Flash</h3><p class="small">เก็บโปรแกรมที่อัปโหลด</p></div>
+      <div class="box orange reveal d3" style="text-align:center"><div class="mono" style="font-size:80px;color:var(--orange);font-weight:700">2 kB</div><h3 style="color:var(--orange)">SRAM</h3><p class="small">พักตัวแปรขณะทำงาน</p></div>
+      <div class="box tint reveal d4" style="text-align:center"><div class="mono" style="font-size:80px;color:var(--teal);font-weight:700">1 kB</div><h3>EEPROM</h3><p class="small">เก็บค่าตั้ง ไม่หายเมื่อปิดไฟ</p></div>
+    </div>
+    <div class="src">ที่มา: Arduino UNO R3 Datasheet <sup class="ref"><a href="#refs">[9]</a></sup></div>
+  </div>
+</section>
+
+<!-- ============ 1.4 ไมโครคอนโทรลเลอร์ Arduino ============ -->
+<section class="slide section sec-4" data-tag="1.4 ไมโครคอนโทรลเลอร์ Arduino" data-title="1.4 ไมโครคอนโทรลเลอร์ Arduino">
+  <div class="big-no">1.4</div>
+  <div class="body center">
+    <div class="label reveal">หัวข้อที่ 1.4</div>
+    <h2 class="reveal d1">ไมโครคอนโทรลเลอร์ Arduino</h2>
+    <p class="lead reveal d2">Arduino คืออะไร · มาจากไหน · ฮาร์ดแวร์และซอฟต์แวร์</p>
+  </div>
+</section>
+
+<section class="slide sec-4" data-title="Arduino คืออะไร">
+  <div class="body">
+    <div class="kicker reveal">ความหมาย</div>
+    <h2 class="title reveal d1">Arduino (อาร์ดุยโน่) คืออะไร?</h2>
+    <div class="box tint reveal d2">
+      <p class="small mono" style="margin:0 0 10px;color:var(--ink-soft)">“Arduino is an open-source electronics platform based on easy-to-use hardware and software.”</p>
+      <p class="lead" style="margin:0">แพลตฟอร์มอิเล็กทรอนิกส์แบบ <b>โอเพนซอร์ส</b> ที่ใช้ <b>ฮาร์ดแวร์และซอฟต์แวร์</b> ซึ่ง <span class="hl">ใช้งานง่าย</span></p>
+    </div>
+    <p class="small reveal d3" style="margin-top:30px">สร้างมาสำหรับศิลปิน นักออกแบบ และทุกคนที่สนใจสร้าง <b>ชิ้นงานที่โต้ตอบกับผู้ใช้หรือสภาพแวดล้อมได้</b></p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [7]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-4" data-title="จุดเริ่มต้นของ Arduino">
+  <div class="body">
+    <div class="kicker reveal">ประวัติ</div>
+    <h2 class="title reveal d1">เกิดที่อิตาลี ราวปี ค.ศ. 2005</h2>
+    <div class="row">
+      <div class="reveal d2">
+        <ul class="pts small">
+          <li>เริ่มที่ <b>Interaction Design Institute Ivrea</b> เมืองอีฟเรอา (Ivrea) ประเทศอิตาลี</li>
+          <li>เป็นเครื่องมือสร้างต้นแบบง่าย ๆ สำหรับ <b>นักศึกษา</b> ที่ไม่มีพื้นฐานอิเล็กทรอนิกส์และการเขียนโปรแกรม</li>
+          <li>ตั้งใจให้ <b>ราคาถูก</b> ทุกคนเข้าถึงได้</li>
+        </ul>
+      </div>
+      <div class="box tint reveal d3" style="flex:0 0 640px">
+        <h3>ทีมผู้ร่วมก่อตั้ง 5 คน</h3>
+        <ul class="pts small" style="margin:0">
+          <li>Massimo Banzi</li><li>David Cuartielles</li><li>David Mellis</li><li>Tom Igoe</li><li>Gianluca Martino</li>
+        </ul>
+      </div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [7] [8]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-4" data-title="ที่มาของชื่อ Arduino">
+  <div class="body">
+    <div class="kicker reveal">ที่มาของชื่อ</div>
+    <h2 class="title reveal d1">ชื่อ “Arduino” มาจากไหน?</h2>
+    <div class="row center">
+      <div class="box sun reveal d2" style="text-align:center"><div class="icon">🍷</div><h3 style="color:#9a6a00">บาร์ในเมือง Ivrea</h3><p class="small">ทีมผู้สร้างตั้งชื่อตามบาร์ที่ไปนั่งกันประจำ</p></div>
+      <div class="reveal d3" style="flex:0 0 auto;font-size:70px">➜</div>
+      <div class="box sun reveal d3" style="text-align:center"><div class="icon">👑</div><h3 style="color:#9a6a00">กษัตริย์ Arduin</h3><p class="small">บาร์นั้นตั้งชื่อตามกษัตริย์อาร์ดุยน์ ผู้ครองอิตาลีช่วงสั้น ๆ ราว ค.ศ. 1002</p></div>
+    </div>
+    <p class="tiny reveal d4" style="margin-top:30px">หมายเหตุ: หนังสือ <sup class="ref"><a href="#refs">[1]</a></sup> ระบุว่า Arduino แปลว่า “เพื่อนแท้” ซึ่งผู้เรียบเรียงยังไม่พบแหล่งอ้างอิงยืนยัน จึงใช้ข้อมูลจาก IEEE Spectrum แทน</p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[8]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-4" data-title="ทำไม Arduino จึงได้รับความนิยม">
+  <div class="body">
+    <div class="kicker reveal">จุดเด่น</div>
+    <h2 class="title reveal d1">ทำไม Arduino ถึงได้รับความนิยมสูง?</h2>
+    <div class="grid g2">
+      <div class="box reveal d2"><h3>💰 ราคาถูก</h3><p class="small">เมื่อเทียบกับไมโครคอนโทรลเลอร์ตระกูลอื่น</p></div>
+      <div class="box reveal d3"><h3>🙂 ใช้ง่าย</h3><p class="small">ไม่ต้องรู้โครงสร้างภายในชิปลึก ๆ แค่รู้ว่าบอร์ดมีขาอะไร ทำอะไรได้</p></div>
+      <div class="box reveal d4"><h3>📚 ผู้ใช้เยอะ</h3><p class="small">มีประสบการณ์และตัวอย่างจากผู้ใช้จำนวนมาก</p></div>
+      <div class="box reveal d5"><h3>💻 ใช้ได้ทุกระบบ</h3><p class="small">เครื่องมือเขียนโค้ดรันได้บน Windows, macOS และ Linux</p></div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-4" data-title="แพลตฟอร์ม Arduino">
+  <div class="body center">
+    <div class="kicker reveal">แพลตฟอร์ม Arduino ประกอบด้วย</div>
+    <h2 class="title reveal d1">ฮาร์ดแวร์ + ซอฟต์แวร์</h2>
+    <div class="grid g2">
+      <div class="box tint reveal d2"><div class="icon">🔧</div><h3>ฮาร์ดแวร์ (Hardware)</h3><p class="small">“บอร์ด Arduino” — บอร์ดอิเล็กทรอนิกส์ขนาดเล็ก มี <b>ไมโครคอนโทรลเลอร์</b> เป็นหลัก ร่วมกับอุปกรณ์อื่น ๆ</p></div>
+      <div class="box orange reveal d3"><div class="icon">💾</div><h3 style="color:var(--orange)">ซอฟต์แวร์ (Software)</h3><p class="small"><b>ภาษา</b>สำหรับเขียนโปรแกรม และ <b>Arduino IDE</b> เครื่องมือเขียนโค้ด</p></div>
+    </div>
+    <p class="small reveal d4" style="margin-top:30px">บอร์ดมีหลายรุ่น ต่างกันที่ <b>ขนาด จำนวนขา แรงดันไฟ และประสิทธิภาพของ MCU</b></p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-4" data-title="ซอฟต์แวร์ Arduino IDE">
+  <div class="body">
+    <div class="kicker reveal">ซอฟต์แวร์ (Software)</div>
+    <h2 class="title reveal d1">จากโค้ด สู่บอร์ด</h2>
+    <div class="grid g4" style="gap:20px">
+      <div class="box tint reveal d2" style="text-align:center"><div class="icon">✍️</div><h3>1. เขียนโค้ด</h3><p class="tiny">ภาษาไวยากรณ์แบบ C/C++</p></div>
+      <div class="box tint reveal d3" style="text-align:center"><div class="icon">⚙️</div><h3>2. คอมไพล์</h3><p class="tiny">แปลงเป็นภาษาเครื่อง</p></div>
+      <div class="box tint reveal d4" style="text-align:center"><div class="icon">🔌</div><h3>3. อัปโหลด</h3><p class="tiny">ส่งโปรแกรมลงบอร์ด</p></div>
+      <div class="box tint reveal d5" style="text-align:center"><div class="icon">🚀</div><h3>4. บอร์ดทำงาน</h3><p class="tiny">ตามโปรแกรมที่เขียน</p></div>
+    </div>
+    <ul class="pts small reveal d5" style="margin-top:34px">
+      <li>ภาษา Arduino มีไวยากรณ์แบบเดียวกับ <b>C/C++</b> (พัฒนาต่อจาก Wiring) <span class="extra">เสริม</span></li>
+      <li><b>Arduino IDE</b> ทำได้ทั้ง เขียนโค้ด คอมไพล์ และอัปโหลด ในโปรแกรมเดียว</li>
+    </ul>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [7]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-4" data-title="บอร์ด Arduino UNO">
+  <div class="body">
+    <div class="kicker reveal">บอร์ดยอดนิยม (รูปที่ 1-3)</div>
+    <h2 class="title reveal d1">Arduino UNO R3</h2>
+    <div class="row center">
+      <div class="photo reveal d2" style="flex:0 0 600px">
+        <img src="../assets/img/arduino-uno-r3.jpg" alt="บอร์ด Arduino UNO R3" style="height:480px">
+        <div class="credit">ภาพ: SparkFun Electronics, CC BY 2.0, via Wikimedia Commons</div>
+      </div>
+      <div class="reveal d3">
+        <table class="t left compact" style="width:100%">
+          <tr><th>ไมโครคอนโทรลเลอร์</th><td class="mono">ATmega328P</td></tr>
+          <tr><th>ความเร็ว</th><td class="mono">16 MHz</td></tr>
+          <tr><th>ขา Digital I/O</th><td>14 ขา (PWM 6 ขา)</td></tr>
+          <tr><th>ขา Analog Input</th><td>6 ขา</td></tr>
+          <tr><th>Flash / SRAM / EEPROM</th><td class="mono">32 / 2 / 1 kB</td></tr>
+          <tr><th>แรงดันใช้งาน</th><td class="mono">5 V</td></tr>
+        </table>
+        <p class="small" style="margin-top:20px">เหมาะกับ <b>ผู้เริ่มต้น</b> มีเอกสารและตัวอย่างมากที่สุด</p>
+      </div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [9]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-4" data-title="บอร์ด Arduino Nano">
+  <div class="body">
+    <div class="kicker reveal">บอร์ดขนาดเล็ก (รูปที่ 1-4)</div>
+    <h2 class="title reveal d1">Arduino Nano</h2>
+    <div class="row center">
+      <div class="photo reveal d2" style="flex:0 0 820px">
+        <img src="../assets/img/arduino-nano.jpg" alt="บอร์ด Arduino Nano เสียบบนเบรดบอร์ด" style="width:780px">
+        <div class="credit">ภาพ: Mauricio V. Genta, CC0, via Wikimedia Commons</div>
+      </div>
+      <div class="reveal d3">
+        <table class="t left compact" style="width:100%">
+          <tr><th>MCU</th><td class="mono">ATmega328</td></tr>
+          <tr><th>ความเร็ว</th><td class="mono">16 MHz</td></tr>
+          <tr><th>ขา Digital</th><td>D0–D13 (PWM 6)</td></tr>
+          <tr><th>ขา Analog</th><td>A0–A7 (8 ขา)</td></tr>
+          <tr><th>USB</th><td>Mini-B</td></tr>
+          <tr><th>ขนาด</th><td class="mono">45 × 18 mm</td></tr>
+        </table>
+        <p class="small" style="margin-top:20px"><b>เสียบเบรดบอร์ดได้</b> เหมาะกับงานที่มีพื้นที่น้อย</p>
+      </div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [10]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-4" data-title="บอร์ด Arduino Mega 2560">
+  <div class="body">
+    <div class="kicker reveal">บอร์ดขาเยอะ (รูปที่ 1-5)</div>
+    <h2 class="title reveal d1">Arduino Mega 2560</h2>
+    <div class="row center">
+      <div class="photo reveal d2" style="flex:0 0 680px">
+        <img src="../assets/img/arduino-mega-2560.jpg" alt="บอร์ด Arduino Mega 2560 R3" style="height:470px">
+        <div class="credit">ภาพ: Dsimic, CC BY-SA 4.0, via Wikimedia Commons</div>
+      </div>
+      <div class="reveal d3">
+        <table class="t left compact" style="width:100%">
+          <tr><th>MCU</th><td class="mono">ATmega2560</td></tr>
+          <tr><th>ความเร็ว</th><td class="mono">16 MHz</td></tr>
+          <tr><th>ขา Digital I/O</th><td>54 ขา (PWM 15)</td></tr>
+          <tr><th>ขา Analog Input</th><td>16 ขา</td></tr>
+          <tr><th>Flash / SRAM / EEPROM</th><td class="mono">256 / 8 / 4 kB</td></tr>
+          <tr><th>UART</th><td>4 ช่อง</td></tr>
+        </table>
+        <p class="small" style="margin-top:20px">เหมาะกับ <b>งานใหญ่</b> ที่ใช้ขาจำนวนมาก เช่น หุ่นยนต์ เครื่องพิมพ์ 3 มิติ</p>
+      </div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [11]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-4" data-title="เปรียบเทียบบอร์ดยอดนิยม">
+  <div class="body">
+    <div class="kicker reveal">เปรียบเทียบ</div>
+    <h2 class="title reveal d1">เลือกบอร์ดไหนดี?</h2>
+    <table class="t reveal d2" style="width:100%;font-size:30px">
+      <tr><th>รุ่น</th><th>MCU</th><th>ความเร็ว</th><th>Digital / Analog</th><th>Flash</th><th>SRAM</th></tr>
+      <tr><td><b>UNO R3</b></td><td class="mono">ATmega328P</td><td class="mono">16 MHz</td><td>14 / 6</td><td class="mono">32 kB</td><td class="mono">2 kB</td></tr>
+      <tr><td><b>Nano</b></td><td class="mono">ATmega328</td><td class="mono">16 MHz</td><td>14 / 8</td><td class="mono">32 kB</td><td class="mono">2 kB</td></tr>
+      <tr><td><b>Mega 2560</b></td><td class="mono">ATmega2560</td><td class="mono">16 MHz</td><td>54 / 16</td><td class="mono">256 kB</td><td class="mono">8 kB</td></tr>
+      <tr class="hit"><td><b>UNO R4 Minima</b> <span class="extra">ใหม่</span></td><td class="mono">Renesas RA4M1<br><span class="tiny">(Arm Cortex-M4)</span></td><td class="mono">48 MHz</td><td>14 / 6</td><td class="mono">256 kB</td><td class="mono">32 kB</td></tr>
+    </table>
+    <p class="tiny reveal d3" style="margin-top:20px">UNO R4 เป็นรุ่นใหม่ ใช้ขั้วต่อ USB-C · ก่อนซื้อบอร์ดควรตรวจสเปกล่าสุดที่ docs.arduino.cc</p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[9] [10] [11] [12]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-4" data-title="ตารางเปรียบเทียบบอร์ด Arduino (จากหนังสือ)">
+  <div class="body" style="top:112px;bottom:90px">
+    <div class="kicker" style="font-size:26px">ตารางเปรียบเทียบคุณสมบัติของบอร์ด Arduino รุ่นต่าง ๆ (เฉพาะบางรุ่น) — จากหนังสือ <sup class="ref"><a href="#refs">[1]</a></sup></div>
+    <table class="t xs" style="width:100%">
+      <tr><th>Name</th><th>Processor</th><th>Operating / Input Voltage</th><th>CPU Speed</th><th>Analog In/Out</th><th>Digital IO/PWM</th><th>EEPROM [kB]</th><th>SRAM [kB]</th><th>Flash [kB]</th><th>USB</th><th>UART</th></tr>
+      <tr><td>101</td><td>Intel® Curie</td><td>3.3 V / 7-12 V</td><td>32 MHz</td><td>6/0</td><td>14/4</td><td>-</td><td>24</td><td>196</td><td>Regular</td><td>-</td></tr>
+      <tr><td>Gemma</td><td>ATtiny85</td><td>3.3 V / 4-16 V</td><td>8 MHz</td><td>1/0</td><td>3/2</td><td>0.5</td><td>0.5</td><td>8</td><td>Micro</td><td>0</td></tr>
+      <tr><td>LilyPad</td><td>ATmega168V / ATmega328P</td><td>2.7-5.5 V</td><td>8 MHz</td><td>6/0</td><td>14/6</td><td>0.512</td><td>1</td><td>16</td><td>-</td><td>-</td></tr>
+      <tr><td>LilyPad SimpleSnap</td><td>ATmega328P</td><td>2.7-5.5 V</td><td>8 MHz</td><td>4/0</td><td>9/4</td><td>1</td><td>2</td><td>32</td><td>-</td><td>-</td></tr>
+      <tr><td>LilyPad USB</td><td>ATmega32U4</td><td>3.3 V / 3.8-5 V</td><td>8 MHz</td><td>4/0</td><td>9/4</td><td>1</td><td>2.5</td><td>32</td><td>Micro</td><td>-</td></tr>
+      <tr><td>Mega 2560</td><td>ATmega2560</td><td>5 V / 7-12 V</td><td>16 MHz</td><td>16/0</td><td>54/15</td><td>4</td><td>8</td><td>256</td><td>Regular</td><td>4</td></tr>
+      <tr><td>Micro</td><td>ATmega32U4</td><td>5 V / 7-12 V</td><td>16 MHz</td><td>12/0</td><td>20/7</td><td>1</td><td>2.5</td><td>32</td><td>Micro</td><td>1</td></tr>
+      <tr><td>Pro</td><td>ATmega168 / ATmega328P</td><td>3.3 V / 3.35-12 V · 5 V / 5-12 V</td><td>8 / 16 MHz</td><td>6/0</td><td>14/6</td><td>0.512 / 1</td><td>1 / 2</td><td>16 / 32</td><td>-</td><td>1</td></tr>
+      <tr><td>Pro Mini</td><td>ATmega328P</td><td>3.3 V / 3.35-12 V · 5 V / 5-12 V</td><td>8 / 16 MHz</td><td>6/0</td><td>14/6</td><td>1</td><td>2</td><td>32</td><td>-</td><td>1</td></tr>
+      <tr><td>Uno</td><td>ATmega328P</td><td>5 V / 7-12 V</td><td>16 MHz</td><td>6/0</td><td>14/6</td><td>1</td><td>2</td><td>32</td><td>Regular</td><td>1</td></tr>
+      <tr><td>Zero</td><td>ATSAMD21G18</td><td>3.3 V / 7-12 V</td><td>48 MHz</td><td>6/1</td><td>14/10</td><td>-</td><td>32</td><td>256</td><td>2 Micro</td><td>2</td></tr>
+      <tr><td>Due</td><td>ATSAM3X8E</td><td>3.3 V / 7-12 V</td><td>84 MHz</td><td>12/2</td><td>54/12</td><td>-</td><td>96</td><td>512</td><td>2 Micro</td><td>4</td></tr>
+      <tr><td>Esplora</td><td>ATmega32U4</td><td>5 V / 7-12 V</td><td>16 MHz</td><td>-</td><td>-</td><td>1</td><td>2.5</td><td>32</td><td>Micro</td><td>-</td></tr>
+      <tr><td>Ethernet</td><td>ATmega328P</td><td>5 V / 7-12 V</td><td>16 MHz</td><td>6/0</td><td>14/4</td><td>1</td><td>2</td><td>32</td><td>Regular</td><td>-</td></tr>
+      <tr><td>Leonardo</td><td>ATmega32U4</td><td>5 V / 7-12 V</td><td>16 MHz</td><td>12/0</td><td>20/7</td><td>1</td><td>2.5</td><td>32</td><td>Micro</td><td>1</td></tr>
+      <tr><td>Mega ADK</td><td>ATmega2560</td><td>5 V / 7-12 V</td><td>16 MHz</td><td>16/0</td><td>54/15</td><td>4</td><td>8</td><td>256</td><td>Regular</td><td>4</td></tr>
+      <tr><td>Mini</td><td>ATmega328P</td><td>5 V / 7-9 V</td><td>16 MHz</td><td>8/0</td><td>14/6</td><td>1</td><td>2</td><td>32</td><td>-</td><td>-</td></tr>
+      <tr><td>Nano</td><td>ATmega168 / ATmega328P</td><td>5 V / 7-9 V</td><td>16 MHz</td><td>8/0</td><td>14/6</td><td>0.512 / 1</td><td>1 / 2</td><td>16 / 32</td><td>Mini</td><td>1</td></tr>
+      <tr><td>Yùn</td><td>ATmega32U4 / AR9331 Linux</td><td>5 V</td><td>16 MHz / 400 MHz</td><td>12/0</td><td>20/7</td><td>1</td><td>2.5 / 16 MB</td><td>32 / 64 MB</td><td>Micro</td><td>1</td></tr>
+    </table>
+    <p class="tiny" style="margin-top:8px">บางรุ่นในตารางอาจเลิกผลิตแล้ว ตรวจรุ่นที่จำหน่ายปัจจุบันได้ที่ docs.arduino.cc</p>
+  </div>
+</section>
+
+<!-- ============ ปิดบท ============ -->
+<section class="slide sec-0" data-tag="สรุปบทเรียน" data-title="สรุปบทเรียน">
+  <div class="body">
+    <div class="kicker reveal">สรุป</div>
+    <h2 class="title reveal d1">สิ่งที่เราได้เรียนในบทที่ 1</h2>
+    <div class="grid g2" style="gap:26px">
+      <div class="box orange reveal d2"><h3 style="color:var(--orange)">1.1 ระบบตัวเลขและรหัส</h3><p class="small">ฐาน 10 → ฐานอื่น: หารเก็บเศษ · ฐานอื่น → 10: คูณน้ำหนักแล้วบวก · ฐาน 2 ↔ 16: กลุ่มละ 4 บิต</p></div>
+      <div class="box tint reveal d3"><h3>1.2 ดิจิทัลพื้นฐาน</h3><p class="small">ลอจิก 0/1 · เกต AND OR XOR NOT NAND NOR</p></div>
+      <div class="box blue reveal d4"><h3 style="color:var(--blue)">1.3 โครงสร้างคอมพิวเตอร์</h3><p class="small">อินพุต · เอาต์พุต · CPU (ALU) · หน่วยความจำ ROM / RAM</p></div>
+      <div class="box green reveal d5"><h3 style="color:#0f8a6c">1.4 Arduino</h3><p class="small">แพลตฟอร์มโอเพนซอร์ส = บอร์ด + ภาษา + Arduino IDE</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide sec-0" data-title="กิจกรรมต่อไป">
+  <div class="body center" style="text-align:center">
+    <div class="kicker reveal">กิจกรรมต่อไป</div>
+    <h2 class="title reveal d1">ได้เวลาฝึกฝีมือแล้ว!</h2>
+    <div class="grid g2 reveal d2" style="gap:40px;max-width:1300px;margin:0 auto">
+      <a class="box tint" href="exercises.html" style="text-decoration:none;color:inherit"><div class="icon">✏️</div><h3>แบบฝึกหัด</h3><p class="small">ฝึกแปลงเลขฐาน เติมตารางความจริง จับคู่หน่วยความจำ</p></a>
+      <a class="box orange" href="quiz.html" style="text-decoration:none;color:inherit"><div class="icon">📝</div><h3 style="color:var(--orange)">แบบทดสอบ 20 ข้อ</h3><p class="small">ทำก่อนเรียนและหลังเรียน ดูพัฒนาการของตัวเอง</p></a>
+    </div>
+  </div>
+</section>
+
+<section class="slide sec-0" id="refs" data-tag="เอกสารอ้างอิง" data-title="เอกสารอ้างอิง (1)">
+  <div class="body" style="font-size:25px;line-height:1.45">
+    <h2 class="title" style="font-size:56px;margin-bottom:20px">เอกสารอ้างอิง</h2>
+    <ol style="margin:0;padding-left:56px">
+      <li style="margin-bottom:12px">ประภาส สุวรรณเพชร. <i>เรียนรู้และลองเล่น Arduino เบื้องต้น</i>, บทที่ 1 ความรู้เบื้องต้นเกี่ยวกับไมโครคอนโทรลเลอร์. (เอกสารต้นฉบับของบทเรียนนี้)</li>
+      <li style="margin-bottom:12px">O'Connor, J. J., &amp; Robertson, E. F. <i>Indian numerals</i>. MacTutor History of Mathematics, University of St Andrews. https://mathshistory.st-andrews.ac.uk/HistTopics/Indian_numerals/</li>
+      <li style="margin-bottom:12px">O'Connor, J. J., &amp; Robertson, E. F. <i>Leonardo Pisano Fibonacci</i>. MacTutor History of Mathematics, University of St Andrews. https://mathshistory.st-andrews.ac.uk/Biographies/Fibonacci/</li>
+      <li style="margin-bottom:12px">Floyd, T. L. (2015). <i>Digital Fundamentals</i> (11th ed.). Pearson. (ระบบตัวเลขและรหัส, ลอจิกเกต, หน่วยความจำ)</li>
+      <li style="margin-bottom:12px">Cerf, V. (1969). <i>RFC 20: ASCII format for Network Interchange</i>. IETF. https://www.rfc-editor.org/rfc/rfc20</li>
+      <li style="margin-bottom:12px">Atmel/Microchip. <i>ATmega328P Datasheet</i> (Atmel-7810), DC Characteristics. https://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-7810-Automotive-Microcontrollers-ATmega328P_Datasheet.pdf</li>
+      <li style="margin-bottom:12px">Arduino. <i>What is Arduino?</i> Arduino Documentation. https://docs.arduino.cc/learn/starting-guide/whats-arduino/</li>
+    </ol>
+  </div>
+</section>
+
+<section class="slide sec-0" data-title="เอกสารอ้างอิง (2) และเครดิตภาพ">
+  <div class="body" style="font-size:25px;line-height:1.45">
+    <h2 class="title" style="font-size:56px;margin-bottom:20px">เอกสารอ้างอิง (ต่อ) และเครดิตภาพ</h2>
+    <ol start="8" style="margin:0;padding-left:56px">
+      <li style="margin-bottom:12px">Kushner, D. (2011). <i>The Making of Arduino</i>. IEEE Spectrum. https://spectrum.ieee.org/the-making-of-arduino</li>
+      <li style="margin-bottom:12px">Arduino. <i>Arduino UNO R3 Datasheet</i> (SKU A000066). https://docs.arduino.cc/resources/datasheets/A000066-datasheet.pdf</li>
+      <li style="margin-bottom:12px">Arduino. <i>Arduino Nano Datasheet</i> (SKU A000005). https://docs.arduino.cc/resources/datasheets/A000005-datasheet.pdf และ https://docs.arduino.cc/hardware/nano/</li>
+      <li style="margin-bottom:12px">Arduino. <i>Arduino Mega 2560 Rev3 Datasheet</i> (SKU A000067). https://docs.arduino.cc/resources/datasheets/A000067-datasheet.pdf</li>
+      <li style="margin-bottom:12px">Arduino. <i>UNO R4 Minima</i>. https://docs.arduino.cc/hardware/uno-r4-minima/</li>
+    </ol>
+    <div class="box" style="margin-top:20px;padding:18px 28px;font-size:23px">
+      <b>เครดิตภาพ (Wikimedia Commons)</b> · Arduino UNO R3: SparkFun Electronics, CC BY 2.0 (File:Arduino_Uno_-_R3.jpg) · Arduino Nano: Mauricio V. Genta, CC0 (File:Arduino_Nano_V3.0.JPG) · Arduino Mega 2560: Dsimic, CC BY-SA 4.0 (File:Arduino_MEGA_2560_R3,_front_side.jpg) · แผนภาพและสัญลักษณ์เกตอื่น ๆ วาดขึ้นใหม่
+    </div>
+    <p class="tiny" style="margin-top:14px">เข้าถึงแหล่งข้อมูลออนไลน์เมื่อ 18 ตุลาคม 2569</p>
+  </div>
+</section>
+
+</main>
+</div>
+<script src="../assets/js/gates.js"></script>
+<script src="../assets/js/deck.js"></script>
+</body>
+</html>

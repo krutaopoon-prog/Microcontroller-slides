@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>วิชาไมโครคอนโทรลเลอร์</title>
+<meta name="description" content="สื่อการสอนวิชาไมโครคอนโทรลเลอร์ ระดับ ปวช. สไลด์ แบบฝึกหัด และแบบทดสอบ">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500&family=Sarabun:wght@400;700&family=Prompt:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/theme.css">
+<style>
+    .hero { padding: 28px 0 10px; }
+    .hero .bits { font: 700 18px var(--font-mono); color: var(--teal); letter-spacing: 2px; }
+    .chapters { display: grid; gap: 16px; }
+    .ch { display: grid; grid-template-columns: 76px 1fr; gap: 16px; align-items: start; }
+    .ch .num { font: 500 44px/1 var(--font-display); color: var(--orange); background: var(--orange-soft); border-radius: 18px; text-align: center; padding: 14px 0; }
+    .ch.soon { opacity: .55; }
+    .ch.soon .num { background: var(--cream-deep); color: var(--ink-soft); }
+    @media (max-width: 560px) { .ch { grid-template-columns: 56px 1fr; } .ch .num { font-size: 30px; } }
+</style>
+</head>
+<body class="doc">
+<div class="doc-wrap">
+    <header class="hero">
+        <div class="bits">0100 1101 · 0100 0011 · 0101 0101</div>
+        <h1>วิชาไมโครคอนโทรลเลอร์</h1>
+        <p class="muted">สื่อการสอนระดับ ปวช. — สไลด์ แบบฝึกหัด และแบบทดสอบ</p>
+    </header>
+
+    <main class="chapters">
+        <article class="card ch">
+            <div class="num">1</div>
+            <div>
+                <h2>ความรู้เบื้องต้นเกี่ยวกับไมโครคอนโทรลเลอร์</h2>
+                <p class="muted" style="margin:0 0 6px">ระบบตัวเลขและรหัส · ดิจิทัลพื้นฐาน · โครงสร้างคอมพิวเตอร์ · Arduino</p>
+                <div class="btn-row">
+                    <a class="btn" href="ch01/slides.html">▶ สไลด์บทเรียน</a>
+                    <a class="btn ghost" href="ch01/exercises.html">✏️ แบบฝึกหัด</a>
+                    <a class="btn orange" href="ch01/quiz.html">📝 แบบทดสอบ</a>
+                </div>
+            </div>
+        </article>
+        <article class="card ch soon" aria-disabled="true">
+            <div class="num">2</div>
+            <div><h2>บทถัดไป</h2><p class="muted" style="margin:0">เร็ว ๆ นี้</p></div>
+        </article>
+    </main>
+
+    <p class="muted" style="font-size:14px;margin-top:24px">วิธีใช้สไลด์: ← → หรือ Space เลื่อนหน้า/แสดงทีละขั้น · T สารบัญ · F เต็มจอ ·
+        เนื้อหาเรียบเรียงจาก “เรียนรู้และลองเล่น Arduino เบื้องต้น” (ครูประภาส สุวรรณเพชร) และแหล่งอ้างอิงท้ายสไลด์ · <a href="ch01/answers.html">สำหรับครู 🔒</a></p>
+</div>
+</body>
+</html>
