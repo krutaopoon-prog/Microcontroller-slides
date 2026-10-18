@@ -166,6 +166,37 @@ table.tt th { background: var(--cream-deep); font-family: var(--font-display); f
 .print-only { display: none; }
 
 /* ===========================================
+   SCORE SHEET — ใบรายงานคะแนน (scoresheet.js)
+   =========================================== */
+.score-sheet {
+    background: #fff;
+    border: 2px solid var(--ink);
+    border-radius: 14px;
+    padding: 22px 26px;
+    margin: 0 0 18px;
+    max-width: 760px;
+}
+.score-sheet .ss-top { text-align: center; border-bottom: 2px solid var(--ink); padding-bottom: 10px; margin-bottom: 14px; }
+.score-sheet .ss-org { font-size: 15px; color: var(--ink-soft); }
+.score-sheet .ss-title { font: 500 28px var(--font-display); margin: 2px 0; }
+.score-sheet .ss-sub { font-size: 16px; }
+.score-sheet table { border-collapse: collapse; width: 100%; margin: 8px 0; }
+.score-sheet th, .score-sheet td { border: 1px solid #b9b2a6; padding: 5px 10px; text-align: left; font-size: 16px; }
+.score-sheet th { background: var(--cream); font-family: var(--font-display); font-weight: 500; white-space: nowrap; width: 1%; }
+.score-sheet .ss-score { text-align: center; font-family: var(--font-display); font-size: 20px; margin: 12px 0 6px; }
+.score-sheet .ss-big { font: 600 46px var(--font-mono); color: var(--teal); }
+.score-sheet .ss-pct { color: var(--ink-soft); }
+.score-sheet .ss-grid td, .score-sheet .ss-grid th { text-align: center; width: auto; padding: 4px 2px; }
+.score-sheet .ss-grid td { font-weight: 700; }
+.score-sheet .ss-sets td:not(:nth-child(2)), .score-sheet .ss-sets th { text-align: center; }
+.score-sheet .ss-sets th { width: auto; }
+.score-sheet .ss-sets td:nth-child(2) { width: 62%; }
+.score-sheet .ss-foot { margin-top: 12px; font-size: 13px; color: var(--ink-soft); text-align: center; word-break: break-all; }
+.score-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.score-actions .hint { font-size: 14px; color: var(--ink-soft); }
+.locked input, .locked select, .locked .choice { cursor: not-allowed; }
+
+/* ===========================================
    PRINT (A4) — ใบงาน / ข้อสอบ / เฉลย
    =========================================== */
 @page { size: A4 portrait; margin: 14mm 14mm 16mm; }
@@ -191,5 +222,13 @@ table.tt th { background: var(--cream-deep); font-family: var(--font-display); f
     .is-ok, .is-bad { background: none !important; }
     .feedback { display: none !important; }
     body.print-blank .doc input[type=text], body.print-blank .doc select { color: transparent !important; }
+
+    /* ใบคะแนน: พิมพ์เฉพาะใบคะแนนเมื่อ body.print-score, กรณีอื่นไม่พิมพ์ใบคะแนน */
+    body:not(.print-score) .score-sheet { display: none !important; }
+    body.print-score .doc-wrap > :not(.score-sheet) { display: none !important; }
+    body.print-score .score-sheet { display: block !important; border: 1.5px solid #000; border-radius: 0; max-width: none; padding: 8mm 10mm; break-inside: avoid; }
+    body.print-score .score-sheet th { background: #eee !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body.print-score .score-sheet th, body.print-score .score-sheet td { font-size: 12.5pt; border-color: #555; }
+    body.print-score .score-sheet .ss-big { color: #000; }
     a { color: #000; text-decoration: none; }
 }

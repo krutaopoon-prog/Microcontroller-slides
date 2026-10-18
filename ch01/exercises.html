@@ -29,6 +29,12 @@
     .tt select { width: 3.6em; font-family: var(--font-mono); }
     .opts { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 16px; background: var(--cream); border-radius: 10px; padding: 6px 12px; margin-bottom: 6px; }
     .opts.col { flex-direction: column; }
+    .who { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; }
+    .who label { display: flex; flex-direction: column; font-size: 15px; color: var(--ink-soft); gap: 4px; }
+    .who input { width: 100%; }
+    .btn:disabled { opacity: .45; cursor: not-allowed; }
+    #result .big { font: 500 40px var(--font-display); color: var(--teal); }
+    @media (max-width: 620px) { .who { grid-template-columns: 1fr 1fr; } .who label:first-child { grid-column: 1 / -1; } }
     .random-note { display: none; }
     .random .random-note { display: block; }
     .sheet-head { border: 1.5px solid #000; padding: 8px 12px; margin-bottom: 8mm; font-size: 12.5pt; }
@@ -72,7 +78,12 @@
     <header class="card no-print">
         <span class="chip orange">บทที่ 1</span>
         <h1 style="margin-top:8px">แบบฝึกหัด: ความรู้เบื้องต้นเกี่ยวกับไมโครคอนโทรลเลอร์</h1>
-        <p class="muted" style="margin:0">ทำทีละชุด แล้วกด “ตรวจคำตอบ” — ✓ = ถูก, ✗ = ลองใหม่อีกครั้ง (ดูวิธีทำได้ในสไลด์)</p>
+        <p class="muted" style="margin:0 0 12px">ทำทีละชุด แล้วกด “ตรวจคำตอบ” — ✓ = ถูก, ✗ = ลองใหม่อีกครั้ง (ดูวิธีทำได้ในสไลด์) · ทำครบแล้วกด <b>ส่งคำตอบทั้งหมด</b> ท้ายหน้า เพื่อรับใบคะแนน</p>
+        <div class="who">
+            <label>ชื่อ-สกุล <input class="name-field" type="text" id="name" autocomplete="name"></label>
+            <label>ชั้น <input class="name-field" type="text" id="room"></label>
+            <label>เลขที่ <input class="name-field" type="text" id="no" inputmode="numeric"></label>
+        </div>
         <div class="btn-row">
             <button class="btn" type="button" data-print="all">🖨 พิมพ์ใบงานทั้งหมด</button>
             <a class="btn ghost" href="answers.html">เฉลยสำหรับครู 🔒</a>
@@ -80,12 +91,26 @@
     </header>
 
     <main id="sets"></main>
+
+    <section class="card no-print" id="submitBox">
+        <h2>ส่งคำตอบทั้งหมด</h2>
+        <p class="muted" style="margin:0 0 6px">ระบบจะตรวจทุกชุด บันทึกคะแนนพร้อมเวลาส่ง และล็อกคำตอบ แล้วจึงพิมพ์ใบคะแนนได้</p>
+        <div class="btn-row">
+            <button class="btn orange" type="button" id="submitAll">📨 ส่งคำตอบทั้งหมด</button>
+            <button class="btn ghost" type="button" id="unlockAll" hidden>แก้คำตอบแล้วส่งใหม่</button>
+        </div>
+        <div id="result" aria-live="polite"></div>
+    </section>
+
+    <!-- ใบรายงานคะแนน (สร้างหลังกดส่ง แสดงบนจอและพิมพ์ได้) -->
+    <section class="score-sheet" id="scoreSheet" hidden aria-label="ใบรายงานคะแนน"></section>
 </div>
 
 <script src="../assets/js/common.js"></script>
 <script src="../assets/js/gates.js"></script>
 <script src="exercises-data.js"></script>
 <script src="check-data.js"></script>
+<script src="../assets/js/scoresheet.js"></script>
 <script>
 /* ===========================================
    แบบฝึกหัด: สร้างโจทย์จาก exercises-data.js, ตรวจคำตอบด้วยค่าแฮชใน check-data.js
@@ -195,6 +220,7 @@
             fb.innerHTML = ok ? '<span class="ok">✓</span>' : '<span class="bad">✗</span>' + (random ? ` <span class="muted">(${C.esc(div.dataset.ans)})</span>` : '');
         });
         sec.querySelector('.score').textContent = `ได้ ${got} / ${sec.dataset.max} คะแนน`;
+        return got;
     }
 
     function clearSet(sec) {
@@ -250,10 +276,75 @@
     E.sets.forEach(renderSet);
     document.querySelector('.total-print').textContent = total;
 
+    /* --- ส่งคำตอบทั้งหมด: ตรวจทุกชุด บันทึกคะแนน+เวลา ล็อกคำตอบ แล้วสร้างใบคะแนน --- */
+    let loadedAt = Date.now(), startedAt = null, confirmBlank = false, locked = false;
+    root.addEventListener('input', () => { if (!startedAt) startedAt = Date.now(); confirmBlank = false; });
+    root.addEventListener('change', () => { if (!startedAt) startedAt = Date.now(); confirmBlank = false; });
+    const resBox = document.getElementById('result');
+    const who = () => ({ name: document.getElementById('name').value.trim(), room: document.getElementById('room').value.trim(), no: document.getElementById('no').value.trim() });
+
+    function setLocked(on) {
+        locked = on;
+        root.classList.toggle('locked', on);
+        root.querySelectorAll('input, select').forEach(i => { i.disabled = on; });
+        root.querySelectorAll('[data-act]').forEach(b => { b.disabled = on; });
+        ['name', 'room', 'no'].forEach(id => { document.getElementById(id).disabled = on; });
+        document.getElementById('submitAll').disabled = on;
+        document.getElementById('unlockAll').hidden = !on;
+    }
+
+    function submitAll() {
+        if (locked) return;
+        const w = who();
+        if (!w.name || !w.room || !w.no) { resBox.innerHTML = '<p class="bad">กรุณากรอก ชื่อ-สกุล ชั้น และเลขที่ ด้านบนให้ครบก่อนส่ง</p>'; document.getElementById('name').focus(); return; }
+        if (root.querySelector('.set.random')) { resBox.innerHTML = '<p class="bad">ชุดที่ 1 อยู่ในโหมดฝึกเพิ่ม (โจทย์สุ่ม) — กด “กลับไปโจทย์ชุดมาตรฐาน” แล้วทำให้ครบก่อนส่ง</p>'; return; }
+        const blank = Array.from(root.querySelectorAll('input, select')).filter(i => i.value.trim() === '').length;
+        if (blank && !confirmBlank) {
+            confirmBlank = true;
+            resBox.innerHTML = `<p class="bad">ยังไม่ได้ตอบ ${blank} ช่อง — ถ้าต้องการส่งเลย ให้กด “ส่งคำตอบทั้งหมด” อีกครั้ง</p>`;
+            return;
+        }
+        const sets = Array.from(root.querySelectorAll('.set')).map(sec => ({
+            id: sec.dataset.set, title: E.sets.find(x => x.id === sec.dataset.set).title, got: checkSet(sec), max: +sec.dataset.max
+        }));
+        const score = sets.reduce((a, x) => a + x.got, 0);
+        const submittedAt = Date.now(), start = startedAt || loadedAt;
+        const k = 'mcu-ch01-ex:' + w.room + ':' + w.no + ':' + w.name;
+        const rec = C.store.get(k, { history: [] });
+        const attempt = rec.history.length + 1;
+        rec.history.push({ score, total, sets: sets.map(x => x.got), submittedAt, startedAt: start, attempt });
+        C.store.set(k, rec);
+        setLocked(true);
+
+        const detail = `<table class="ss-sets"><tr><th>ชุด</th><th>เรื่อง</th><th>ได้</th><th>เต็ม</th></tr>${sets.map((x, i) => {
+            const m = x.title.match(/^ชุดที่ \d+ (.*)$/);
+            return `<tr><td>${i + 1}</td><td>${C.esc(m ? m[1] : x.title)}</td><td><b>${x.got}</b></td><td>${x.max}</td></tr>`;
+        }).join('')}<tr><th colspan="2" style="text-align:right">รวม</th><td><b>${score}</b></td><td>${total}</td></tr></table>`;
+        ScoreSheet.render(document.getElementById('scoreSheet'), {
+            kind: 'แบบฝึกหัด', chapter: E.chapter, who: w, score, total, submittedAt, startedAt: start, attempt, detailHTML: detail
+        });
+        resBox.innerHTML = `<p class="ok" style="margin:10px 0 0">ส่งคำตอบเรียบร้อย · ${C.thaiDateTime(submittedAt)}</p>
+            <div class="big">${score} / ${total} คะแนน (${Math.round(score / total * 100)}%)</div>
+            <div class="score-actions" style="margin-top:10px">
+                <button class="btn orange" type="button" id="printScore">🖨 พิมพ์ใบคะแนน</button>
+                <span class="hint">ในหน้าต่างพิมพ์ เลือกปลายทาง “บันทึกเป็น PDF” แล้วนำไฟล์ไปแนบส่งใน Google Classroom</span>
+            </div>`;
+        document.getElementById('printScore').addEventListener('click', () => ScoreSheet.print());
+        document.getElementById('scoreSheet').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    document.getElementById('submitAll').addEventListener('click', submitAll);
+    document.getElementById('unlockAll').addEventListener('click', () => {
+        setLocked(false);
+        confirmBlank = false;
+        resBox.innerHTML = '<p class="muted">ปลดล็อกแล้ว แก้คำตอบได้ — เมื่อส่งอีกครั้งจะนับเป็นการส่งครั้งถัดไป</p>';
+        document.getElementById('scoreSheet').hidden = true;
+    });
+
     document.addEventListener('click', e => {
         const p = e.target.closest('[data-print]');
         if (p) { printSheet(p.dataset.print); return; }
-        const b = e.target.closest('[data-act]'); if (!b) return;
+        const b = e.target.closest('[data-act]'); if (!b || locked) return;
         const sec = b.closest('.set');
         ({ check: () => checkSet(sec), clear: () => clearSet(sec), random: () => setRandom(sec, true), std: () => setRandom(sec, false) })[b.dataset.act]();
     });

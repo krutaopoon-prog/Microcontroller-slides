@@ -83,5 +83,21 @@
         return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
     }
 
-    g.LessonCommon = { norm, cyrb53, answerHash, toBase, fromBase, divSteps, decryptAnswers, store, shuffle, esc };
+    /* --- วันเวลาแบบไทย เช่น "18 ตุลาคม 2569 เวลา 21:35:12 น." --- */
+    function thaiDateTime(d) {
+        d = new Date(d);
+        const date = d.toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' });
+        const time = d.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+        return date + ' เวลา ' + time + ' น.';
+    }
+
+    /* --- ระยะเวลา เช่น "12 นาที 30 วินาที" --- */
+    function duration(ms) {
+        let s = Math.max(0, Math.round(ms / 1000));
+        const h = Math.floor(s / 3600); s -= h * 3600;
+        const m = Math.floor(s / 60); s -= m * 60;
+        return [h ? h + ' ชั่วโมง' : '', m ? m + ' นาที' : '', (s || (!h && !m)) ? s + ' วินาที' : ''].filter(Boolean).join(' ');
+    }
+
+    g.LessonCommon = { norm, cyrb53, answerHash, toBase, fromBase, divSteps, decryptAnswers, store, shuffle, esc, thaiDateTime, duration };
 })(typeof window !== 'undefined' ? window : globalThis);
