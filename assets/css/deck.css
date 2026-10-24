@@ -147,6 +147,7 @@ svg {
 .slide.sec-2 { --sec: var(--teal); --sec-soft: var(--teal-soft); }
 .slide.sec-3 { --sec: var(--blue); --sec-soft: var(--blue-soft); }
 .slide.sec-4 { --sec: #0f8a6c; --sec-soft: #d5efe6; }
+.slide.sec-5 { --sec: var(--rose); --sec-soft: var(--rose-soft); }
 
 /* --- กรอบสไลด์ (chrome) --- */
 .chrome {

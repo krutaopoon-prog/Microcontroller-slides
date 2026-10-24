@@ -1,0 +1,2517 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>บทที่ 2 การเขียนโปรแกรมภาษาซี</title>
+<meta name="description" content="สไลด์ประกอบการสอน บทที่ 2 การเขียนโปรแกรมภาษาซีสำหรับไมโครคอนโทรลเลอร์ ระดับ ปวช. (5 ชั่วโมง)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Sarabun:wght@400;700&family=Prompt:wght@400;500;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/theme.css">
+<link rel="stylesheet" href="../assets/css/deck.css">
+<link rel="stylesheet" href="../assets/css/sims.css">
+<link rel="stylesheet" href="../assets/css/code.css">
+<style>
+    /* ส่วนเพิ่มเฉพาะบทนี้ */
+    .cover .bits { font: 700 46px/1.45 var(--font-code); text-align: left; right: 130px; top: 250px; }
+    table.plan td, table.plan th { font-size: 26px; padding: 5px 16px; }
+    table.plan td:first-child { font-family: var(--font-mono); white-space: nowrap; }
+    table.plan tr.brk td { background: var(--cream); color: var(--ink-soft); }
+    .vwrap { flex: 0 0 1000px; }
+    .vside { display: flex; flex-direction: column; gap: 18px; }
+    .fix { border: 3px dashed var(--rose); background: #fff; border-radius: 20px; padding: 12px 24px; font-size: 28px; line-height: 1.45; }
+    .fix b.t { color: var(--rose); font-family: var(--font-display); font-weight: 500; }
+    .note { background: var(--sun-soft); border-radius: 18px; padding: 12px 24px; font-size: 29px; line-height: 1.45; }
+    .cards { display: grid; gap: 18px; }
+    .cards .box { padding: 18px 22px; }
+    .cards .box h3 { font-size: 34px; margin-bottom: 4px; }
+    .cards .box p { font-size: 28px; line-height: 1.4; margin: 0; }
+    .step5 { display: flex; gap: 14px; align-items: stretch; }
+    .step5 .box { flex: 1; text-align: center; padding: 20px 12px; }
+    .step5 .box .icon { font-size: 58px; margin-bottom: 6px; }
+    .step5 .box h3 { font-size: 32px; margin: 0 0 6px; }
+    .step5 .box p { font-size: 25px; line-height: 1.35; margin: 0; color: var(--ink-soft); }
+    .step5 .arr { align-self: center; font-size: 40px; color: var(--ink-soft); flex: 0 0 auto; }
+    .symrow { display: grid; grid-template-columns: 300px 1fr; gap: 6px 30px; align-items: center; }
+    .symrow svg { width: 260px; height: 120px; }
+    .symrow h3 { font: 500 38px var(--font-display); margin: 0; color: var(--ink); }
+    .symrow p { font-size: 28px; margin: 0; color: var(--ink-soft); }
+    .fcbox { display: flex; justify-content: center; align-items: flex-start; }
+    .fcbox svg { height: auto; }
+    .algo { font-size: 33px; line-height: 1.5; }
+    .algo li { margin-bottom: 2px; }
+    .lang { display: flex; flex-direction: column; gap: 14px; }
+    .lang .box { display: grid; grid-template-columns: 330px 1fr 420px; align-items: center; gap: 20px; padding: 16px 26px; }
+    .lang .box h3 { font-size: 36px; margin: 0; }
+    .lang .box p { font-size: 27px; margin: 0; line-height: 1.35; }
+    .lang .box .ex { font: 700 27px var(--font-code); }
+    .struct { display: flex; flex-direction: column; gap: 12px; width: 640px; }
+    .struct .blk { border-radius: 14px; padding: 12px 18px; text-align: center; font: 500 30px var(--font-display); }
+    .struct .head { background: #e7f4d8; border: 3px solid #8fbf5a; }
+    .struct .bodyp { background: var(--teal-soft); border: 3px solid var(--teal); display: flex; flex-direction: column; gap: 10px; padding: 12px 18px 18px; }
+    .struct .main { background: #ece4fb; border: 3px solid #8e74c8; }
+    .struct .subf { background: var(--orange-soft); border: 3px solid var(--orange); }
+    .struct .setup { background: var(--rose-soft); border: 3px solid var(--rose); }
+    .struct .loop { background: #e7f4d8; border: 3px solid #8fbf5a; }
+    .struct .proto { background: var(--orange-soft); border: 3px dashed var(--orange); }
+    .leds { display: flex; gap: 18px; }
+    .led { width: 54px; height: 54px; border-radius: 50%; background: #ddd6e2; border: 4px solid #c9c1cf; display: inline-block; vertical-align: middle; }
+    .led.on { background: radial-gradient(circle at 40% 35%, #fff2f2, #ff5a5a 50%, #c41f2f); border-color: #c41f2f; box-shadow: 0 0 22px 4px rgba(255, 90, 90, .55); }
+    table.ledt td { padding: 6px 18px; }
+    .nm { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .nm .box { text-align: center; padding: 14px 10px; }
+    .nm code { font-size: 36px; background: none; }
+    .nm .frag { font: 500 27px var(--font-display); margin-top: 6px; }
+    .ok { color: var(--green); } .ng { color: var(--rose); }
+    .cells { display: inline-flex; font: 700 30px var(--font-code); }
+    .cells span { border: 3px solid var(--blue); background: var(--blue-soft); padding: 8px 14px; margin-left: -3px; }
+    .grid2d { display: inline-grid; grid-template-columns: repeat(3, auto); font: 700 28px var(--font-code); }
+    .grid2d span { border: 3px solid var(--blue); background: var(--blue-soft); padding: 6px 12px; margin: 0 0 -3px -3px; }
+    table.bits td, table.bits th { font-family: var(--font-code); font-weight: 700; font-size: 38px; padding: 4px 18px; text-align: center; }
+    table.bits th { font-family: var(--font-display); font-weight: 400; font-size: 26px; color: var(--ink-soft); text-align: right; }
+    table.bits tr.res td { border-top: 4px solid var(--ink); color: var(--orange); }
+    .race td { font-size: 30px; }
+    .race td.ans { font-family: var(--font-code); font-weight: 700; color: var(--rose); }
+    .mini { font-size: 26px; line-height: 1.4; color: var(--ink-soft); }
+    .fn4 { display: grid; grid-template-columns: 220px 1fr 1fr; gap: 14px; align-items: stretch; }
+    .fn4 > div { border-radius: 18px; padding: 14px 18px; font-size: 28px; line-height: 1.4; }
+    .fn4 .hd { font: 500 30px var(--font-display); text-align: center; background: var(--cream-deep); display: flex; align-items: center; justify-content: center; }
+    .fn4 .c { background: #fff; border: 2px solid var(--line); }
+    .fn4 .c b { font-family: var(--font-display); font-weight: 500; color: var(--sec); }
+    .fn4 code { font-size: 26px; }
+    .vote.quad { grid-template-columns: repeat(4, 1fr) auto; gap: 12px; align-items: center; }
+    .vote.quad .opt { font-size: 28px; padding: 10px 14px; }
+    .vote.quad .reveal { grid-column: auto; }
+    .vrow.q { grid-template-columns: 470px 1fr; margin-bottom: 30px; }
+    .vrow.q .sit { font-size: 30px; }
+    table.notes td, table.notes th { font-size: 28px; padding: 8px 16px; line-height: 1.35; }
+    table.notes code { font-size: 26px; }
+</style>
+</head>
+<body>
+<!--
+  วิธีใช้: ← → / Space เลื่อนสไลด์และแสดงทีละขั้น · T สารบัญ · F เต็มจอ · ลิงก์ #หมายเลข ไปสไลด์นั้น
+  ป้าย "เสริม" = เนื้อหาเพิ่มจากแหล่งภายนอก มีเลขอ้างอิง [n] ลิงก์ไปสไลด์เอกสารอ้างอิง
+  กล่องเส้นประสีแดง "แก้จากต้นฉบับ" = จุดที่หนังสือพิมพ์ผิดหรือคลาดเคลื่อน และแก้ให้ถูกแล้ว
+-->
+<div class="deck-viewport">
+<main class="deck-stage" id="deckStage" data-head="บทที่ 2" data-foot="">
+
+<!-- ============ เปิดบท ============ -->
+<section class="slide cover" data-title="ปก: บทที่ 2">
+  <div class="body center" style="top:0;bottom:0">
+    <div class="chapter reveal d1">บทที่ 2</div>
+    <h1 class="reveal d2" style="max-width:1100px">การเขียนโปรแกรม<br>ภาษาซีสำหรับ<br>ไมโครคอนโทรลเลอร์</h1>
+    <div class="sub reveal d3">วิชาไมโครคอนโทรลเลอร์ · ระดับ ปวช. · 5 ชั่วโมง</div>
+    <div class="tiny reveal d4" style="margin-top:40px">เรียบเรียงจาก “เรียนรู้และลองเล่น Arduino เบื้องต้น” (ครูประภาส สุวรรณเพชร) และแหล่งอ้างอิงท้ายบท</div>
+  </div>
+  <div class="bits reveal d3">void loop()<br>{<br>&nbsp;&nbsp;<span>if</span> (x == 1)<br>&nbsp;&nbsp;&nbsp;&nbsp;ledOn();<br>}</div>
+</section>
+
+<section class="slide sec-0" data-tag="แผนการเรียนวันนี้" data-title="แผนการเรียนวันนี้ 5 ชั่วโมง">
+  <div class="body" style="top:108px">
+    <div class="kicker reveal">วันนี้เราจะทำอะไรบ้าง · 5 ชั่วโมง</div>
+    <h2 class="title reveal d1" style="font-size:52px;margin-bottom:8px">คิดเป็นขั้นตอน → วาดผังงาน → อ่าน/เขียนโค้ดภาษาซี</h2>
+    <table class="t left plan reveal d2" style="width:100%">
+      <tr><th>เวลา</th><th>ช่วง</th><th>นักเรียนทำอะไร</th></tr>
+      <tr><td>0:00–0:10</td><td>เปิดเรื่อง</td><td>🎭 สั่ง “ครูหุ่นยนต์” ทำไข่เจียว</td></tr>
+      <tr><td>0:10–0:25</td><td>แบบทดสอบก่อนเรียน</td><td>📱 ทำ 20 ข้อบนมือถือ</td></tr>
+      <tr><td>0:25–1:00</td><td>2.1 ขั้นตอนพัฒนาโปรแกรม · ผังงาน</td><td>🧩 เรียง 5 ขั้น · 🙋 โหวตสัญลักษณ์ · ✏️ กลุ่มวาดผังงาน · 🐞 จับผิด</td></tr>
+      <tr><td>1:00–1:45</td><td>2.2 โครงสร้างภาษาซี · ตัวแปร · ชนิดข้อมูล</td><td>🙋 setup ทำกี่ครั้ง · 🎮 ชื่อนี้ใช้ได้ไหม · 🙋 255 + 1</td></tr>
+      <tr><td>1:45–2:15</td><td>2.2 พอยน์เตอร์ · อาร์เรย์ · ตัวดำเนินการ</td><td>🧮 แข่งกลุ่มคิดเลข % &amp; | ^ &lt;&lt; &gt;&gt;</td></tr>
+      <tr class="brk"><td>2:15–2:25</td><td>พัก</td><td>☕</td></tr>
+      <tr><td>2:25–2:45</td><td>2.2 ไวยากรณ์ภาษาซี</td><td>🐞 หาบั๊กในโค้ด</td></tr>
+      <tr><td>2:45–3:30</td><td>2.2 คำสั่งเลือกทำ · คำสั่งวนซ้ำ</td><td>🙋 ทายผล · 📝 ไล่โค้ด · ✏️ เขียนโค้ดจากผังงาน</td></tr>
+      <tr><td>3:30–4:05</td><td>2.3 ฟังก์ชันรอง 4 ชนิด</td><td>🐞 ไฟวิ่งทิศไหน · 🧩 จับคู่ชนิดฟังก์ชัน</td></tr>
+      <tr><td>4:05–4:25</td><td>2.4 ขอบเขตตัวแปร · 2.5 struct/union</td><td>🙋 ใครมองเห็นตัวแปร · 🙋 ทำไมได้ 102</td></tr>
+      <tr><td>4:25–4:45</td><td>แบบฝึกหัด</td><td>✏️ ทำบนเว็บ ตรวจทันที (ที่เหลือเป็นการบ้าน)</td></tr>
+      <tr><td>4:45–5:00</td><td>สรุป + แบบทดสอบหลังเรียน</td><td>📱 ทำ 20 ข้อ เทียบกับก่อนเรียน</td></tr>
+    </table>
+  </div>
+</section>
+
+<section class="slide sec-0 act" data-tag="เปิดเรื่อง" data-title="🎭 สั่งครูหุ่นยนต์ทำไข่เจียว">
+  <div class="body">
+    <div><span class="act-badge">🎭 บทบาทสมมติ</span><span class="act-meta">ทั้งห้อง · 7 นาที</span></div>
+    <h2 class="title" style="font-size:58px;margin-bottom:18px">วันนี้ครูเป็น “หุ่นยนต์” 🤖 ทำตามคำสั่งแบบตรงตัวเท่านั้น</h2>
+    <div class="row">
+      <div class="qbox" style="flex:1.4"><h3>📋 กติกา</h3><ol>
+        <li>นักเรียนผลัดกันบอกคำสั่ง “ทำไข่เจียว” ทีละ 1 คำสั่ง</li>
+        <li>หุ่นยนต์ทำ<b>ตามคำพูดเป๊ะ ๆ</b> ไม่เดา ไม่ข้ามขั้น</li>
+        <li>สั่งผิดลำดับ / สั่งไม่ชัด → หุ่นยนต์ทำพัง 😵 (เช่น “ใส่ไข่” แต่ยังไม่ได้ตอก)</li>
+        <li>เพื่อนจดคำสั่งที่ใช้ได้บนกระดาน</li>
+      </ol></div>
+      <div class="vside" style="flex:1;align-items:flex-start"><div data-timer="420"></div><div data-picker="40"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide sec-0" data-title="ทำไมหุ่นยนต์ทำพัง">
+  <div class="body">
+    <div class="kicker reveal">สรุปจากกิจกรรม</div>
+    <h2 class="title reveal d1">ไมโครคอนโทรลเลอร์ก็เหมือนหุ่นยนต์ตัวนี้</h2>
+    <div class="grid g3">
+      <div class="box tint reveal d2"><div class="icon">📏</div><h3>ทำตามตรงตัว</h3><p class="small">ไม่คิดแทนเรา สั่งอะไรทำอย่างนั้น</p></div>
+      <div class="box sun reveal d3"><div class="icon">🔢</div><h3>ต้องมีลำดับ</h3><p class="small">สลับขั้นตอน ผลก็ผิด</p></div>
+      <div class="box rose reveal d4"><div class="icon">❓</div><h3>ต้องชัดเจน</h3><p class="small">“ทอดให้สุก” สุกแค่ไหน? ต้องมีเงื่อนไขที่ตรวจได้</p></div>
+    </div>
+    <p class="lead reveal d5" style="margin-top:36px;text-align:center">ลำดับขั้นตอนที่ชัดเจนแบบนี้เรียกว่า <span class="hl">อัลกอริทึม</span> — เรื่องแรกของบทนี้</p>
+  </div>
+</section>
+
+<section class="slide sec-0" data-tag="เปิดบทเรียน" data-title="หัวข้อเรื่อง">
+  <div class="body">
+    <div class="kicker reveal">เราจะเรียนอะไรบ้าง</div>
+    <h2 class="title reveal d1">หัวข้อเรื่อง</h2>
+    <div class="cards g2 grid" style="gap:20px">
+      <div class="box reveal d2" style="--sec:var(--orange)"><h3>2.1 ขั้นตอนในการพัฒนาโปรแกรม</h3><p>อัลกอริทึม · ผังงาน · จากผังงานเป็นโปรแกรม</p></div>
+      <div class="box reveal d2"><h3>2.2 ภาษาซีสำหรับไมโครคอนโทรลเลอร์</h3><p>โครงสร้าง · ตัวแปร · ตัวดำเนินการ · if · switch · ลูป</p></div>
+      <div class="box reveal d3" style="--sec:var(--blue)"><h3>2.3 การสร้างฟังก์ชันรองขึ้นใช้เอง</h3><p>prototype · ฟังก์ชัน 4 ชนิด</p></div>
+      <div class="box reveal d4" style="--sec:#0f8a6c"><h3>2.4 ขอบเขตของตัวแปร</h3><p>global · local</p></div>
+      <div class="box reveal d5" style="--sec:var(--rose)"><h3>2.5 สตรัคเจอร์ และยูเนียน</h3><p>struct · union</p></div>
+      <div class="box sun reveal d5"><p class="mini">หน้าหัวข้อเรื่องในหนังสือเขียนไว้ถึง 2.3 แต่เนื้อหาในบทมีถึง 2.5 จึงเรียนครบทั้ง 5 หัวข้อ</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide sec-0" data-title="สาระสำคัญ">
+  <div class="body center">
+    <div class="kicker reveal">สาระสำคัญ</div>
+    <h2 class="title reveal d1">ทำไมต้องเขียนโปรแกรมด้วยภาษาซี</h2>
+    <div class="grid g3">
+      <div class="box tint reveal d2"><div class="icon">🧘</div><h3>ยืดหยุ่น</h3><p class="small">เขียนง่ายกว่าภาษาแอสเซมบลี</p></div>
+      <div class="box tint reveal d3"><div class="icon">⚡</div><h3>พัฒนาได้เร็ว</h3><p class="small">ใช้เวลาเขียนและแก้น้อยกว่า</p></div>
+      <div class="box tint reveal d4"><div class="icon">🔁</div><h3>ใช้ต่อได้</h3><p class="small">หลักไวยากรณ์เดียวกันกับไมโครคอนโทรลเลอร์ตัวอื่น</p></div>
+    </div>
+    <p class="reveal d5" style="margin-top:30px;text-align:center">Arduino เขียนด้วยไวยากรณ์ภาษาซี เรียนจบบทนี้ไปเขียนบอร์ดอื่นได้ด้วย</p>
+  </div>
+</section>
+
+<section class="slide sec-0" data-title="สมรรถนะและจุดประสงค์ทั่วไป">
+  <div class="body">
+    <div class="kicker reveal">สมรรถนะประจำหน่วย</div>
+    <h2 class="title reveal d1" style="font-size:58px">แสดงความรู้เกี่ยวกับการเขียนผังงาน ตรวจความถูกต้อง<br>ของโปรแกรมจากผังงาน และเขียนโปรแกรมจากผังงานได้</h2>
+    <div class="box reveal d2">
+      <h3>จุดประสงค์ทั่วไป — เพื่อให้มีความรู้เกี่ยวกับ</h3>
+      <ol class="steps" style="margin-top:16px">
+        <li>ขั้นตอนในการพัฒนาโปรแกรม</li>
+        <li>ภาษาซีสำหรับไมโครคอนโทรลเลอร์</li>
+        <li>การสร้างฟังก์ชันรองขึ้นใช้เอง</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="slide sec-0" data-title="จุดประสงค์เชิงพฤติกรรม">
+  <div class="body">
+    <div class="kicker reveal">จุดประสงค์เชิงพฤติกรรม</div>
+    <h2 class="title reveal d1">เรียนจบบทนี้แล้ว นักเรียนสามารถ…</h2>
+    <ol class="steps">
+      <li class="reveal d2">บอกเกี่ยวกับขั้นตอนในการพัฒนาโปรแกรมได้</li>
+      <li class="reveal d3">บอกเกี่ยวกับภาษาซีสำหรับไมโครคอนโทรลเลอร์ได้</li>
+      <li class="reveal d4">บอกวิธีการสร้างฟังก์ชันรองขึ้นใช้เองได้</li>
+      <li class="reveal d5">ทำแบบฝึกหัดเสร็จทันเวลาและทำแบบทดสอบผ่านเกณฑ์ที่กำหนด</li>
+    </ol>
+  </div>
+</section>
+
+<section class="slide sec-0 act" data-title="📱 แบบทดสอบก่อนเรียน">
+  <div class="body center" style="text-align:center">
+    <div><span class="act-badge">📱 แบบทดสอบก่อนเรียน</span><span class="act-meta">รายบุคคล · 15 นาที</span></div>
+    <h2 class="title">ยังไม่รู้ก็ไม่เป็นไร ตอบตามที่คิด!</h2>
+    <p>เปิด <b>แบบทดสอบ</b> → เลือก “<b>ก่อนเรียน</b>” → ทำ 20 ข้อ → กดส่ง</p>
+    <p class="small"><a href="quiz.html">quiz.html</a> (ลิงก์อยู่ในหน้าแรกของวิชา)</p>
+    <div style="margin-top:20px"><div data-timer="900"></div></div>
+  </div>
+</section>
+
+<section class="slide sec-0" data-tag="บทนำ" data-title="ฮาร์ดแวร์ + ซอฟต์แวร์">
+  <div class="body">
+    <div class="kicker reveal">บทนำ</div>
+    <h2 class="title reveal d1">ไมโครคอนโทรลเลอร์ทำงานได้ต้องมี 2 ส่วน</h2>
+    <div class="row center">
+      <div class="box blue reveal d2" style="text-align:center"><div class="icon">🔌</div><h3 style="color:var(--blue)">ฮาร์ดแวร์ <span class="en">(Hardware)</span></h3><p class="small">วงจรไมโครคอนโทรลเลอร์<br>+ วงจรเชื่อมต่ออุปกรณ์ภายนอก</p></div>
+      <div class="reveal d3" style="flex:0 0 auto;font-size:90px;color:var(--ink-soft)">+</div>
+      <div class="box orange reveal d3" style="text-align:center"><div class="icon">📜</div><h3 style="color:var(--orange)">ซอฟต์แวร์ <span class="en">(Software)</span></h3><p class="small">ชุดคำสั่ง (โปรแกรม)<br>ที่สั่งให้ทำงานตามต้องการ</p></div>
+    </div>
+    <p class="lead reveal d4" style="margin-top:40px;text-align:center">บทนี้เรียน <span class="hl">ซอฟต์แวร์</span>: หลักการเขียนโปรแกรมควบคุม</p>
+  </div>
+</section>
+
+<!-- ============ 2.1 ขั้นตอนในการพัฒนาโปรแกรม ============ -->
+<section class="slide section sec-1" data-tag="2.1 ขั้นตอนการพัฒนาโปรแกรม" data-title="2.1 ขั้นตอนในการพัฒนาโปรแกรม">
+  <div class="big-no">2.1</div>
+  <div class="body center">
+    <div class="label reveal">หัวข้อที่ 2.1</div>
+    <h2 class="reveal d1">ขั้นตอนในการ<br>พัฒนาโปรแกรม</h2>
+    <p class="lead reveal d2">คิดก่อนเขียน: วิเคราะห์ วางแผน แล้วจึงลงมือ</p>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="5 ขั้นตอนการพัฒนาโปรแกรม">
+  <div class="body">
+    <div class="kicker reveal">โปรแกรมไม่ได้เริ่มจากการพิมพ์โค้ด</div>
+    <h2 class="title reveal d1">5 ขั้นตอนการพัฒนาโปรแกรม</h2>
+    <div class="step5">
+      <div class="box tint frag"><div class="icon">🔍</div><h3>1. วิเคราะห์ปัญหา</h3><p>ต้องการผลลัพธ์อะไร ใช้ข้อมูลอะไร</p></div><div class="arr frag">›</div>
+      <div class="box sun frag"><div class="icon">📝</div><h3>2. ออกแบบวิธีแก้</h3><p>อัลกอริทึม ผังงาน รหัสจำลอง</p></div><div class="arr frag">›</div>
+      <div class="box orange frag"><div class="icon">⌨️</div><h3>3. เขียนโปรแกรม</h3><p>แปลงเป็นภาษาคอมพิวเตอร์</p></div><div class="arr frag">›</div>
+      <div class="box rose frag"><div class="icon">🐞</div><h3>4. ทดสอบและแก้ไข</h3><p>หาข้อผิดพลาด (Error)</p></div><div class="arr frag">›</div>
+      <div class="box blue frag"><div class="icon">📚</div><h3>5. จัดทำเอกสาร</h3><p>วิธีใช้ วิธีติดตั้ง โค้ดต้นฉบับ</p></div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="ขั้นที่ 1–2 วิเคราะห์และออกแบบ">
+  <div class="body">
+    <div class="kicker reveal">ขั้นที่ 1 และ 2</div>
+    <h2 class="title reveal d1">เริ่มจาก “ผลลัพธ์” แล้วย้อนกลับ</h2>
+    <div class="row">
+      <div class="box tint reveal d2"><h3>1. วิเคราะห์ปัญหา</h3>
+        <ul class="pts small"><li>ผลลัพธ์ที่ต้องการ <b>(Output)</b></li><li>ข้อมูลที่นำเข้า <b>(Input)</b></li><li>ข้อมูลอื่นที่ใช้ประมวลผล</li></ul></div>
+      <div class="box sun reveal d3"><h3 style="color:#a26a00">2. ออกแบบวิธีแก้ปัญหา</h3>
+        <ul class="pts small"><li>เขียนลำดับขั้นตอน = <b>อัลกอริทึม</b></li><li>เครื่องมือช่วย: <b>รหัสจำลอง</b> (Pseudo code)</li><li>และ <b>ผังงาน</b> (Flowchart)</li></ul></div>
+    </div>
+    <div class="note reveal d4" style="margin-top:24px">💡 ตัวอย่าง: “ไฟกะพริบ” → Output = LED ติด-ดับทุก 1 วินาที · Input = ไม่มี · ข้อมูลอื่น = ขาที่ต่อ LED, เวลาหน่วง</div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="ขั้นที่ 3–5 เขียน ทดสอบ เอกสาร">
+  <div class="body">
+    <div class="kicker reveal">ขั้นที่ 3 4 และ 5</div>
+    <h2 class="title reveal d1">ลงมือเขียน แล้วต้องตรวจเสมอ</h2>
+    <div class="grid g3">
+      <div class="box orange reveal d2"><h3 style="color:var(--orange)">3. เขียนโปรแกรม</h3><p class="small">เลือกภาษาที่เหมาะกับผู้เขียนและงาน แล้วเขียนตามอัลกอริทึมที่ออกแบบไว้</p></div>
+      <div class="box rose reveal d3"><h3 style="color:var(--rose)">4. ทดสอบ แก้ไข</h3><p class="small">หาข้อผิดพลาด (Error) แล้วปรับปรุงจนทำงานได้ตามต้องการ</p></div>
+      <div class="box blue reveal d4"><h3 style="color:var(--blue)">5. จัดทำเอกสาร</h3><p class="small">วิธีใช้ วิธีติดตั้ง อัลกอริทึม และโค้ดต้นฉบับ (Source code) ไว้แก้ไขภายหลัง</p></div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1 act" data-title="🧩 เรียงให้ถูก: 5 ขั้นตอน">
+  <div class="body">
+    <div><span class="act-badge">🧩 เรียงให้ถูก</span><span class="act-meta">จับคู่ · 2 นาที · เขียนตัวอักษรเรียงลงกระดาษ</span></div>
+    <h2 class="title" style="font-size:56px;margin-bottom:20px">ร้านส้มตำอยากได้ “ระบบนับคิวลูกค้า” เรียงงานให้ถูกลำดับ</h2>
+    <div class="cards grid" style="grid-template-columns:1fr 1fr;gap:16px">
+      <div class="box"><h3>A. ลองกดปุ่มรับคิวหลาย ๆ ครั้ง ดูว่าเลขขึ้นถูกไหม</h3><p class="frag c-rose">ขั้นที่ 4 ทดสอบและแก้ไข</p></div>
+      <div class="box"><h3>B. ถามเจ้าของร้านว่าอยากให้จอแสดงอะไร กดปุ่มตรงไหน</h3><p class="frag c-teal">ขั้นที่ 1 วิเคราะห์ปัญหา</p></div>
+      <div class="box"><h3>C. เขียนคู่มือ “วิธีรีเซ็ตคิวตอนเปิดร้าน”</h3><p class="frag c-blue">ขั้นที่ 5 จัดทำเอกสาร</p></div>
+      <div class="box"><h3>D. พิมพ์โค้ดใน Arduino IDE</h3><p class="frag c-orange">ขั้นที่ 3 เขียนโปรแกรม</p></div>
+      <div class="box"><h3>E. วาดผังงาน “กดปุ่ม → เลขคิว +1 → แสดงผล”</h3><p class="frag" style="color:#a26a00">ขั้นที่ 2 ออกแบบวิธีแก้ปัญหา</p></div>
+      <div class="box sun" style="display:flex;align-items:center;gap:24px"><div data-timer="120" class="sm"></div><p class="frag" style="font:500 40px var(--font-display)">B → E → D → A → C</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="อัลกอริทึมคืออะไร">
+  <div class="body">
+    <div class="kicker reveal">ขั้นตอนวิธี</div>
+    <h2 class="title reveal d1">อัลกอริทึม <span class="en">(Algorithm)</span></h2>
+    <p class="lead reveal d2">กระบวนการแก้ปัญหาที่<span class="hl">เข้าใจได้ มีลำดับชัดเจน</span><br>ทำตามแล้วได้ผลลัพธ์แน่นอนเหมือนเดิมทุกครั้ง</p>
+    <div class="grid g2 reveal d3">
+      <div class="box green"><h3 style="color:var(--green)">✔ อัลกอริทึม</h3><p class="small">เป็นขั้น ๆ มีส่วนทำซ้ำ (วนรอบ) และเปรียบเทียบด้วยตรรกะ “และ / หรือ”</p></div>
+      <div class="box rose"><h3 style="color:var(--rose)">✘ สามัญสำนึก / ฮิวริสติก</h3><p class="small">ใช้ประสบการณ์กะเอา ผลอาจไม่เหมือนเดิมทุกครั้ง</p></div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="อัลกอริทึมมีหลายแบบ">
+  <div class="body">
+    <div class="kicker reveal">อัลกอริทึม</div>
+    <h2 class="title reveal d1">ปัญหาเดียว แก้ได้หลายวิธี</h2>
+    <div class="row">
+      <div class="box reveal d2"><h3>ผลลัพธ์เหมือนกันได้ แต่…</h3><ul class="pts small"><li>จำนวนขั้นตอนต่างกัน</li><li>ใช้<b>เวลา</b>ต่างกัน</li><li>ใช้<b>หน่วยความจำ</b>ต่างกัน</li></ul></div>
+      <div class="box tint reveal d3"><h3>ไม่ได้ใช้แค่คอมพิวเตอร์</h3><ul class="pts small"><li>ออกแบบวงจรไฟฟ้า</li><li>การทำงานของเครื่องจักรกล</li><li>ธรรมชาติ เช่น วิธีขนอาหารของแมลง</li></ul></div>
+    </div>
+    <p class="reveal d4" style="margin-top:20px">ไมโครคอนโทรลเลอร์มีหน่วยความจำน้อย อัลกอริทึมที่<b>สั้นและเร็ว</b>จึงสำคัญมาก</p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1 act watch" data-title="🎬 อัลกอริทึมคืออะไร">
+  <div class="body">
+    <div><span class="act-badge vd">🎬 ดูคลิป</span><span class="act-meta">5 นาที · แล้วคิด-คู่-แชร์ 3 นาที</span></div>
+    <h2 class="title" style="font-size:56px;margin-bottom:18px">อัลกอริทึมอยู่รอบตัวเรา</h2>
+    <div class="row" style="gap:36px">
+      <div class="vwrap"><div data-video="7ITAF0CkPwg" data-title="วิทยาการคำนวณ EP8 อัลกอริทึมคืออะไร" data-credit="Lipda Pola · สื่อวิชาวิทยาการคำนวณ" data-len="5:17"></div></div>
+      <div class="vside">
+        <div class="qbox"><h3>💬 คุยกับเพื่อนข้าง ๆ</h3><ol>
+          <li>ยกตัวอย่างอัลกอริทึมในชีวิตประจำวัน 1 อย่าง</li>
+          <li>อัลกอริทึมนั้นมีขั้นตอนที่ “ทำซ้ำ” ไหม?</li>
+        </ol></div>
+        <div data-timer="180" class="sm"></div>
+      </div>
+    </div>
+    <div class="src">วิดีโอ <sup class="ref"><a href="#videos">[V1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="ผังงานคืออะไร">
+  <div class="body">
+    <div class="kicker reveal">เครื่องมือออกแบบ</div>
+    <h2 class="title reveal d1">ผังงาน <span class="en">(Flowchart)</span></h2>
+    <p class="lead reveal d2">รูปภาพ / สัญลักษณ์ที่เขียนแทนขั้นตอนของอัลกอริทึม</p>
+    <div class="row center reveal d3">
+      <div class="box"><h3>ทำไมต้องวาด?</h3><ul class="pts small"><li>คุยด้วยคำพูดอย่างเดียว เข้าใจตรงกันยาก</li><li>ภาพเห็นลำดับ ทางแยก และการวนซ้ำชัดเจน</li><li>ใช้ตรวจโปรแกรมว่าทำงานถูกตามที่ออกแบบหรือไม่</li></ul></div>
+      <div style="flex:0 0 460px"><svg class="fc" viewBox="0 0 640 460" role="img" aria-label="ผังงานคำสั่ง while"><path class="a" d="M280 0 L280 60"/><polygon class="s dec " points="280,60.0 440.0,112 280,164.0 120.0,112"/><text x="280" y="112">เงื่อนไข</text><path class="a" d="M280 164 L280 206"/><text x="244" y="186" class="lbl yes">จริง</text><rect class="s " x="120.0" y="206.0" width="320" height="80" rx="6"/><text><tspan x="280" y="229.8">ชุดคำสั่ง</tspan><tspan x="280" y="262.2">ที่ทำซ้ำ</tspan></text><path class="a" d="M280 286 L280 330 L60 330 L60 34 L276 34"/><path class="a" d="M440 112 L580 112 L580 440"/><text x="545" y="88" class="lbl no">เท็จ</text></svg></div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="ตาราง 2-1 สัญลักษณ์ผังงาน (1)">
+  <div class="body">
+    <div class="kicker reveal">ตารางที่ 2-1 ผังงานหลักที่ใช้งานไมโครคอนโทรลเลอร์</div>
+    <h2 class="title reveal d1" style="margin-bottom:20px">สัญลักษณ์ผังงาน (1)</h2>
+    <div class="symrow">
+      <div class="reveal d2"><svg class="fc" viewBox="0 0 260 120" role="img" aria-label="term" style="width:260px;height:120px;flex:0 0 auto"><rect class="s term " x="30.0" y="28.0" width="200" height="64" rx="32.0"/><text x="130.0" y="60.0"></text></svg></div><div class="reveal d2"><h3>จุดเริ่มต้น / จุดสิ้นสุด</h3><p>ใช้ครั้งเดียวตอนเริ่ม และตอนจบโปรแกรม</p></div>
+      <div class="frag"><svg class="fc" viewBox="0 0 260 120" role="img" aria-label="proc" style="width:260px;height:120px;flex:0 0 auto"><rect class="s " x="30.0" y="25.0" width="200" height="70" rx="6"/><text x="130.0" y="60.0"></text></svg></div><div class="frag"><h3>กระบวนการประมวลผล</h3><p>งาน 1 อย่าง เช่น “ใส่น้ำมัน” “LED ติด”</p></div>
+      <div class="frag"><svg class="fc" viewBox="0 0 260 120" role="img" aria-label="dec" style="width:260px;height:120px;flex:0 0 auto"><polygon class="s dec " points="130.0,12.0 240.0,60.0 130.0,108.0 20.0,60.0"/><text x="130.0" y="60.0"></text></svg></div><div class="frag"><h3>การตัดสินใจ</h3><p>คำถาม ใช่ / ไม่ใช่ (จริง / เท็จ) แยกออกได้ 2 ทาง</p></div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [2]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="ตาราง 2-1 สัญลักษณ์ผังงาน (2)">
+  <div class="body">
+    <div class="kicker reveal">ตารางที่ 2-1 (ต่อ)</div>
+    <h2 class="title reveal d1" style="margin-bottom:20px">สัญลักษณ์ผังงาน (2)</h2>
+    <div class="symrow">
+      <div class="reveal d2"><svg class="fc" viewBox="0 0 260 120" role="img" aria-label="sub" style="width:260px;height:120px;flex:0 0 auto"><rect class="s sub " x="30.0" y="25.0" width="200" height="70" rx="4"/><path class="ln" d="M48.0 25.0 V95.0 M212.0 25.0 V95.0"/><text x="130.0" y="60.0"></text></svg></div><div class="reveal d2"><h3>ชุดกระบวนการที่เตรียมไว้แล้ว</h3><p>โปรแกรมย่อย / ฟังก์ชันรอง (เรียนใน 2.3)</p></div>
+      <div class="frag"><svg class="fc" viewBox="0 0 260 120" role="img" aria-label="con" style="width:260px;height:120px;flex:0 0 auto"><circle class="s" cx="130.0" cy="60.0" r="34"/><text x="130.0" y="60.0"></text></svg></div><div class="frag"><h3>จุดเชื่อมในหน้าเดียวกัน</h3><p>ใส่ตัวอักษรเดียวกัน = เส้นต่อกัน ไม่ต้องลากเส้นยาว</p></div>
+      <div class="frag"><svg class="fc" viewBox="0 0 260 120" role="img" aria-label="off" style="width:260px;height:120px;flex:0 0 auto"><polygon class="s" points="90.0,18.0 170.0,18.0 170.0,74.0 130.0,102.0 90.0,74.0"/><text x="130.0" y="54.0"></text></svg></div><div class="frag"><h3>จุดเชื่อมไปหน้าอื่น</h3><p>ผังงานยาวเกิน 1 หน้ากระดาษ</p></div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [2]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="เส้นทางเข้า-ออกของสัญลักษณ์">
+  <div class="body">
+    <div class="kicker reveal">ตัวอย่างเส้นทาง (ตารางที่ 2-1)</div>
+    <h2 class="title reveal d1">ลูกศรเข้า-ออกกี่ทาง?</h2>
+    <div class="reveal d2"><svg class="fc" viewBox="0 0 1500 200" role="img" aria-label="เส้นทางเข้าออกของสัญลักษณ์"><rect class="s term " x="25.0" y="41.0" width="170" height="58" rx="29.0"/><text x="110" y="70">เริ่ม</text><path class="a" d="M110 99 L110 160"/><text x="110" y="186" class="lbl">ออก 1 ทาง</text><path class="a" d="M340 10 L340 41"/><rect class="s term " x="255.0" y="41.0" width="170" height="58" rx="29.0"/><text x="340" y="70">จบ</text><text x="340" y="186" class="lbl">เข้า 1 ทาง</text><path class="a" d="M600 0 L600 40"/><rect class="s " x="500.0" y="41.0" width="200" height="58" rx="6"/><text x="600" y="70">ทำงาน</text><path class="a" d="M600 99 L600 160"/><text x="600" y="186" class="lbl">เข้า 1 ออก 1</text><path class="a" d="M900 0 L900 22"/><polygon class="s dec " points="900,22.0 1010.0,70 900,118.0 790.0,70"/><text x="900" y="70">เงื่อนไข?</text><path class="a" d="M900 118 L900 160"/><path class="a" d="M1010 70 L1080 70"/><text x="925" y="145" class="lbl yes">ใช่</text><text x="1050" y="52" class="lbl no">ไม่ใช่</text><text x="940" y="186" class="lbl">เข้า 1 ออก 2</text><path class="a" d="M1300 0 L1300 40"/><circle class="s" cx="1300" cy="70" r="26"/><text x="1300" y="70">A</text><text x="1300" y="186" class="lbl">ชื่อเดียวกัน = ต่อกัน</text><circle class="s" cx="1440" cy="70" r="26"/><text x="1440" y="70">A</text><path class="a" d="M1440 96 L1440 160"/></svg></div>
+    <div class="grid g2 reveal d3" style="margin-top:24px">
+      <div class="note">📐 ทิศทางนิยมจาก <b>บน → ล่าง</b> และ <b>ซ้าย → ขวา</b> ลูกศรบอกลำดับการทำงาน</div>
+      <div class="box" style="padding:14px 22px;display:flex;gap:18px;align-items:center"><svg class="fc" viewBox="0 0 260 120" role="img" aria-label="io" style="width:260px;height:120px;flex:0 0 auto"><polygon class="s io" points="51.0,25.0 235.0,25.0 209.0,95.0 25.0,95.0"/><text x="130.0" y="60.0"></text></svg><p class="small" style="margin:0"><span class="extra">เสริม</span> <b>รับ/แสดงผลข้อมูล</b> (Input/Output) พบในผังงานทั่วไป<sup class="ref"><a href="#refs">[2]</a></sup></p></div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [2]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1 act" data-title="🙋 โหวต: สัญลักษณ์ไหนใช้ทำอะไร">
+  <div class="body" style="top:118px">
+    <div><span class="act-badge">🙋 โหวตทั้งห้อง</span><span class="act-meta">ชูนิ้ว 1–4 ตามตัวเลือก</span></div>
+    <h2 class="title" style="font-size:52px;margin-bottom:16px">เลือกสัญลักษณ์ที่ถูกต้อง</h2>
+    <div class="vrow q"><div class="sit"><span class="no">1</span>“ปุ่มถูกกดหรือไม่?” ใช้รูปไหน</div>
+      <div class="vote quad" data-answer="2"><button type="button" class="opt"><b>1</b> วงรี</button><button type="button" class="opt"><b>2</b> สี่เหลี่ยม</button><button type="button" class="opt"><b>3</b> ข้าวหลามตัด</button><button type="button" class="opt"><b>4</b> วงกลม</button><button type="button" class="reveal">เฉลย</button>
+        <div class="why">เป็นคำถาม ใช่/ไม่ใช่ → <b>การตัดสินใจ</b> (ข้าวหลามตัด)</div></div></div>
+    <div class="vrow q"><div class="sit"><span class="no">2</span>ผังงานยาว ต่อไปหน้ากระดาษถัดไป ใช้รูปไหน</div>
+      <div class="vote quad" data-answer="3"><button type="button" class="opt"><b>1</b> วงกลม</button><button type="button" class="opt"><b>2</b> สี่เหลี่ยมมีขีดข้าง</button><button type="button" class="opt"><b>3</b> วงรี</button><button type="button" class="opt"><b>4</b> ห้าเหลี่ยมหัวลง</button><button type="button" class="reveal">เฉลย</button>
+        <div class="why">ห้าเหลี่ยมหัวลง = <b>จุดเชื่อมไปหน้าอื่น</b> ส่วนวงกลม = จุดเชื่อมในหน้าเดียวกัน</div></div></div>
+    <div class="vrow q"><div class="sit"><span class="no">3</span>เรียกใช้ฟังก์ชันที่เขียนเตรียมไว้แล้ว ใช้รูปไหน</div>
+      <div class="vote quad" data-answer="1"><button type="button" class="opt"><b>1</b> สี่เหลี่ยม</button><button type="button" class="opt"><b>2</b> สี่เหลี่ยมมีขีดข้าง</button><button type="button" class="opt"><b>3</b> ข้าวหลามตัด</button><button type="button" class="opt"><b>4</b> วงรี</button><button type="button" class="reveal">เฉลย</button>
+        <div class="why">สี่เหลี่ยมมีเส้นขีดสองข้าง = <b>ชุดกระบวนการที่เตรียมไว้แล้ว</b> (โปรแกรมย่อย)</div></div></div>
+  </div>
+</section>
+
+<section class="slide sec-1 act watch" data-title="🎬 สรุป Flowchart ใน 3 นาที">
+  <div class="body">
+    <div><span class="act-badge vd">🎬 ดูคลิป</span><span class="act-meta">4 นาที · จดสัญลักษณ์ที่ยังไม่รู้จัก</span></div>
+    <h2 class="title" style="font-size:56px;margin-bottom:18px">ผังงานแบบรวบรัด</h2>
+    <div class="row" style="gap:36px">
+      <div class="vwrap"><div data-video="ThpK8B9Xjsg" data-title="Ep.2 สรุป Flowchart แบบรวบรัดภายใน 3 นาที" data-credit="BorntoDev · สาระเดฟใน 3 นาที" data-len="3:50"></div></div>
+      <div class="vside">
+        <div class="qbox"><h3>👀 ดูแล้วตอบ</h3><ol>
+          <li>คลิปมีสัญลักษณ์ไหนที่ตาราง 2-1 ไม่มี?</li>
+          <li>รูปข้าวหลามตัดมีทางออกกี่ทาง?</li>
+        </ol></div>
+        <div class="note" style="font-size:24px">คลิปมีสัญลักษณ์มากกว่าในหนังสือ งานไมโครคอนโทรลเลอร์ใช้ตามตาราง 2-1 เป็นหลัก</div>
+      </div>
+    </div>
+    <div class="src">วิดีโอ <sup class="ref"><a href="#videos">[V2]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="ตัวอย่าง: อัลกอริทึมทำไข่เจียว">
+  <div class="body">
+    <div class="kicker reveal">ตัวอย่างการเขียนลำดับขั้นตอนวิธี · ขั้นที่ 1</div>
+    <h2 class="title reveal d1">โจทย์: ทำไข่เจียวหมูสับ 🍳</h2>
+    <div class="row">
+      <ol class="algo reveal d2" style="flex:1">
+        <li>เตรียมวัสดุ ไข่ หมูสับ กระทะ เตาไฟ น้ำมันพืช ถ้วย จาน</li>
+        <li>เอากระทะตั้งไฟ (อุ่นกระทะ)</li>
+        <li>ใส่น้ำมันพืช</li>
+        <li>ตอกไข่ใส่ถ้วย ใส่หมูสับ</li>
+        <li>ตีจนเข้ากัน</li>
+      </ol>
+      <ol class="algo reveal d3" start="6" style="flex:1">
+        <li>ถ้ากระทะร้อน ใส่ไข่ลงไป</li>
+        <li>รอให้หนึ่งด้านสุก</li>
+        <li>กลับด้าน</li>
+        <li>รอให้ด้านที่ 2 สุก</li>
+        <li>ตักออกใส่จาน (เสร็จ)</li>
+      </ol>
+    </div>
+    <div class="note reveal d4">🔎 หาคำว่า “<b>จน</b>” “<b>ถ้า</b>” “<b>รอให้</b>” → คือจุดที่ต้องใช้ <b>การตัดสินใจ</b> ในผังงาน</div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="ผังงานไข่เจียว (ส่วนที่ 1)">
+  <div class="body" style="top:118px">
+    <div class="kicker">ขั้นที่ 2 แปลงลำดับขั้นเป็นผังงาน · ส่วนที่ 1</div>
+    <div class="row" style="gap:30px">
+      <div class="fcbox" style="flex:0 0 700px"><div style="width:660px"><svg class="fc" viewBox="0 0 720 860" role="img" aria-label="ผังงานทำไข่เจียวหมูสับ ส่วนที่ 1"><rect class="s term " x="200.0" y="3.0" width="200" height="58" rx="29.0"/><text x="300" y="32">เริ่ม</text><path class="a" d="M300 61 L300 87"/><rect class="s " x="90.0" y="87.0" width="420" height="62" rx="6"/><text x="300" y="118">เตรียมวัสดุ ไข่ หมูสับ กระทะ…</text><path class="a" d="M300 149 L300 169"/><rect class="s " x="90.0" y="169.0" width="420" height="62" rx="6"/><text x="300" y="200">เอากระทะตั้งไฟ</text><path class="a" d="M300 231 L300 251"/><rect class="s " x="90.0" y="251.0" width="420" height="62" rx="6"/><text x="300" y="282">ใส่น้ำมันพืช</text><path class="a" d="M300 313 L300 333"/><rect class="s " x="90.0" y="333.0" width="420" height="62" rx="6"/><text x="300" y="364">ตอกไข่ใส่ถ้วย ใส่หมูสับ</text><path class="a" d="M300 395 L300 415"/><rect class="s " x="90.0" y="415.0" width="420" height="62" rx="6"/><text x="300" y="446">ตีไข่</text><path class="a" d="M300 477 L300 532"/><polygon class="s dec " points="300,532.0 460.0,584 300,636.0 140.0,584"/><text x="300" y="584">เข้ากันหรือไม่</text><path class="a" d="M460 584 L600 584 L600 400 L304 400"/><text x="560" y="560" class="lbl no">ไม่ใช่</text><path class="a" d="M300 636 L300 680"/><text x="260" y="660" class="lbl yes">ใช่</text><polygon class="s dec " points="300,680.0 460.0,732 300,784.0 140.0,732"/><text x="300" y="732">กระทะร้อนหรือไม่</text><path class="a" d="M460 732 L600 732 L600 658 L304 658"/><text x="560" y="708" class="lbl no">ไม่ใช่</text><path class="a" d="M300 784 L300 806"/><text x="260" y="798" class="lbl yes">ใช่</text><circle class="s" cx="300" cy="832" r="26"/><text x="300" y="832">B</text></svg></div></div>
+      <div style="display:flex;flex-direction:column;gap:20px;justify-content:center">
+        <div class="box frag"><h3>“ตีจนเข้ากัน”</h3><p class="small">ยังไม่เข้ากัน → <b class="ng">ไม่ใช่</b> → กลับไปตีใหม่ = <b>วนซ้ำ</b></p></div>
+        <div class="box frag"><h3>“ถ้ากระทะร้อน”</h3><p class="small">ยังไม่ร้อน → วนถามซ้ำ = <b>รอ</b></p></div>
+        <div class="box tint frag"><h3>วงกลม B</h3><p class="small">เส้นยาวเกินหน้า → ไปต่อที่ B อีกฝั่ง</p></div>
+      </div>
+    </div>
+    <div class="src">วาดใหม่จาก <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="ผังงานไข่เจียว (ส่วนที่ 2)">
+  <div class="body" style="top:118px">
+    <div class="kicker">ขั้นที่ 2 แปลงลำดับขั้นเป็นผังงาน · ส่วนที่ 2</div>
+    <div class="row" style="gap:30px">
+      <div class="fcbox" style="flex:0 0 700px"><div style="width:700px"><svg class="fc" viewBox="0 0 720 760" role="img" aria-label="ผังงานทำไข่เจียวหมูสับ ส่วนที่ 2"><circle class="s" cx="300" cy="30" r="26"/><text x="300" y="30">B</text><path class="a" d="M300 56 L300 86"/><rect class="s " x="110.0" y="87.0" width="380" height="62" rx="6"/><text x="300" y="118">ใส่ไข่ลงกระทะ</text><path class="a" d="M300 149 L300 206"/><polygon class="s dec " points="300,206.0 460.0,258 300,310.0 140.0,258"/><text x="300" y="258">ด้าน 1 สุกหรือไม่</text><path class="a" d="M460 258 L600 258 L600 178 L304 178"/><text x="560" y="234" class="lbl no">ไม่ใช่</text><path class="a" d="M300 310 L300 346"/><text x="260" y="330" class="lbl yes">ใช่</text><rect class="s " x="110.0" y="347.0" width="380" height="62" rx="6"/><text x="300" y="378">กลับด้าน</text><path class="a" d="M300 409 L300 462"/><polygon class="s dec " points="300,462.0 460.0,514 300,566.0 140.0,514"/><text x="300" y="514">ด้าน 2 สุกหรือไม่</text><path class="a" d="M460 514 L600 514 L600 436 L304 436"/><text x="560" y="490" class="lbl no">ไม่ใช่</text><path class="a" d="M300 566 L300 602"/><text x="260" y="586" class="lbl yes">ใช่</text><rect class="s " x="110.0" y="603.0" width="380" height="62" rx="6"/><text x="300" y="634">ตักใส่จาน</text><path class="a" d="M300 665 L300 695"/><rect class="s term " x="200.0" y="695.0" width="200" height="58" rx="29.0"/><text x="300" y="724">เสร็จ</text></svg></div></div>
+      <div style="display:flex;flex-direction:column;gap:20px;justify-content:center">
+        <div class="box frag"><h3>เริ่มต่อจาก B</h3><p class="small">วงกลม B ส่วนที่ 1 ต่อกับ B ตรงนี้</p></div>
+        <div class="box frag"><h3>มีการตัดสินใจ 4 จุด</h3><p class="small">เข้ากันไหม · ร้อนไหม · ด้าน 1 สุกไหม · ด้าน 2 สุกไหม</p></div>
+        <div class="box sun frag"><h3>ทุกทางต้องไปถึง “เสร็จ”</h3><p class="small">ผังงานที่ดีไม่มีทางตัน</p></div>
+      </div>
+    </div>
+    <div class="src">วาดใหม่จาก <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1 act" data-title="✏️ กลุ่มวาดผังงาน">
+  <div class="body">
+    <div><span class="act-badge">✏️ กิจกรรมกลุ่ม</span><span class="act-meta">กลุ่มละ 4–5 คน · 10 นาที · วาดลงกระดาษ A4</span></div>
+    <h2 class="title" style="font-size:56px;margin-bottom:16px">จับฉลากโจทย์ 1 ข้อ แล้ววาดผังงาน</h2>
+    <div class="row">
+      <div class="cards grid" style="flex:1.3;gap:14px">
+        <div class="box"><h3>1. ข้ามถนนทางม้าลาย</h3><p>ต้องมี: รถหยุดหรือยัง? ถ้ายัง → รอ</p></div>
+        <div class="box"><h3>2. ชาร์จโทรศัพท์</h3><p>ต้องมี: แบตเต็ม 100% หรือยัง?</p></div>
+        <div class="box"><h3>3. พัดลมเปิดเองเมื่อร้อน</h3><p>ต้องมี: อุณหภูมิเกิน 30 °C หรือไม่? (ทำซ้ำตลอด)</p></div>
+        <div class="box sun"><p><b>เกณฑ์ 5 คะแนน</b> มีเริ่ม-จบ (1) · ใช้สัญลักษณ์ถูก (1) · มีตัดสินใจ (1) · ลูกศรครบไม่มีทางตัน (1) · นำเสนอชัดเจน (1)</p></div>
+      </div>
+      <div class="vside" style="flex:1;align-items:flex-start"><div data-timer="600"></div><div data-picker="6" data-label="กลุ่ม"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="ตัวอย่าง: ไฟกะพริบ D13 อัลกอริทึม">
+  <div class="body">
+    <div class="kicker reveal">ตัวอย่างการเขียนโปรแกรมไมโครคอนโทรลเลอร์ · ขั้นที่ 1</div>
+    <h2 class="title reveal d1">โจทย์: ไฟกะพริบ LED ที่ต่ออยู่ขา D13</h2>
+    <div class="row">
+      <ol class="algo reveal d2" style="flex:1.2;font-size:36px">
+        <li>กำหนดชื่อ LED กับขาที่เชื่อมต่อ</li>
+        <li>กำหนดโหมดของขาใช้งาน</li>
+        <li>เขียนลอจิก 1 ไปที่ขาเชื่อม LED</li>
+        <li>หน่วงเวลา</li>
+        <li>เขียนลอจิก <span class="frag" style="display:inline-block;color:var(--rose);font-weight:700;text-decoration:line-through">2</span> <span class="frag" style="display:inline-block;color:var(--green);font-weight:700">0</span> ไปที่ขาเชื่อม LED</li>
+        <li>หน่วงเวลา</li>
+        <li>กระโดดกลับไปทำในขั้นตอนที่ 3</li>
+      </ol>
+      <div class="box rose act" style="flex:1"><h3 style="color:var(--rose)">🐞 จับผิด!</h3><p class="small">ในหนังสือมีข้อหนึ่งพิมพ์ผิด<br>หาให้เจอภายใน 1 นาที<br>(ใบ้: ลอจิกมีแค่ 0 กับ 1)</p><div data-timer="60" class="sm"></div></div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="ผังงานไฟกะพริบ (แก้แล้ว)">
+  <div class="body" style="top:118px">
+    <div class="kicker">ขั้นที่ 2 แปลงลำดับขั้นเป็นผังงาน</div>
+    <div class="row" style="gap:40px">
+      <div class="fcbox" style="flex:0 0 640px"><div style="width:620px"><svg class="fc" viewBox="0 0 640 720" role="img" aria-label="ผังงานไฟกะพริบ LED ขา 13"><rect class="s term " x="205.0" y="3.0" width="190" height="58" rx="29.0"/><text x="300" y="32">START</text><path class="a" d="M300 61 L300 86"/><rect class="s " x="100.0" y="87.0" width="400" height="58" rx="6"/><text x="300" y="116">กำหนดชื่อ LED = ขา 13</text><path class="a" d="M300 145 L300 170"/><rect class="s new" x="100.0" y="171.0" width="400" height="58" rx="6"/><text x="300" y="200">ตั้งขา LED เป็นเอาต์พุต</text><path class="a" d="M300 229 L300 270"/><rect class="s " x="100.0" y="271.0" width="400" height="58" rx="6"/><text x="300" y="300">เขียนลอจิก 1 ไปที่ขา LED</text><path class="a" d="M300 329 L300 355"/><rect class="s " x="100.0" y="355.0" width="400" height="58" rx="6"/><text x="300" y="384">หน่วงเวลา 1 วินาที</text><path class="a" d="M300 413 L300 439"/><rect class="s " x="100.0" y="439.0" width="400" height="58" rx="6"/><text x="300" y="468">เขียนลอจิก 0 ไปที่ขา LED</text><path class="a" d="M300 497 L300 523"/><rect class="s " x="100.0" y="523.0" width="400" height="58" rx="6"/><text x="300" y="552">หน่วงเวลา 1 วินาที</text><path class="a" d="M300 581 L300 630 L50 630 L50 250 L296 250"/><text x="130" y="660" class="lbl">วนกลับไปขั้นที่ 3</text><text x="560" y="200" class="lbl yes">← เพิ่ม</text></svg></div></div>
+      <div style="display:flex;flex-direction:column;gap:22px;justify-content:center">
+        <div class="fix"><b class="t">แก้จากต้นฉบับ</b><br>① ข้อ 5 หนังสือพิมพ์ “ลอจิก 2” ที่ถูกคือ <b>ลอจิก 0</b> (ผังงานในหนังสือเขียน 0 ถูกแล้ว)<br>② ผังงานในหนังสือไม่มีกล่องขั้นที่ 2 “กำหนดโหมดของขา” จึง<b>เพิ่มให้</b> (กรอบเส้นประสีเขียว)</div>
+        <div class="note">🔁 ลูกศรวนกลับไปขั้นที่ 3 → ไฟกะพริบไม่รู้จบ<br>ผังงานนี้ <b>ไม่มีจุดสิ้นสุด</b> เพราะไมโครคอนโทรลเลอร์ทำงานตลอดเวลา</div>
+      </div>
+    </div>
+    <div class="src">วาดใหม่จาก <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-1" data-title="จากผังงานเป็นโปรแกรม">
+  <div class="body">
+    <div class="kicker reveal">ขั้นที่ 3 แปลงผังงานเป็นโปรแกรม</div>
+    <h2 class="title reveal d1" style="margin-bottom:20px">กล่องละ 1 บรรทัด</h2>
+    <div class="row">
+      <pre class="code reveal d2" data-ln data-cc="full" style="flex:1.6">#define LED 13
+void setup()
+{
+  pinMode(LED, OUTPUT);
+}
+void loop()
+{
+  digitalWrite(LED, HIGH);  // turn the LED on
+  delay(1000);              // wait for a second
+  digitalWrite(LED, LOW);   // turn the LED off
+  delay(1000);              // wait for a second
+}</pre>
+      <table class="t left compact" style="flex:1">
+        <tr><th>กล่องในผังงาน</th><th>บรรทัด</th></tr>
+        <tr class="frag"><td>กำหนดชื่อ LED = ขา 13</td><td class="mono">1</td></tr>
+        <tr class="frag"><td>ตั้งขาเป็นเอาต์พุต</td><td class="mono">4</td></tr>
+        <tr class="frag"><td>ลอจิก 1 → ขา LED</td><td class="mono">8</td></tr>
+        <tr class="frag"><td>หน่วงเวลา 1 วินาที</td><td class="mono">9</td></tr>
+        <tr class="frag"><td>ลอจิก 0 → ขา LED</td><td class="mono">10</td></tr>
+        <tr class="frag"><td>หน่วงเวลา 1 วินาที</td><td class="mono">11</td></tr>
+        <tr class="frag"><td>วนกลับขั้นที่ 3</td><td>loop() วนเอง</td></tr>
+      </table>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup> · delay(1000) = 1000 มิลลิวินาที = 1 วินาที</div>
+  </div>
+</section>
+
+<section class="slide sec-1 act" data-title="🎲 ฝึกคิด 2.1">
+  <div class="body">
+    <div><span class="act-badge">🎲 ฝึกคิด 2.1</span><span class="act-meta">คุยกับเพื่อนข้าง ๆ 2 นาที แล้วสุ่มเลขที่ตอบ</span></div>
+    <h2 class="title" style="font-size:56px">ตอบให้ได้ก่อนไปหัวข้อ 2.2</h2>
+    <div class="row">
+      <ol class="steps" style="flex:1.5">
+        <li>ขั้นตอนการพัฒนาโปรแกรมมีกี่ขั้น อะไรบ้าง</li>
+        <li>อัลกอริทึมต่างจากการใช้สามัญสำนึกอย่างไร</li>
+        <li>สัญลักษณ์ข้าวหลามตัดใช้ทำอะไร มีทางออกกี่ทาง</li>
+      </ol>
+      <div style="flex:1;display:flex;flex-direction:column;gap:20px;align-items:flex-start"><div data-timer="120" class="sm"></div><div data-picker="40"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2.2 ภาษาซีสำหรับไมโครคอนโทรลเลอร์ ============ -->
+<section class="slide section sec-2" data-tag="2.2 ภาษาซีสำหรับไมโครคอนโทรลเลอร์" data-title="2.2 ภาษาซีสำหรับไมโครคอนโทรลเลอร์">
+  <div class="big-no">2.2</div>
+  <div class="body center">
+    <div class="label reveal">หัวข้อที่ 2.2</div>
+    <h2 class="reveal d1">ภาษาซีสำหรับ<br>ไมโครคอนโทรลเลอร์</h2>
+    <p class="lead reveal d2">โครงสร้าง ตัวแปร ตัวดำเนินการ ไวยากรณ์ คำสั่งเลือกทำ และวนซ้ำ</p>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="ภาษาเครื่อง แอสเซมบลี ภาษาซี">
+  <div class="body">
+    <div class="kicker reveal">ไมโครคอนโทรลเลอร์เข้าใจภาษาอะไร</div>
+    <h2 class="title reveal d1" style="margin-bottom:22px">จากภาษาเครื่อง สู่ภาษาซี</h2>
+    <div class="lang">
+      <div class="box reveal d2"><h3>ภาษาเครื่อง</h3><p>รหัส <b>0 กับ 1</b> ที่ไมโครคอนโทรลเลอร์ทำงานได้โดยตรง คนอ่านไม่ออก</p><div class="ex">1110 1111 0000 1111</div></div>
+      <div class="box reveal d3"><h3>ภาษาแอสเซมบลี</h3><p>คนอ่านได้ ใกล้ภาษาเครื่องที่สุด แต่เขียนยาก ซับซ้อน ช้า</p><div class="ex">LDI R16, 0xFF</div></div>
+      <div class="box tint reveal d4"><h3>ภาษาซี ✔</h3><p>เข้าใจง่าย พัฒนาได้เร็ว เหมาะกับงานไมโครคอนโทรลเลอร์</p><div class="ex">digitalWrite(13, HIGH);</div></div>
+    </div>
+    <div class="fix reveal d5" style="margin-top:20px"><b class="t">อธิบายเพิ่มจากต้นฉบับ</b> หนังสือเขียนว่า “ภาษาเครื่องเป็นเลขฐาน 16 ทั้งหมด” ที่จริงภาษาเครื่องคือรหัส <b>0/1</b> ส่วนเลขฐาน 16 เป็นวิธี<b>เขียนให้สั้น</b>ลงสำหรับคนอ่าน (4 บิต = เลขฐาน 16 หนึ่งหลัก ตามที่เรียนในบทที่ 1)</div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup> · รหัสภาษาเครื่องในแถวแรกคือคำสั่ง LDI R16, 0xFF ของ AVR (ใส่ค่า 255 ลงรีจิสเตอร์ R16) <sup class="ref"><a href="#refs">[18]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="โครงสร้างภาษาซี (รูป 2-1)">
+  <div class="body">
+    <div class="kicker reveal">โครงสร้างของภาษาซี</div>
+    <h2 class="title reveal d1">แบ่งเป็น 2 ส่วน</h2>
+    <div class="row center">
+      <div class="struct reveal d2" style="flex:0 0 640px">
+        <div class="blk head">หัวโปรแกรม</div>
+        <div class="blk bodyp">ตัวโปรแกรม
+          <div class="blk main">ฟังก์ชันหลัก main( )</div>
+          <div class="blk subf">ฟังก์ชันรองที่เขียนเพิ่มขึ้น</div>
+        </div>
+        <div class="tiny" style="text-align:center">รูปที่ 2-1 โครงสร้างภาษาซี (วาดใหม่)</div>
+      </div>
+      <ul class="pts small reveal d3">
+        <li>เขียนแยกเป็นส่วน ๆ เรียกว่า <b>ฟังก์ชัน</b></li>
+        <li>แต่ละส่วนเรียกใช้กันได้ → แบ่งงานให้หลายคนช่วยกันเขียน</li>
+        <li><b>main()</b> = ส่วนหลักของการทำงาน</li>
+        <li>ฟังก์ชันที่ผู้ใช้เขียนเพิ่ม = <b>ฟังก์ชันรอง</b></li>
+      </ul>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="โครงสร้างภาษาซีสำหรับ Arduino (รูป 2-2)">
+  <div class="body">
+    <div class="kicker reveal">โครงสร้างภาษาซีสำหรับ Arduino</div>
+    <h2 class="title reveal d1" style="margin-bottom:24px">จัดใหม่ให้ง่ายสำหรับมือใหม่</h2>
+    <div class="row" style="align-items:flex-end;gap:60px">
+      <div class="struct reveal d2" style="width:auto;flex:1">
+        <div class="blk bodyp">ตัวโปรแกรม
+          <div class="blk setup">ทำงานครั้งเดียว setup( )</div>
+          <div class="blk loop">วนกลับทำงานซ้ำ loop( )</div>
+        </div>
+        <div class="small" style="text-align:center">(พื้นฐาน)</div>
+      </div>
+      <div class="struct frag" style="width:auto;flex:1">
+        <div class="blk head" style="background:var(--blue-soft);border-color:var(--blue)">หัวโปรแกรม</div>
+        <div class="blk bodyp">ตัวโปรแกรม
+          <div class="blk setup">ทำงานครั้งเดียว setup( )</div>
+          <div class="blk loop">วนกลับทำงานซ้ำ loop( )</div>
+          <div class="blk subf">ฟังก์ชันรองที่เขียนขึ้นเอง</div>
+        </div>
+        <div class="small" style="text-align:center">(ขั้นสูง)</div>
+      </div>
+    </div>
+    <div class="src">วาดใหม่จาก <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="setup() กับ loop()">
+  <div class="body">
+    <div class="kicker reveal">หัวใจของโปรแกรม Arduino</div>
+    <h2 class="title reveal d1">setup( ) ครั้งเดียว · loop( ) ไม่รู้จบ</h2>
+    <div class="row">
+      <div class="box rose reveal d2"><h3 style="color:var(--rose)">setup( )</h3><p class="small">ทำ <b>1 ครั้ง</b> หลังจ่ายไฟหรือกดรีเซ็ต<br>ใช้ตั้งค่า เช่น <code>pinMode</code>, <code>Serial.begin</code></p></div>
+      <div class="box green reveal d3"><h3 style="color:var(--green)">loop( )</h3><p class="small">ทำงานจบแล้ว<b>วนกลับมาทำใหม่</b>ตั้งแต่ต้นไปเรื่อย ๆ<br>ใช้เขียนงานหลัก</p></div>
+    </div>
+    <div class="row frag" style="margin-top:22px;align-items:center">
+      <div class="mini" style="flex:0 0 560px"><span class="extra">เสริม</span> ใน Arduino ยังมี <b>main()</b> ซ่อนอยู่ในไฟล์ระบบ เขียนไว้แบบนี้<sup class="ref"><a href="#refs">[4]</a></sup> เราจึงไม่ต้องเขียน main() เอง</div>
+      <pre class="code sm">int main(void)
+{
+    init();
+    setup();          // ทำครั้งเดียว
+    for (;;) {
+        loop();       // วนตลอดไป
+    }
+}</pre>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [3] [4]</a></sup> (ตัดบางบรรทัดของ main.cpp ออกเพื่อให้อ่านง่าย)</div>
+  </div>
+</section>
+
+<section class="slide sec-2 act" data-title="🙋 ทายก่อนเฉลย: setup ทำกี่ครั้ง">
+  <div class="body" style="top:118px">
+    <div><span class="act-badge">🙋 ทายก่อนเฉลย</span><span class="act-meta">ชูนิ้วตอบพร้อมกัน</span></div>
+    <h2 class="title" style="font-size:52px;margin-bottom:14px">เปิดเครื่อง 10 วินาที โปรแกรมไฟกะพริบ (ติด 1 วิ ดับ 1 วิ)</h2>
+    <div class="vrow q"><div class="sit"><span class="no">1</span>setup( ) ทำงานกี่ครั้ง</div>
+      <div class="vote quad" data-answer="0"><button type="button" class="opt"><b>1</b> 1 ครั้ง</button><button type="button" class="opt"><b>2</b> 5 ครั้ง</button><button type="button" class="opt"><b>3</b> 10 ครั้ง</button><button type="button" class="opt"><b>4</b> ไม่ทำเลย</button><button type="button" class="reveal">เฉลย</button>
+        <div class="why">setup() ทำครั้งเดียวหลังจ่ายไฟ</div></div></div>
+    <div class="vrow q"><div class="sit"><span class="no">2</span>loop( ) ทำครบกี่รอบ</div>
+      <div class="vote quad" data-answer="1"><button type="button" class="opt"><b>1</b> 1 รอบ</button><button type="button" class="opt"><b>2</b> 5 รอบ</button><button type="button" class="opt"><b>3</b> 10 รอบ</button><button type="button" class="opt"><b>4</b> 20 รอบ</button><button type="button" class="reveal">เฉลย</button>
+        <div class="why">1 รอบ = ติด 1 วิ + ดับ 1 วิ = 2 วินาที → 10 ÷ 2 = <b>5 รอบ</b></div></div></div>
+    <div class="vrow q"><div class="sit"><span class="no">3</span>ถ้ากดปุ่มรีเซ็ต setup( ) จะ…</div>
+      <div class="vote quad" data-answer="2"><button type="button" class="opt"><b>1</b> ไม่ทำอีก</button><button type="button" class="opt"><b>2</b> ทำต่อจากเดิม</button><button type="button" class="opt"><b>3</b> ทำใหม่ 1 ครั้ง</button><button type="button" class="opt"><b>4</b> ทำทุกรอบ</button><button type="button" class="reveal">เฉลย</button>
+        <div class="why">setup() ทำ 1 ครั้ง “หลังจ่ายไฟหรือรีเซ็ตทุกครั้ง”<sup class="ref"><a href="#refs">[3]</a></sup></div></div></div>
+  </div>
+</section>
+
+<section class="slide sec-2 act watch" data-title="🎬 Void Setup และ Void Loop">
+  <div class="body">
+    <div><span class="act-badge vd">🎬 ดูคลิป</span><span class="act-meta">5 นาที · จับประเด็น 2 ข้อ</span></div>
+    <h2 class="title" style="font-size:56px;margin-bottom:18px">setup กับ loop ต่างกันอย่างไร</h2>
+    <div class="row" style="gap:36px">
+      <div class="vwrap"><div data-video="IGLs5c0LG38" data-title="Void Setup และ Void Loop มันแตกต่างกันอย่างไร" data-credit="NoneTech" data-len="4:45"></div></div>
+      <div class="vside">
+        <div class="qbox"><h3>✍️ จดลงสมุด</h3><ol>
+          <li>คำสั่งแบบไหนควรอยู่ใน setup()</li>
+          <li>คำสั่งแบบไหนควรอยู่ใน loop()</li>
+        </ol></div>
+        <div data-timer="120" class="sm"></div>
+      </div>
+    </div>
+    <div class="src">วิดีโอ <sup class="ref"><a href="#videos">[V3]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="ตัวอย่างโครงสร้างแบบพื้นฐาน">
+  <div class="body" style="top:118px">
+    <div class="kicker">ตัวอย่างโปรแกรมที่เขียนด้วยโครงสร้างแบบพื้นฐาน · ไฟวิ่ง 4 ดวง (ขา 2–5)</div>
+    <div class="row" style="gap:30px;margin-top:10px">
+      <pre class="code sm cols2" data-cc="full" data-hl="1-8" data-hl2="9-31" style="flex:0 0 860px">void setup()
+{
+  Serial.begin(9600);
+  pinMode(2,OUTPUT);
+  pinMode(3,OUTPUT);
+  pinMode(4,OUTPUT);
+  pinMode(5,OUTPUT);
+}
+void loop()
+{
+  digitalWrite(2,HIGH);
+  digitalWrite(3,LOW);
+  digitalWrite(4,LOW);
+  digitalWrite(5,LOW);
+  delay(200);
+  digitalWrite(2,LOW);
+  digitalWrite(3,HIGH);
+  digitalWrite(4,LOW);
+  digitalWrite(5,LOW);
+  delay(200);
+  digitalWrite(2,LOW);
+  digitalWrite(3,LOW);
+  digitalWrite(4,HIGH);
+  digitalWrite(5,LOW);
+  delay(200);
+  digitalWrite(2,LOW);
+  digitalWrite(3,LOW);
+  digitalWrite(4,LOW);
+  digitalWrite(5,HIGH);
+  delay(200);
+}</pre>
+      <div style="flex:1">
+        <div class="note" style="margin-bottom:16px"><b style="color:#a26a00">สีเหลือง</b> = setup() ทำครั้งเดียว · <b class="c-teal">สีฟ้า</b> = loop() วนซ้ำ</div>
+        <table class="t compact ledt">
+          <tr><th>จังหวะ</th><th>ขา 2</th><th>ขา 3</th><th>ขา 4</th><th>ขา 5</th></tr>
+          <tr class="frag"><td>1</td><td><i class="led on"></i></td><td><i class="led"></i></td><td><i class="led"></i></td><td><i class="led"></i></td></tr>
+          <tr class="frag"><td>2</td><td><i class="led"></i></td><td><i class="led on"></i></td><td><i class="led"></i></td><td><i class="led"></i></td></tr>
+          <tr class="frag"><td>3</td><td><i class="led"></i></td><td><i class="led"></i></td><td><i class="led on"></i></td><td><i class="led"></i></td></tr>
+          <tr class="frag"><td>4</td><td><i class="led"></i></td><td><i class="led"></i></td><td><i class="led"></i></td><td><i class="led on"></i></td></tr>
+        </table>
+        <p class="small frag" style="margin-top:16px">ไฟวิ่ง ขา 2 → 3 → 4 → 5 จังหวะละ 0.2 วินาที แล้ววนใหม่<br>ยาว 31 บรรทัด… มีวิธีเขียนให้สั้นกว่านี้ไหม?</p>
+      </div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="ตัวอย่างโครงสร้างแบบขั้นสูง">
+  <div class="body" style="top:118px">
+    <div class="kicker">ตัวอย่างโปรแกรมที่เขียนด้วยโครงสร้างแบบขั้นสูง</div>
+    <div class="row" style="gap:30px;margin-top:10px">
+      <pre class="code xs" data-cc="full" data-hl="1-6" data-hl2="22-28" style="flex:0 0 1150px">#define LED1 2
+#define LED2 3
+#define LED3 4
+#define LED4 5
+char LED_pin[] = {LED1,LED2,LED3,LED4};
+void send2port(byte data);
+void setup()
+{
+  Serial.begin(9600);
+  for(char i=0;i&lt;4;i++)
+  {
+    pinMode(LED_pin[i],OUTPUT);
+  }
+}
+void loop()
+{
+  send2port(0B1000);delay(200);
+  send2port(0B0100);delay(200);
+  send2port(0B0010);delay(200);
+  send2port(0B0001);delay(200);
+}
+void send2port(byte data)
+{
+  if (data &amp; 1 ){digitalWrite(LED_pin[0],HIGH);} else {digitalWrite(LED_pin[0],LOW);}
+  if (data &amp; 2 ){digitalWrite(LED_pin[1],HIGH);} else {digitalWrite(LED_pin[1],LOW);}
+  if (data &amp; 4 ){digitalWrite(LED_pin[2],HIGH);} else {digitalWrite(LED_pin[2],LOW);}
+  if (data &amp; 8 ){digitalWrite(LED_pin[3],HIGH);} else {digitalWrite(LED_pin[3],LOW);}
+}</pre>
+      <div class="cards grid" style="flex:1;gap:14px">
+        <div class="box sun frag"><h3>หัวโปรแกรม</h3><p>บรรทัด 1–6 ตั้งชื่อขา อาร์เรย์ และประกาศฟังก์ชันรอง</p></div>
+        <div class="box frag"><h3>setup / loop</h3><p>loop เหลือ 4 บรรทัด</p></div>
+        <div class="box tint frag"><h3>ฟังก์ชันรอง</h3><p>send2port ทำงานแทนที่เขียนซ้ำ ๆ</p></div>
+        <div class="box rose frag"><h3>🕵️ จำโค้ดนี้ไว้</h3><p>หนังสือบอกว่า “ให้ผลแบบเดียวกัน” จริงไหม? ไปพิสูจน์ใน 2.3</p></div>
+      </div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup> · คำในโค้ดเรียนทีละเรื่องในสไลด์ถัดไป</div>
+  </div>
+</section>
+
+<!-- ---- ตัวแปร ---- -->
+<section class="slide sec-2" data-tag="2.2 ตัวแปรและชนิดข้อมูล" data-title="ตัวแปรในภาษาซี">
+  <div class="body">
+    <div class="kicker reveal">ตัวแปรในภาษาซี</div>
+    <h2 class="title reveal d1">ตัวแปร = กล่องเก็บข้อมูลที่มีชื่อ 📦</h2>
+    <p class="reveal d2">ประกาศตัวแปร = <b>จองพื้นที่ในหน่วยความจำ</b> แล้วใช้ “ชื่อ” แทนการจำเลขที่อยู่ (แอดเดรส)</p>
+    <div class="row center reveal d3">
+      <div><div class="box tint" style="font:700 40px var(--font-code);padding:18px 30px">ชนิดของตัวแปร &nbsp; ชื่อตัวแปร;</div>
+        <div class="box tint" style="font:700 34px var(--font-code);padding:16px 30px;margin-top:14px">ชนิด &nbsp; ชื่อที่1, ชื่อที่2, … ;</div></div>
+      <pre class="code lg frag" data-cc="frag">int count;
+byte a, b, c;
+float temp;</pre>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="หลักการตั้งชื่อตัวแปร">
+  <div class="body">
+    <div class="kicker reveal">หลักการตั้งชื่อตัวแปรในภาษาซี</div>
+    <h2 class="title reveal d1">กฎ 4 ข้อ</h2>
+    <ol class="steps">
+      <li class="reveal d2">ต้องไม่ซ้ำกับ<b>คำสงวน</b> (คำที่ภาษาซีใช้อยู่แล้ว เช่น <code>int</code> <code>if</code> <code>for</code>)</li>
+      <li class="reveal d3">ตัวพิมพ์ใหญ่กับพิมพ์เล็ก<b>ถือว่าคนละตัว</b> (<code>led</code> ≠ <code>LED</code>)</li>
+      <li class="reveal d4">ตัวแรกต้องเป็นตัวอักษร <span class="frag c-rose">หรือขีดล่าง <code>_</code></span> ตัวถัดไปเป็นตัวเลขได้</li>
+      <li class="reveal d5">ห้ามเว้นวรรค (ใช้ <code>led_pin</code> หรือ <code>ledPin</code> แทน)</li>
+    </ol>
+    <div class="fix frag"><b class="t">เพิ่มจากต้นฉบับ</b> ข้อ 3 หนังสือเขียนว่า “ตัวแรกต้องเป็นตัวอักษรเท่านั้น” ภาษาซียอมให้ตัวแรกเป็น <b>ขีดล่าง _</b> ได้ด้วย<sup class="ref"><a href="#refs">[7]</a></sup></div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [7]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2 act" data-title="🎮 เกม: ชื่อนี้ใช้ได้ไหม">
+  <div class="body" style="top:118px">
+    <div><span class="act-badge">🎮 เกมแข่งกลุ่ม</span><span class="act-meta">กลุ่มละ 4–5 คน · 3 นาที · เขียน ✔ / ✘ พร้อมเหตุผล</span></div>
+    <h2 class="title" style="font-size:54px;margin-bottom:14px">ชื่อตัวแปรนี้ใช้ได้ไหม?</h2>
+    <div class="nm">
+      <div class="box"><code>ledPin</code><div class="frag ok">✔ ใช้ได้</div></div>
+      <div class="box"><code>2led</code><div class="frag ng">✘ ขึ้นต้นด้วยเลข</div></div>
+      <div class="box"><code>led pin</code><div class="frag ng">✘ เว้นวรรค</div></div>
+      <div class="box"><code>_count</code><div class="frag ok">✔ ขึ้นต้นด้วย _ ได้</div></div>
+      <div class="box"><code>int</code><div class="frag ng">✘ คำสงวน</div></div>
+      <div class="box"><code>temp1</code><div class="frag ok">✔ ตัวเลขอยู่ท้ายได้</div></div>
+      <div class="box"><code>sw-1</code><div class="frag ng">✘ - คือเครื่องหมายลบ</div></div>
+      <div class="box"><code>LED</code><div class="frag ok">✔ (แต่ต่างจาก led)</div></div>
+    </div>
+    <div class="row" style="margin-top:16px;align-items:flex-end">
+      <div data-timer="180" class="sm" style="flex:0 0 auto"></div>
+      <div data-board="6"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="ตาราง 2-2 ชนิดของตัวแปร">
+  <div class="body" style="top:112px">
+    <div class="kicker">ตารางที่ 2-2 ชนิดของตัวแปรในภาษาซีสำหรับ Arduino (บอร์ด Uno / Nano / Mega)</div>
+    <div class="row" style="gap:30px;margin-top:6px">
+      <table class="t left compact" style="flex:0 0 1040px;font-size:28px">
+        <tr><th>ชนิด</th><th>บิต</th><th>ไบต์</th><th>ขอบเขต</th></tr>
+        <tr><td class="mono">boolean</td><td>8</td><td>1</td><td>true, false</td></tr>
+        <tr><td class="mono">char</td><td>8</td><td>1</td><td>-128 ถึง +127</td></tr>
+        <tr><td class="mono">unsigned char</td><td>8</td><td>1</td><td>0 ถึง 255</td></tr>
+        <tr><td class="mono">byte</td><td>8</td><td>1</td><td>0 ถึง 255</td></tr>
+        <tr><td class="mono">int</td><td>16</td><td>2</td><td>-32768 ถึง +32767</td></tr>
+        <tr><td class="mono">unsigned int</td><td>16</td><td>2</td><td>0 ถึง 65535</td></tr>
+        <tr><td class="mono">long</td><td>32</td><td>4</td><td>-2147483648 ถึง +2147483647</td></tr>
+        <tr><td class="mono">unsigned long</td><td>32</td><td>4</td><td>0 ถึง 4294967295</td></tr>
+        <tr><td class="mono">float</td><td>32</td><td>4</td><td>±3.4028235E+38 (ประมาณ 6–7 หลัก)</td></tr>
+        <tr class="hit"><td class="mono">double</td><td><b>32</b></td><td><b>4</b></td><td>เหมือน float ทุกอย่าง</td></tr>
+      </table>
+      <div class="fix" style="font-size:26px"><b class="t">แก้จากต้นฉบับ</b><br>หนังสือเขียน double = 64 บิต (8 ไบต์) ±1.7E±308<br>บน Uno / Nano / Mega <b>double มีขนาด 4 ไบต์ เท่ากับ float</b><sup class="ref"><a href="#refs">[5] [6]</a></sup><br><br>ค่า 64 บิตเป็นของบอร์ด 32 บิต เช่น Arduino Due</div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [5] [6]</a></sup> · ตรวจด้วยคอมไพเลอร์ avr-gcc ของ Arduino IDE แล้ว</div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="ขนาดตัวแปรขึ้นกับบอร์ด">
+  <div class="body">
+    <div class="kicker reveal">ขนาดตัวแปรขึ้นกับบอร์ด <span class="extra">เสริม</span></div>
+    <h2 class="title reveal d1">int กับ double ไม่เท่ากันทุกบอร์ด</h2>
+    <table class="t reveal d2" style="width:100%">
+      <tr><th>ชนิด</th><th>Uno · Nano · Mega<br><span class="tiny">(ATmega 8 บิต)</span></th><th>Due · Zero · MKR<br><span class="tiny">(ARM 32 บิต)</span></th></tr>
+      <tr><td class="mono">int</td><td>2 ไบต์ (-32768 ถึง 32767)</td><td>4 ไบต์</td></tr>
+      <tr><td class="mono">float</td><td>4 ไบต์</td><td>4 ไบต์</td></tr>
+      <tr><td class="mono">double</td><td>4 ไบต์ (= float)</td><td>8 ไบต์ (Due)</td></tr>
+    </table>
+    <p class="reveal d3" style="margin-top:26px">วิชานี้ใช้บอร์ดตระกูล ATmega จึงยึด<b>คอลัมน์ซ้าย</b> · ถ้าต้องการขนาดแน่นอน ใช้ <code>byte</code> หรือ <code>long</code></p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[5] [6]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="เลือกชนิดตัวแปรให้เหมาะ">
+  <div class="body">
+    <div class="kicker reveal">ใช้งานจริง</div>
+    <h2 class="title reveal d1">ข้อมูลแบบนี้ ใช้ตัวแปรชนิดไหน?</h2>
+    <table class="t left" style="width:100%">
+      <tr><th>ข้อมูล</th><th>ชนิดที่เหมาะ</th><th>เหตุผล</th></tr>
+      <tr class="reveal d2"><td>สถานะสวิตช์ กด / ไม่กด</td><td class="mono frag">boolean</td><td class="frag">มีแค่ 2 ค่า</td></tr>
+      <tr class="reveal d2"><td>เลขขา 0–13</td><td class="mono frag">byte</td><td class="frag">ไม่ติดลบ ไม่เกิน 255 ใช้แค่ 1 ไบต์</td></tr>
+      <tr class="reveal d3"><td>ค่าอ่านแอนะล็อก 0–1023</td><td class="mono frag">int</td><td class="frag">เกิน 255 แต่ไม่เกิน 32767</td></tr>
+      <tr class="reveal d3"><td>อุณหภูมิ 23.5 °C</td><td class="mono frag">float</td><td class="frag">มีทศนิยม</td></tr>
+      <tr class="reveal d4"><td>เวลาเป็นมิลลิวินาที นับไปหลายวัน</td><td class="mono frag">unsigned long</td><td class="frag">ค่ามากถึงหลักพันล้าน</td></tr>
+    </table>
+    <div class="src">เทียบขอบเขตจากตารางที่ 2-2 <sup class="ref"><a href="#refs">[1] [5]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2 act" data-title="🙋 ทายก่อนเฉลย: 255 + 1">
+  <div class="body">
+    <div><span class="act-badge">🙋 ทายก่อนเฉลย</span><span class="act-meta">ชูนิ้ว 1–4</span></div>
+    <h2 class="title" style="font-size:56px;margin-bottom:18px">กล่องใส่ได้ถึง 255 ถ้าใส่เพิ่มอีก 1 จะเป็นอะไร?</h2>
+    <div class="row" style="align-items:flex-start">
+      <pre class="code lg" data-cc="frag" style="flex:0 0 640px">byte x = 255;
+x = x + 1;
+// ตอนนี้ x มีค่าเท่าไร</pre>
+      <div class="vote" data-answer="2" style="flex:1"><button type="button" class="opt"><b>1</b> 256</button><button type="button" class="opt"><b>2</b> 255</button><button type="button" class="opt"><b>3</b> 0</button><button type="button" class="opt"><b>4</b> -1</button><button type="button" class="reveal">เฉลย</button>
+        <div class="why"><span class="extra">เสริม</span> byte มีแค่ 8 บิต: 1111 1111 + 1 = <s>1</s> 0000 0000 → บิตที่ 9 หลุดไป x = <b>0</b> เรียกว่า “ค่าล้น” (overflow)<sup class="ref"><a href="#refs">[5] [9]</a></sup></div></div>
+    </div>
+    <p class="note" style="margin-top:24px">💡 เลือกชนิดตัวแปรเล็กเกินไป ตัวเลขจะ “วนกลับ” ทำให้โปรแกรมทำงานผิดโดยไม่มีข้อความเตือน</p>
+  </div>
+</section>
+
+<!-- ---- พอยน์เตอร์ อาร์เรย์ ---- -->
+<section class="slide sec-2" data-tag="2.2 พอยน์เตอร์ อาร์เรย์" data-title="พอยน์เตอร์">
+  <div class="body">
+    <div class="kicker reveal">พอยน์เตอร์ <span class="en">(Pointer)</span></div>
+    <h2 class="title reveal d1">ตัวแปรที่เก็บ “ที่อยู่” ของตัวแปรอื่น</h2>
+    <div class="row">
+      <div style="flex:1">
+        <div class="box tint reveal d2" style="font:700 36px var(--font-code);padding:16px 26px">ชนิดของตัวแปร &nbsp;*ชื่อตัวแปร;</div>
+        <ul class="pts small reveal d3" style="margin-top:20px"><li><code>*</code> นำหน้า = ประกาศเป็นพอยน์เตอร์</li><li><code>&amp;</code> นำหน้าตัวแปร = ขอ “ที่อยู่” ของตัวแปรนั้น</li></ul>
+        <div class="fix frag"><b class="t">แก้จากต้นฉบับ</b> หนังสือพิมพ์ <code>i-10;</code> และ <code>n-&amp;i;</code> ที่ถูกคือ <code>i=10;</code> และ <code>n=&amp;i;</code></div>
+      </div>
+      <pre class="code lg reveal d3" data-cc="frag" data-ln style="flex:0 0 520px">int *n;
+int i;
+i = 10;
+n = &amp;i;</pre>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [17]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="พอยน์เตอร์ ทีละบรรทัด">
+  <div class="body">
+    <div class="kicker reveal">ไล่ทีละบรรทัด (ที่อยู่ 0x0100 เป็นค่าสมมติ)</div>
+    <h2 class="title reveal d1">n “ชี้” ไปที่ i</h2>
+    <div class="row center">
+      <table class="t left trace" style="flex:1.3">
+        <tr><th>บรรทัด</th><th>i</th><th>n</th><th class="th">ความหมาย</th></tr>
+        <tr class="frag"><td>int *n; int i;</td><td>?</td><td>?</td><td class="th">จองกล่อง i และ n</td></tr>
+        <tr class="frag"><td>i = 10;</td><td>10</td><td>?</td><td class="th">ใส่ 10 ลงใน i</td></tr>
+        <tr class="frag"><td>n = &amp;i;</td><td>10</td><td>0x0100</td><td class="th">n เก็บที่อยู่ของ i</td></tr>
+        <tr class="frag"><td>*n</td><td>10</td><td>0x0100</td><td class="th"><span class="extra">เสริม</span> อ่านค่าที่ n ชี้ = 10</td></tr>
+      </table>
+      <div class="frag" style="flex:0 0 520px">
+        <div class="mem"><div class="cell" style="width:240px">0x0100<small>n (เก็บที่อยู่)</small></div></div>
+        <div style="font-size:60px;text-align:center;color:var(--orange)">⬇ ชี้ไปที่</div>
+        <div class="mem"><div class="cell" style="width:240px;background:var(--sun-soft)">10<small>i @ 0x0100</small></div></div>
+      </div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [17]</a></sup> · ใช้มากในบทเรียนขั้นสูง บทนี้รู้จักไว้ก่อน</div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="อาร์เรย์ 1 มิติ">
+  <div class="body">
+    <div class="kicker reveal">อาร์เรย์ <span class="en">(Array)</span></div>
+    <h2 class="title reveal d1">ตัวแปรชื่อเดียว เก็บข้อมูลได้เป็นชุด</h2>
+    <div class="box tint reveal d2" style="font:700 36px var(--font-code);padding:16px 26px;align-self:flex-start">ชนิดของตัวแปร &nbsp;ชื่อตัวแปร[จำนวนสมาชิก];</div>
+    <div class="row center reveal d3" style="margin-top:34px">
+      <pre class="code lg" data-cc="frag" style="flex:0 0 360px">int x[4];</pre>
+      <div><div class="cells"><span>x[0]</span><span>x[1]</span><span>x[2]</span><span>x[3]</span></div>
+        <p class="small frag" style="margin-top:20px">มี 4 ช่อง เลขช่อง (index) <b>เริ่มที่ 0</b> ช่องสุดท้ายคือ <b>x[3]</b> ไม่ใช่ x[4]</p></div>
+    </div>
+    <div class="note frag" style="margin-top:20px">ในตัวอย่างขั้นสูง <code>LED_pin[0]</code>…<code>LED_pin[3]</code> = ขา 2, 3, 4, 5 → ใช้ <code>for</code> วนตั้งค่าครบทุกขาด้วยโค้ดไม่กี่บรรทัด</div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [8]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="อาร์เรย์ 2 มิติ และ 3 มิติ">
+  <div class="body">
+    <div class="kicker reveal">อาร์เรย์หลายมิติ</div>
+    <h2 class="title reveal d1">ใส่วงเล็บ [ ] เพิ่มทีละมิติ</h2>
+    <div class="row">
+      <div style="flex:1">
+        <pre class="code reveal d2" data-cc="frag">int x[4];        // 1 มิติ
+int y[3][3];     // 2 มิติ (3 แถว 3 คอลัมน์)
+int z[3][3][2];  // 3 มิติ</pre>
+        <div class="fix frag" style="margin-top:20px"><b class="t">แก้จากต้นฉบับ</b> หนังสือเขียน <code>int x[3,3];</code> และ <code>x[0,1]</code> ซึ่ง<b>ผิดไวยากรณ์ภาษาซี</b> (คอมไพล์ไม่ผ่าน) ที่ถูกคือ <code>int x[3][3];</code> และ <code>x[0][1]</code><sup class="ref"><a href="#refs">[8]</a></sup></div>
+      </div>
+      <div class="reveal d3" style="flex:0 0 470px;text-align:center">
+        <div class="grid2d"><span>y[0][0]</span><span>y[0][1]</span><span>y[0][2]</span><span>y[1][0]</span><span>y[1][1]</span><span>y[1][2]</span><span>y[2][0]</span><span>y[2][1]</span><span>y[2][2]</span></div>
+        <p class="small">2 มิติ = ตาราง [แถว][คอลัมน์]<br>มีสมาชิก 3 × 3 = 9 ช่อง</p>
+      </div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [8]</a></sup> · ตรวจด้วยคอมไพเลอร์ avr-gcc แล้ว</div>
+  </div>
+</section>
+
+<!-- ---- ตัวดำเนินการ ---- -->
+<section class="slide sec-2" data-tag="2.2 ตัวดำเนินการ" data-title="ตัวดำเนินการ 5 กลุ่ม">
+  <div class="body">
+    <div class="kicker reveal">ตัวดำเนินการในภาษาซี</div>
+    <h2 class="title reveal d1">แบ่งตามการกระทำ 5 กลุ่ม</h2>
+    <div class="grid g3" style="gap:20px">
+      <div class="box orange reveal d2"><h3 style="color:var(--orange)">1. คณิตศาสตร์</h3><p class="mono" style="font-size:44px;margin:0">+ - * / %</p></div>
+      <div class="box blue reveal d2"><h3 style="color:var(--blue)">2. ลอจิกระดับบิต</h3><p class="mono" style="font-size:44px;margin:0">&amp; | ^ ~ &lt;&lt; &gt;&gt;</p></div>
+      <div class="box green reveal d3"><h3 style="color:var(--green)">3. บูลีน</h3><p class="mono" style="font-size:44px;margin:0">&amp;&amp; || !</p></div>
+      <div class="box sun reveal d4"><h3 style="color:#a26a00">4. เปรียบเทียบ</h3><p class="mono" style="font-size:44px;margin:0">&gt; &lt; &gt;= &lt;= == !=</p></div>
+      <div class="box rose reveal d5"><h3 style="color:var(--rose)">5. ประสม</h3><p class="mono" style="font-size:44px;margin:0">++ -- += -= …</p></div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="ตาราง 2-3 ตัวกระทำทางคณิตศาสตร์">
+  <div class="body">
+    <div class="kicker reveal">ตารางที่ 2-3 ตัวกระทำทางคณิตศาสตร์</div>
+    <h2 class="title reveal d1" style="margin-bottom:20px">บวก ลบ คูณ หาร หารเอาเศษ</h2>
+    <table class="t left reveal d2" style="width:100%">
+      <tr><th>เครื่องหมาย</th><th>การกระทำ</th><th>ตัวอย่าง</th><th>คำอธิบาย</th></tr>
+      <tr><td class="mono">+</td><td>บวก</td><td class="mono">x=y+z;</td><td>x = y บวก z</td></tr>
+      <tr><td class="mono">-</td><td>ลบ</td><td class="mono">x=y-z;</td><td>x = y ลบด้วย z</td></tr>
+      <tr><td class="mono">*</td><td>คูณ</td><td class="mono">x=y*z;</td><td>x = y คูณด้วย z</td></tr>
+      <tr><td class="mono">/</td><td>หาร</td><td class="mono">x=y/z;</td><td>x = y หารด้วย z</td></tr>
+      <tr class="hit"><td class="mono">%</td><td>หารเอาเศษ</td><td class="mono">x=y%z;</td><td>x = <b>เศษ</b>ของ y หารด้วย z</td></tr>
+    </table>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="หารจำนวนเต็ม / และ %">
+  <div class="body">
+    <div class="kicker reveal">ระวัง! หารจำนวนเต็ม <span class="extra">เสริม</span></div>
+    <h2 class="title reveal d1">17 ÷ 5 ในภาษาซีได้เท่าไร?</h2>
+    <div class="row center">
+      <div class="box reveal d2" style="text-align:center;font:500 46px var(--font-display)">17 ÷ 5 = 3 เศษ 2</div>
+      <table class="t trace" style="flex:1.2">
+        <tr><th>คำสั่ง (ตัวแปรเป็น int)</th><th>ผล</th></tr>
+        <tr class="frag"><td>x = 17 / 5;</td><td>3</td></tr>
+        <tr class="frag"><td>x = 17 % 5;</td><td>2</td></tr>
+        <tr class="frag"><td>x = 20 % 5;</td><td>0</td></tr>
+        <tr class="frag"><td>x = 7 / 2;</td><td>3</td></tr>
+      </table>
+    </div>
+    <p class="note frag" style="margin-top:26px">int ÷ int <b>ตัดเศษทิ้ง</b> (ไม่ปัดขึ้น) · ถ้าต้องการทศนิยม ใช้ float เช่น <code>17.0 / 5</code> = 3.4 · <code>%</code> ใช้บ่อยตรวจเลขคู่-คี่ (<code>x % 2 == 0</code> คือเลขคู่)</p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[9]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="ตาราง 2-4 ตัวกระทำระดับบิต">
+  <div class="body">
+    <div class="kicker reveal">ตารางที่ 2-4 ตัวกระทำทางลอจิก (ระดับบิต)</div>
+    <h2 class="title reveal d1" style="margin-bottom:20px">ทำทีละบิต เหมือนลอจิกเกตในบทที่ 1</h2>
+    <table class="t left reveal d2" style="width:100%">
+      <tr><th>เครื่องหมาย</th><th>การกระทำ</th><th>ตัวอย่าง</th><th>คำอธิบาย</th></tr>
+      <tr><td class="mono">&amp;</td><td>แอนด์</td><td class="mono">x=y&amp;z;</td><td>y AND z ทีละบิต</td></tr>
+      <tr><td class="mono">|</td><td>ออร์</td><td class="mono">x=y|z;</td><td>y OR z ทีละบิต</td></tr>
+      <tr><td class="mono">^</td><td>เอ็กซ์คลูซีฟออร์</td><td class="mono">x=y^z;</td><td>y XOR z ทีละบิต</td></tr>
+      <tr><td class="mono">~</td><td>วันคอมพลีเมนต์</td><td class="mono">x=~y;</td><td>กลับทุกบิตของ y (NOT)</td></tr>
+      <tr><td class="mono">&lt;&lt;</td><td>เลื่อนไปทางซ้าย</td><td class="mono">x=x&lt;&lt;1;</td><td>เลื่อน x ไปทางซ้าย 1 บิต</td></tr>
+      <tr><td class="mono">&gt;&gt;</td><td>เลื่อนไปทางขวา</td><td class="mono">x=x&gt;&gt;2;</td><td>เลื่อน x ไปทางขวา 2 บิต</td></tr>
+    </table>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="ตัวอย่าง &amp; | ^ ทีละบิต">
+  <div class="body">
+    <div class="kicker reveal">ตัวอย่าง: y = 12, z = 10</div>
+    <h2 class="title reveal d1" style="margin-bottom:16px">แปลงเป็นเลขฐาน 2 แล้วทำทีละหลัก</h2>
+    <div class="grid g3" style="gap:26px">
+      <table class="bits reveal d2"><tr><th>y = 12</th><td>1100</td></tr><tr><th>z = 10</th><td>1010</td></tr><tr class="res frag"><th>y &amp; z</th><td>1000 = 8</td></tr></table>
+      <table class="bits reveal d3"><tr><th>y = 12</th><td>1100</td></tr><tr><th>z = 10</th><td>1010</td></tr><tr class="res frag"><th>y | z</th><td>1110 = 14</td></tr></table>
+      <table class="bits reveal d4"><tr><th>y = 12</th><td>1100</td></tr><tr><th>z = 10</th><td>1010</td></tr><tr class="res frag"><th>y ^ z</th><td>0110 = 6</td></tr></table>
+    </div>
+    <div class="grid g3 frag" style="gap:26px;margin-top:20px">
+      <p class="small" style="margin:0">&amp; ได้ 1 เมื่อ<b>ทั้งคู่</b>เป็น 1</p>
+      <p class="small" style="margin:0">| ได้ 1 เมื่อ<b>มีอย่างน้อย 1</b> ตัว</p>
+      <p class="small" style="margin:0">^ ได้ 1 เมื่อ<b>ต่างกัน</b></p>
+    </div>
+    <div class="note frag" style="margin-top:20px">ใน send2port: <code>data &amp; 4</code> ใช้ “ตรวจว่าบิตที่ 2 เป็น 1 หรือไม่” (4 = 0100)</div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="~ และการเลื่อนบิต">
+  <div class="body">
+    <div class="kicker reveal">กลับบิต และเลื่อนบิต (ใช้ตัวแปร byte 8 บิต)</div>
+    <h2 class="title reveal d1" style="margin-bottom:16px">~ &nbsp; &lt;&lt; &nbsp; &gt;&gt;</h2>
+    <div class="grid g3" style="gap:26px">
+      <table class="bits reveal d2"><tr><th>y</th><td>0000 1111</td></tr><tr class="res frag"><th>~y</th><td>1111 0000</td></tr><tr class="frag"><th></th><td style="font-size:30px">15 → 240</td></tr></table>
+      <table class="bits reveal d3"><tr><th>x = 5</th><td>0000 0101</td></tr><tr class="res frag"><th>x&lt;&lt;1</th><td>0000 1010</td></tr><tr class="frag"><th></th><td style="font-size:30px">5 → 10</td></tr></table>
+      <table class="bits reveal d4"><tr><th>x = 200</th><td>1100 1000</td></tr><tr class="res frag"><th>x&gt;&gt;2</th><td>0011 0010</td></tr><tr class="frag"><th></th><td style="font-size:30px">200 → 50</td></tr></table>
+    </div>
+    <p class="note frag" style="margin-top:26px">💡 เลื่อนซ้าย 1 บิต ≈ คูณ 2 · เลื่อนขวา 1 บิต ≈ หาร 2 (ตัดเศษ) · บิตที่หลุดขอบหายไป และเติม 0 เข้ามา</p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup> · คำนวณซ้ำด้วยโปรแกรมแล้ว</div>
+  </div>
+</section>
+
+<section class="slide sec-2 act" data-title="🧮 แข่งกลุ่ม: คิดเลขแบบภาษาซี">
+  <div class="body" style="top:118px">
+    <div><span class="act-badge">🧮 แข่งคิดเลข</span><span class="act-meta">กลุ่มละ 4–5 คน · 6 นาที · ถูกข้อละ 1 คะแนน</span></div>
+    <h2 class="title" style="font-size:52px;margin-bottom:12px">ตัวแปรเป็นจำนวนเต็ม หาค่าของ x</h2>
+    <table class="t left compact race" style="width:100%">
+      <tr><th>ข้อ</th><th>คำสั่ง</th><th>x</th><th>ข้อ</th><th>คำสั่ง</th><th>x</th></tr>
+      <tr><td>1</td><td class="mono">x = 23 % 4;</td><td class="ans frag">3</td><td>5</td><td class="mono">x = 6 ^ 3;</td><td class="ans frag">5</td></tr>
+      <tr><td>2</td><td class="mono">x = 23 / 4;</td><td class="ans frag">5</td><td>6</td><td class="mono">x = 3 &lt;&lt; 2;</td><td class="ans frag">12</td></tr>
+      <tr><td>3</td><td class="mono">x = 6 &amp; 3;</td><td class="ans frag">2</td><td>7</td><td class="mono">x = 96 &gt;&gt; 3;</td><td class="ans frag">12</td></tr>
+      <tr><td>4</td><td class="mono">x = 6 | 3;</td><td class="ans frag">7</td><td>8</td><td class="mono">x = 100 % 7;</td><td class="ans frag">2</td></tr>
+    </table>
+    <div class="row" style="margin-top:14px;align-items:flex-end">
+      <div data-timer="360" class="sm" style="flex:0 0 auto"></div>
+      <div data-board="6"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="ตาราง 2-5 ตัวกระทำบูลีน">
+  <div class="body">
+    <div class="kicker reveal">ตารางที่ 2-5 ตัวกระทำบูลีน</div>
+    <h2 class="title reveal d1" style="margin-bottom:20px">เชื่อมเงื่อนไข: “และ” “หรือ” “ไม่”</h2>
+    <table class="t left reveal d2" style="width:100%">
+      <tr><th>เครื่องหมาย</th><th>การกระทำ</th><th>คำอธิบาย</th></tr>
+      <tr><td class="mono">&amp;&amp;</td><td>แอนด์</td><td>เชื่อม 2 เงื่อนไขด้วยคำว่า “และ” (จริงทั้งคู่จึงจริง)</td></tr>
+      <tr><td class="mono">||</td><td>ออร์</td><td>เชื่อม 2 เงื่อนไขด้วยคำว่า “หรือ” (จริงตัวเดียวก็จริง)</td></tr>
+      <tr><td class="mono">!</td><td>อินเวิร์ส (นอต)</td><td>กลับค่าจริง/เท็จ เช่น <code>if(!x)</code> ตรวจว่า x เท่ากับศูนย์หรือไม่</td></tr>
+    </table>
+    <pre class="code frag" data-cc="frag" style="margin-top:24px">if (temp &gt; 30 &amp;&amp; fanOn == false) { /* ร้อน และ พัดลมยังไม่เปิด */ }</pre>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup> · &amp; กับ &amp;&amp; ต่างกัน: &amp; ทำทีละบิต ส่วน &amp;&amp; ใช้กับเงื่อนไข</div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="ตาราง 2-6 ตัวกระทำเปรียบเทียบ">
+  <div class="body">
+    <div class="kicker reveal">ตารางที่ 2-6 ตัวกระทำการเปรียบเทียบ</div>
+    <h2 class="title reveal d1" style="margin-bottom:16px">ผลลัพธ์เป็น จริง หรือ เท็จ</h2>
+    <div class="row">
+      <table class="t left compact reveal d2" style="flex:1.3">
+        <tr><th>เครื่องหมาย</th><th>การกระทำ</th><th>ตัวอย่าง</th></tr>
+        <tr><td class="mono">&gt;</td><td>มากกว่า</td><td class="mono">if(x&gt;10)</td></tr>
+        <tr><td class="mono">&lt;</td><td>น้อยกว่า</td><td class="mono">if(x&lt;10)</td></tr>
+        <tr><td class="mono">&gt;=</td><td>มากกว่าหรือเท่ากับ</td><td class="mono">if(x&gt;=10)</td></tr>
+        <tr><td class="mono">&lt;=</td><td>น้อยกว่าหรือเท่ากับ</td><td class="mono">if(x&lt;=10)</td></tr>
+        <tr class="hit"><td class="mono">==</td><td>เท่ากับ</td><td class="mono">if(x==10)</td></tr>
+        <tr><td class="mono">!=</td><td>ไม่เท่ากับ</td><td class="mono">if(x!=10)</td></tr>
+      </table>
+      <div style="flex:1;display:flex;flex-direction:column;gap:18px">
+        <div class="fix frag"><b class="t">แก้จากต้นฉบับ</b> หนังสือพิมพ์ <code>= =</code> มีช่องว่างคั่น ต้องเขียน<b>ติดกัน</b> <code>==</code> ถ้าเว้นวรรคจะคอมไพล์ไม่ผ่าน</div>
+        <div class="box rose frag"><h3 style="color:var(--rose)">⚠️ กับดักยอดฮิต</h3><p class="small"><code>=</code> คือ <b>ใส่ค่า</b><br><code>==</code> คือ <b>เปรียบเทียบ</b><br><code>if (x = 10)</code> จริงเสมอ!</p></div>
+      </div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup> · ตรวจด้วยคอมไพเลอร์ avr-gcc แล้ว</div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="ตาราง 2-7 ตัวกระทำประสม">
+  <div class="body" style="top:118px">
+    <div class="kicker">ตารางที่ 2-7 ตัวกระทำประสม (เขียนย่อ)</div>
+    <div class="row" style="margin-top:8px">
+      <table class="t left compact" style="flex:1.4;font-size:27px">
+        <tr><th>เครื่องหมาย</th><th>ตัวอย่าง</th><th>เขียนเต็มคือ</th></tr>
+        <tr><td class="mono">++</td><td class="mono">x++;</td><td class="mono">x = x + 1;</td></tr>
+        <tr><td class="mono">--</td><td class="mono">x--;</td><td class="mono">x = x - 1;</td></tr>
+        <tr><td class="mono">+=</td><td class="mono">x+=2;</td><td class="mono">x = x + 2;</td></tr>
+        <tr><td class="mono">-=</td><td class="mono">x-=2;</td><td class="mono">x = x - 2;</td></tr>
+        <tr><td class="mono">*=</td><td class="mono">x*=2;</td><td class="mono">x = x * 2;</td></tr>
+        <tr><td class="mono">/=</td><td class="mono">x/=2;</td><td class="mono">x = x / 2;</td></tr>
+        <tr><td class="mono">%=</td><td class="mono">x%=2;</td><td class="mono">x = x % 2;</td></tr>
+        <tr><td class="mono">&amp;=</td><td class="mono">x&amp;=2;</td><td class="mono">x = x &amp; 2;</td></tr>
+        <tr><td class="mono">|=</td><td class="mono">x|=2;</td><td class="mono">x = x | 2;</td></tr>
+      </table>
+      <div class="act" style="flex:1">
+        <div><span class="act-badge">🙋 ไล่ค่า x</span></div>
+        <table class="t trace compact" style="margin-top:12px;width:100%">
+          <tr><th>คำสั่ง</th><th>x</th></tr>
+          <tr><td>x = 7;</td><td>7</td></tr>
+          <tr><td>x += 3;</td><td class="frag">10</td></tr>
+          <tr><td>x *= 2;</td><td class="frag">20</td></tr>
+          <tr><td>x %= 6;</td><td class="frag">2</td></tr>
+          <tr><td>x++;</td><td class="frag">3</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-0 act" data-title="☕ พัก 10 นาที">
+  <div class="body center" style="text-align:center">
+    <div><span class="act-badge" style="background:var(--teal)">☕ พัก 10 นาที</span></div>
+    <h2 class="title">กลับมาแล้วเจอ “ล่าบั๊ก” 🐞</h2>
+    <div data-timer="600"></div>
+  </div>
+</section>
+
+<!-- ---- ไวยากรณ์ภาษาซี ---- -->
+<section class="slide sec-2" data-tag="2.2 ไวยากรณ์ภาษาซี" data-title="ไวยากรณ์ 1: #define">
+  <div class="body">
+    <div class="kicker reveal">ไวยากรณ์ภาษาซี ข้อ 1</div>
+    <h2 class="title reveal d1">ประกาศชื่อแทน <code style="font-size:.8em">#define</code></h2>
+    <div class="box tint reveal d2" style="font:700 40px var(--font-code);padding:16px 30px;align-self:flex-start">#define constantName value</div>
+    <ul class="pts small reveal d3" style="margin-top:20px"><li><b>constantName</b> = ชื่อที่ต้องการตั้ง · <b>value</b> = ค่าที่ให้ชื่อนั้นแทน</li><li><b>ไม่มี</b> <code>;</code> ปิดท้าย และไม่มีเครื่องหมาย <code>=</code></li></ul>
+    <div class="row center frag" style="margin-top:20px">
+      <pre class="code" data-cc="full" style="flex:0 0 720px">#define LED 13
+void setup() { pinMode(LED, OUTPUT); }
+void loop() { }</pre>
+      <p class="small" style="margin:0">หมายถึง ให้คำว่า <b>LED</b> มีค่าเท่ากับ 13<br>ย้าย LED ไปขาอื่น แก้บรรทัดเดียวจบ</p>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="ไวยากรณ์ 2: #include">
+  <div class="body">
+    <div class="kicker reveal">ไวยากรณ์ภาษาซี ข้อ 2</div>
+    <h2 class="title reveal d1">รวมไฟล์อื่นเข้ามาร่วม <code style="font-size:.8em">#include</code></h2>
+    <div class="row">
+      <div class="box tint reveal d2" style="font:700 40px var(--font-code);padding:16px 30px">#include &lt;file&gt;<br>#include "file"</div>
+      <div class="reveal d3" style="flex:1.3"><p class="small">นำไฟล์ (มักเป็นไลบรารี) มารวมกับโค้ดของเรา<b>ก่อนคอมไพล์</b></p>
+        <pre class="code" data-cc="full">#include &lt;SPI.h&gt;</pre>
+        <p class="small" style="margin-top:12px">หมายถึง ให้คอมไพเลอร์รวมไฟล์ชื่อ SPI.h ก่อนทำการคอมไพล์</p></div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="ไวยากรณ์ 3: หมายเหตุ (comment)">
+  <div class="body">
+    <div class="kicker reveal">ไวยากรณ์ภาษาซี ข้อ 3</div>
+    <h2 class="title reveal d1">ใส่หมายเหตุในโค้ด (คอมไพเลอร์ข้ามไป)</h2>
+    <div class="grid g2 reveal d2">
+      <div class="box"><h3>// …</h3><p class="small">ใช้ในกรณี<b>บรรทัดเดียว</b> (ตั้งแต่ // ถึงท้ายบรรทัด)</p></div>
+      <div class="box"><h3>/* … */</h3><p class="small">ใช้ในกรณี<b>หลายบรรทัด</b></p></div>
+    </div>
+    <pre class="code frag" data-cc="frag" style="margin-top:24px">/* โปรแกรมไฟกะพริบ
+   เขียนโดย นักเรียน ปวช. */
+digitalWrite(13, HIGH);   // LED ติด</pre>
+    <p class="small frag" style="margin-top:14px">เขียนหมายเหตุไว้ อีก 1 เดือนกลับมาอ่านก็ยังเข้าใจ (ขั้นที่ 5 จัดทำเอกสาร)</p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="ไวยากรณ์ 4: ; และ { }">
+  <div class="body">
+    <div class="kicker reveal">ไวยากรณ์ภาษาซี ข้อ 4</div>
+    <h2 class="title reveal d1">เครื่องหมายท้ายคำสั่ง</h2>
+    <div class="row">
+      <div class="box orange reveal d2"><h3 style="color:var(--orange);font-size:60px">;</h3><p class="small">ปิดท้าย<b>คำสั่งที่ทำงานเสร็จในตัว</b><br>เช่น <code>delay(1000);</code></p></div>
+      <div class="box blue reveal d3"><h3 style="color:var(--blue);font-size:60px">{ }</h3><p class="small">ครอบ<b>กลุ่มคำสั่ง</b>ที่มีคำสั่งอื่นรวมอยู่ข้างใน<br>เช่น ตัวฟังก์ชัน, if, for</p></div>
+    </div>
+    <div class="note reveal d4" style="margin-top:24px">หนังสือเรียกว่า “ฟังก์ชันที่ทำงานเสร็จในตัว” และ “ฟังก์ชันที่มีฟังก์ชันอื่นรวมเข้าไป” ในที่นี้เรียกว่า <b>คำสั่ง</b> และ <b>กลุ่มคำสั่ง (บล็อก)</b> ซึ่งหมายถึงสิ่งเดียวกัน · <code>{</code> ต้องมี <code>}</code> คู่กันเสมอ</div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2 act" data-title="🐞 ล่าบั๊ก: หาที่ผิด 4 จุด">
+  <div class="body" style="top:118px">
+    <div><span class="act-badge">🐞 ล่าบั๊ก</span><span class="act-meta">จับคู่ · 4 นาที · วงจุดที่ผิดแล้วเขียนวิธีแก้</span></div>
+    <h2 class="title" style="font-size:52px;margin-bottom:12px">โปรแกรมนี้คอมไพล์ไม่ผ่าน หาที่ผิด 4 จุด</h2>
+    <div class="row" style="gap:30px">
+      <pre class="code bad" data-cc="bad" data-ln style="flex:0 0 760px">#define LED 13
+void setup()
+{
+  pinmode(LED, OUTPUT);
+}
+void loop()
+{
+  int sw = digitalRead(2)
+  if (sw = = HIGH)
+  {
+    digitalWrite(LED, HIGH);
+  }
+</pre>
+      <div style="flex:1;display:flex;flex-direction:column;gap:12px">
+        <div class="box frag" style="padding:10px 20px"><p class="small" style="margin:0"><b>บรรทัด 4</b> <code>pinmode</code> → <code>pinMode</code> (ตัวพิมพ์ใหญ่-เล็กต่างกัน)</p></div>
+        <div class="box frag" style="padding:10px 20px"><p class="small" style="margin:0"><b>บรรทัด 8</b> ขาด <code>;</code> ท้ายคำสั่ง</p></div>
+        <div class="box frag" style="padding:10px 20px"><p class="small" style="margin:0"><b>บรรทัด 9</b> <code>= =</code> → <code>==</code> (ห้ามเว้นวรรค)</p></div>
+        <div class="box frag" style="padding:10px 20px"><p class="small" style="margin:0"><b>ท้ายโปรแกรม</b> ขาด <code>}</code> ปิด loop()</p></div>
+        <div data-timer="240" class="sm"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ---- คำสั่งเลือกทำ ---- -->
+<section class="slide sec-2" data-tag="2.2 คำสั่งเลือกทำ" data-title="คำสั่งที่ทำงานแบบทางเลือก 4 แบบ">
+  <div class="body">
+    <div class="kicker reveal">การดำเนินการแบบทางเลือก</div>
+    <h2 class="title reveal d1">ให้โปรแกรม “เลือกทาง” ตามเงื่อนไข</h2>
+    <div class="grid g4 reveal d2" style="gap:18px">
+      <div class="box tint" style="text-align:center"><h3>if</h3><p class="small">ทางเลือกเดียว</p></div>
+      <div class="box tint" style="text-align:center"><h3>if-else</h3><p class="small">สองทางเลือก</p></div>
+      <div class="box tint" style="text-align:center"><h3>if-else if</h3><p class="small">หลายทางเลือก</p></div>
+      <div class="box tint" style="text-align:center"><h3>switch</h3><p class="small">หลายทาง ตรวจค่าที่เท่ากัน</p></div>
+    </div>
+    <div class="fix reveal d3" style="margin-top:30px"><b class="t">หมายเหตุคำศัพท์</b> หนังสือเรียกว่า “ฟังก์ชั่น if” “ฟังก์ชั่น for” ในภาษาซี if, switch, for, while คือ <b>คำสั่งควบคุม</b> (Control Structure) ไม่ใช่ฟังก์ชัน จึงไม่ต้องประกาศหรือสร้างขึ้นเอง<sup class="ref"><a href="#refs">[14]</a></sup> และสไลด์นี้ใช้ตัวสะกด “ฟังก์ชัน”</div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [14]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="คำสั่ง if (ทางเลือกเดียว)">
+  <div class="body" style="top:118px">
+    <div class="kicker">คำสั่ง if (ทางเลือกเดียว)</div>
+    <div class="row" style="gap:40px;margin-top:10px">
+      <div style="flex:0 0 760px"><svg class="fc" viewBox="0 0 620 470" role="img" aria-label="ผังงานคำสั่ง if"><path class="a" d="M260 0 L260 60"/><polygon class="s dec " points="260,60.0 420.0,112 260,164.0 100.0,112"/><text x="260" y="112">เงื่อนไข</text><path class="a" d="M260 164 L260 214"/><text x="226" y="190" class="lbl yes">จริง</text><rect class="s " x="100.0" y="214.0" width="320" height="76" rx="6"/><text><tspan x="260" y="235.8">ชุดคำสั่ง</tspan><tspan x="260" y="268.2">เมื่อเงื่อนไขเป็นจริง</tspan></text><path class="a" d="M260 290 L260 380"/><path class="a" d="M420 112 L560 112 L560 350 L264 350"/><text x="520" y="88" class="lbl no">เท็จ</text><path class="a" d="M260 380 L260 440"/></svg></div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:18px">
+        <pre class="code" data-cc="tmpl">if (เงื่อนไขที่ตรวจสอบ)
+{
+   // ทำเมื่อเงื่อนไขเป็นจริง
+}</pre>
+        <pre class="code frag" data-cc="frag">int value = analogRead(A0);
+if (value &lt; 50)
+{
+   digitalWrite(13, HIGH);
+}</pre>
+        <div class="note frag">ถ้าในวงเล็บปีกกามีคำสั่ง<b>เดียว</b> ไม่ต้องใส่ <code>{ }</code> ก็ได้</div>
+      </div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="คำสั่ง if-else (สองทางเลือก)">
+  <div class="body" style="top:118px">
+    <div class="kicker">คำสั่ง if-else (สองทางเลือก)</div>
+    <div class="row" style="gap:40px;margin-top:10px">
+      <div style="flex:0 0 820px"><svg class="fc" viewBox="0 0 760 420" role="img" aria-label="ผังงานคำสั่ง if-else"><path class="a" d="M380 0 L380 50"/><polygon class="s dec " points="380,50.0 540.0,102 380,154.0 220.0,102"/><text x="380" y="102">เงื่อนไข</text><path class="a" d="M220 102 L150 102 L150 196"/><text x="190" y="78" class="lbl yes">จริง</text><path class="a" d="M540 102 L610 102 L610 196"/><text x="570" y="78" class="lbl no">เท็จ</text><rect class="s " x="20.0" y="196.0" width="260" height="80" rx="6"/><text><tspan x="150" y="219.8">ชุดคำสั่ง</tspan><tspan x="150" y="252.2">เมื่อจริง</tspan></text><rect class="s " x="480.0" y="196.0" width="260" height="80" rx="6"/><text><tspan x="610" y="219.8">ชุดคำสั่ง</tspan><tspan x="610" y="252.2">เมื่อเท็จ</tspan></text><path class="a nohead" d="M150 276 L150 330 L610 330 L610 276"/><path class="a" d="M380 330 L380 400"/></svg></div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:18px">
+        <pre class="code" data-cc="tmpl">if (เงื่อนไข)
+{
+   // ทำเมื่อเงื่อนไขเป็นจริง
+}
+else
+{
+   // ทำเมื่อเงื่อนไขเป็นเท็จ
+}</pre>
+        <p class="small frag">ต้องได้ทำ<b>ทางใดทางหนึ่งเสมอ</b> ไม่มีทางที่ทำทั้งสองทาง หรือไม่ทำเลย</p>
+      </div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="if-else แบบย่อ ? :">
+  <div class="body">
+    <div class="kicker reveal">คำสั่ง if-else แบบย่อ</div>
+    <h2 class="title reveal d1">เงื่อนไข <span class="mono">?</span> ค่าเมื่อจริง <span class="mono">:</span> ค่าเมื่อเท็จ</h2>
+    <div class="row">
+      <div style="flex:1"><div class="tiny">แบบปกติ</div><pre class="code reveal d2" data-cc="frag">if (digitalRead(SW1) == LOW) {
+   digitalWrite(LED, HIGH);
+}
+else {
+   digitalWrite(LED, LOW);
+}</pre></div>
+      <div style="flex:1"><div class="tiny">แบบย่อ (ผลเหมือนกัน)</div><pre class="code reveal d3" data-cc="frag">digitalWrite(LED,
+   (digitalRead(SW1) == LOW) ? HIGH : LOW);</pre></div>
+    </div>
+    <div class="fix frag" style="margin-top:22px"><b class="t">ปรับจากต้นฉบับ</b> หนังสือเขียน <code>(SW1==LOW)</code> ซึ่งถ้า SW1 คือ<b>เลขขา</b>จาก #define จะเป็นการเทียบเลขขากับ LOW ไม่ได้อ่านสวิตช์ จึงเขียนเป็น <code>digitalRead(SW1) == LOW</code> ให้ทำงานได้จริง</div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="คำสั่ง if-else if (หลายทางเลือก)">
+  <div class="body" style="top:118px">
+    <div class="kicker">คำสั่ง if-else if … else (หลายทางเลือก)</div>
+    <div class="row" style="gap:36px;margin-top:10px">
+      <div style="flex:0 0 840px"><svg class="fc" viewBox="0 0 820 560" role="img" aria-label="ผังงานคำสั่ง if-else if"><path class="a" d="M200 0 L200 40"/><polygon class="s dec " points="200,40.0 350.0,92 200,144.0 50.0,92"/><text x="200" y="92">เงื่อนไขที่ 1</text><path class="a" d="M350 92 L430 92"/><text x="385" y="70" class="lbl yes">จริง</text><rect class="s " x="430.0" y="52.0" width="300" height="80" rx="6"/><text><tspan x="580" y="75.8">ชุดคำสั่งเมื่อ</tspan><tspan x="580" y="108.2">เงื่อนไข 1 จริง</tspan></text><path class="a" d="M200 144 L200 214"/><text x="160" y="180" class="lbl no">เท็จ</text><polygon class="s dec " points="200,214.0 350.0,266 200,318.0 50.0,266"/><text x="200" y="266">เงื่อนไขที่ 2</text><path class="a" d="M350 266 L430 266"/><text x="385" y="244" class="lbl yes">จริง</text><rect class="s " x="430.0" y="226.0" width="300" height="80" rx="6"/><text><tspan x="580" y="249.8">ชุดคำสั่งเมื่อ</tspan><tspan x="580" y="282.2">เงื่อนไข 2 จริง</tspan></text><path class="a" d="M200 318 L200 388"/><text x="160" y="354" class="lbl no">เท็จ</text><rect class="s " x="60.0" y="392.0" width="280" height="60" rx="6"/><text x="200" y="422">else (ถ้ามี)</text><path class="a" d="M200 452 L200 540"/><path class="a" d="M730 92 L780 92 L780 500 L204 500"/><path class="a nohead" d="M730 266 L780 266"/></svg></div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:16px">
+        <pre class="code sm" data-cc="tmpl">if (เงื่อนไข1)
+{
+   // ทำเมื่อเงื่อนไข1 จริง
+}
+else if (เงื่อนไข2)
+{
+   // ทำเมื่อเงื่อนไข2 จริง
+}
+else
+{
+   // ไม่ตรงเงื่อนไขใดเลย (ใส่หรือไม่ก็ได้)
+}</pre>
+        <p class="small frag">ตรวจจาก<b>บนลงล่าง</b> เจอเงื่อนไขแรกที่จริง ทำแล้ว<b>ออกทันที</b> ไม่ตรวจข้อถัดไป</p>
+      </div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup> · ส่วน else ท้ายสุดเพิ่มจากรูปแบบในหนังสือ</div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="คำสั่ง switch...case">
+  <div class="body" style="top:118px">
+    <div class="kicker">คำสั่ง switch…case (หลายทางเลือก ตรวจค่าที่เท่ากัน)</div>
+    <div class="row" style="gap:36px;margin-top:10px">
+      <div style="flex:0 0 860px"><svg class="fc" viewBox="0 0 860 600" role="img" aria-label="ผังงานคำสั่ง switch case"><path class="a" d="M210 0 L210 24"/><rect class="s " x="60.0" y="25.0" width="300" height="58" rx="6"/><text x="210" y="54">ตัวแปรที่ตรวจสอบ</text><path class="a" d="M210 83 L210 120"/><polygon class="s dec " points="210,120.0 370.0,168 210,216.0 50.0,168"/><text x="210" y="168">เท่ากับ case 1 ?</text><path class="a" d="M370 168 L450 168"/><text x="405" y="146" class="lbl yes">จริง</text><rect class="s " x="460.0" y="128.0" width="300" height="80" rx="6"/><text><tspan x="610" y="151.8">คำสั่งของ case 1</tspan><tspan x="610" y="184.2">break;</tspan></text><path class="a" d="M210 216 L210 270"/><text x="170" y="243" class="lbl no">เท็จ</text><polygon class="s dec " points="210,270.0 370.0,318 210,366.0 50.0,318"/><text x="210" y="318">เท่ากับ case 2 ?</text><path class="a" d="M370 318 L450 318"/><text x="405" y="296" class="lbl yes">จริง</text><rect class="s " x="460.0" y="278.0" width="300" height="80" rx="6"/><text><tspan x="610" y="301.8">คำสั่งของ case 2</tspan><tspan x="610" y="334.2">break;</tspan></text><path class="a" d="M210 366 L210 412"/><text x="170" y="389" class="lbl no">เท็จ</text><rect class="s " x="60.0" y="414.0" width="300" height="68" rx="6"/><text x="210" y="448">คำสั่งของ default</text><path class="a" d="M210 482 L210 580"/><path class="a" d="M760 168 L820 168 L820 540 L214 540"/><path class="a nohead" d="M760 318 L820 318"/></svg></div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:16px">
+        <pre class="code sm" data-cc="tmpl">switch (variable)
+{
+  case 1:
+     // ทำเมื่อค่าเท่ากับ 1
+     break;
+  case 2:
+     // ทำเมื่อค่าเท่ากับ 2
+     break;
+  default:
+     // ไม่ตรงค่าใดเลย
+     break;
+}</pre>
+        <div class="note frag" style="font-size:26px"><span class="extra">เสริม</span> ถ้าลืม <code>break;</code> โปรแกรมจะ<b>ทำ case ถัดไปต่อ</b> (fall-through) จนกว่าจะเจอ break<sup class="ref"><a href="#refs">[16]</a></sup></div>
+      </div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [16]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2 act" data-title="🙋 ทายผล: if-else if และ switch">
+  <div class="body" style="top:118px">
+    <div><span class="act-badge">🙋 ทายก่อนเฉลย</span><span class="act-meta">ชูนิ้ว 1–4 · แล้วสุ่มเลขที่อธิบาย</span></div>
+    <div class="row" style="gap:30px;margin-top:10px">
+      <div style="flex:1">
+        <pre class="code sm" data-cc="frag">int score = 72;
+int grade;
+if (score &gt;= 80)      grade = 4;
+else if (score &gt;= 70) grade = 3;
+else if (score &gt;= 60) grade = 2;
+else                  grade = 0;</pre>
+        <div class="vote" data-answer="1" style="margin-top:12px"><button type="button" class="opt"><b>1</b> grade = 4</button><button type="button" class="opt"><b>2</b> grade = 3</button><button type="button" class="opt"><b>3</b> grade = 2</button><button type="button" class="opt"><b>4</b> 3 และ 2</button><button type="button" class="reveal">เฉลย</button>
+          <div class="why">72 ≥ 80 เท็จ → 72 ≥ 70 <b>จริง</b> → grade = 3 แล้วออกทันที (ไม่ตรวจ ≥ 60)</div></div>
+      </div>
+      <div style="flex:1">
+        <pre class="code sm" data-cc="frag">byte mode = 2;
+switch (mode) {
+  case 1: digitalWrite(2, HIGH); break;
+  case 2: digitalWrite(3, HIGH);
+  case 3: digitalWrite(4, HIGH); break;
+  default: digitalWrite(5, HIGH); break;
+}</pre>
+        <div class="vote" data-answer="2" style="margin-top:12px"><button type="button" class="opt"><b>1</b> ขา 3</button><button type="button" class="opt"><b>2</b> ขา 5</button><button type="button" class="opt"><b>3</b> ขา 3 และ 4</button><button type="button" class="opt"><b>4</b> ทุกขา</button><button type="button" class="reveal">เฉลย</button>
+          <div class="why">case 2 <b>ไม่มี break</b> → ทำต่อ case 3 → ขา 3 และ 4 ติด แล้วเจอ break จึงหยุด</div></div>
+      </div>
+    </div>
+    <div style="margin-top:10px"><div data-picker="40"></div></div>
+  </div>
+</section>
+
+<!-- ---- คำสั่งวนซ้ำ ---- -->
+<section class="slide sec-2" data-tag="2.2 คำสั่งวนซ้ำ" data-title="คำสั่งวนซ้ำ 4 แบบ">
+  <div class="body">
+    <div class="kicker reveal">การดำเนินการแบบวนซ้ำ</div>
+    <h2 class="title reveal d1">ทำชุดคำสั่งเดิมซ้ำ ๆ</h2>
+    <div class="grid g4 reveal d2" style="gap:18px">
+      <div class="box tint" style="text-align:center"><h3>for</h3><p class="small">รู้จำนวนรอบแน่นอน</p></div>
+      <div class="box tint" style="text-align:center"><h3>while</h3><p class="small">ตรวจเงื่อนไข<b>ก่อน</b>ทำ</p></div>
+      <div class="box tint" style="text-align:center"><h3>while(1)</h3><p class="small">วนไม่รู้จบ</p></div>
+      <div class="box tint" style="text-align:center"><h3>do-while</h3><p class="small">ทำ<b>ก่อน</b> แล้วจึงตรวจ</p></div>
+    </div>
+    <p class="reveal d3" style="margin-top:30px">การวนซ้ำมีทั้งแบบ<b>มีเงื่อนไข</b> (ทำจนกว่าเงื่อนไขเป็นเท็จ) และ<b>ไม่มีเงื่อนไข</b> (วนตลอดไป)</p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="คำสั่ง for">
+  <div class="body" style="top:118px">
+    <div class="kicker">คำสั่ง for (ทราบจำนวนรอบ)</div>
+    <div class="row" style="gap:40px;margin-top:10px">
+      <div style="flex:0 0 700px"><svg class="fc" viewBox="0 0 640 600" role="img" aria-label="ผังงานคำสั่ง for"><path class="a" d="M280 0 L280 30"/><rect class="s " x="110.0" y="31.0" width="340" height="62" rx="6"/><text x="280" y="62">① ค่าเริ่มต้นตัวนับ</text><path class="a" d="M280 93 L280 160"/><polygon class="s dec " points="280,160.0 440.0,212 280,264.0 120.0,212"/><text x="280" y="212">② เงื่อนไข</text><path class="a" d="M280 264 L280 300"/><text x="244" y="282" class="lbl yes">จริง</text><rect class="s " x="120.0" y="300.0" width="320" height="76" rx="6"/><text><tspan x="280" y="321.8">③ ชุดคำสั่ง</tspan><tspan x="280" y="354.2">ที่ทำซ้ำ</tspan></text><path class="a" d="M280 376 L280 410"/><rect class="s " x="120.0" y="410.0" width="320" height="62" rx="6"/><text x="280" y="441">④ เพิ่ม/ลดตัวนับ</text><path class="a" d="M280 472 L280 510 L60 510 L60 130 L276 130"/><path class="a" d="M440 212 L580 212 L580 580"/><text x="545" y="188" class="lbl no">เท็จ</text><text x="580" y="600" class="lbl"></text></svg></div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:18px">
+        <pre class="code" data-cc="tmpl">for (①ค่าเริ่มต้น; ②เงื่อนไข; ④เพิ่มหรือลดค่า)
+{
+   // ③ ชุดคำสั่งที่ต้องการทำซ้ำ
+}</pre>
+        <ol class="steps small frag" style="font-size:30px">
+          <li>① ทำครั้งเดียวตอนเริ่ม</li>
+          <li>② ตรวจทุกรอบ จริง → ทำ ③ · เท็จ → ออก</li>
+          <li>③ ทำงาน แล้ว ④ เพิ่ม/ลดตัวนับ กลับไป ②</li>
+        </ol>
+      </div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="ตัวอย่าง for กะพริบ 10 ครั้ง">
+  <div class="body">
+    <div class="kicker reveal">ตัวอย่างคำสั่ง for</div>
+    <h2 class="title reveal d1" style="margin-bottom:18px">LED กะพริบกี่ครั้ง?</h2>
+    <div class="row">
+      <pre class="code reveal d2" data-cc="frag" style="flex:0 0 700px">for (int i = 0; i &lt; 10; i++)
+{
+   digitalWrite(13, HIGH);
+   delay(500);
+   digitalWrite(13, LOW);
+   delay(500);
+}</pre>
+      <table class="t trace compact" style="flex:1">
+        <tr><th>รอบ</th><th>i</th><th>i &lt; 10 ?</th><th class="th">ผล</th></tr>
+        <tr class="frag"><td>1</td><td>0</td><td>จริง</td><td class="th">กะพริบครั้งที่ 1</td></tr>
+        <tr class="frag"><td>2</td><td>1</td><td>จริง</td><td class="th">กะพริบครั้งที่ 2</td></tr>
+        <tr class="frag"><td>…</td><td>…</td><td>…</td><td class="th">…</td></tr>
+        <tr class="frag"><td>10</td><td>9</td><td>จริง</td><td class="th">กะพริบครั้งที่ 10</td></tr>
+        <tr class="frag"><td>—</td><td>10</td><td>เท็จ</td><td class="th">ออกจาก for</td></tr>
+      </table>
+    </div>
+    <p class="note frag" style="margin-top:20px">i มีค่า 0 ถึง 9 = <b>10 รอบ</b> · ประกาศ i เป็นชนิด int ค่าเริ่มต้นเป็นศูนย์ เพิ่มทีละ 1 (<code>i++</code>)</p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="คำสั่ง while">
+  <div class="body" style="top:118px">
+    <div class="kicker">คำสั่ง while (ตรวจเงื่อนไขก่อนทำ)</div>
+    <div class="row" style="gap:40px;margin-top:10px">
+      <div style="flex:0 0 700px"><svg class="fc" viewBox="0 0 640 460" role="img" aria-label="ผังงานคำสั่ง while"><path class="a" d="M280 0 L280 60"/><polygon class="s dec " points="280,60.0 440.0,112 280,164.0 120.0,112"/><text x="280" y="112">เงื่อนไข</text><path class="a" d="M280 164 L280 206"/><text x="244" y="186" class="lbl yes">จริง</text><rect class="s " x="120.0" y="206.0" width="320" height="80" rx="6"/><text><tspan x="280" y="229.8">ชุดคำสั่ง</tspan><tspan x="280" y="262.2">ที่ทำซ้ำ</tspan></text><path class="a" d="M280 286 L280 330 L60 330 L60 34 L276 34"/><path class="a" d="M440 112 L580 112 L580 440"/><text x="545" y="88" class="lbl no">เท็จ</text></svg></div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:18px">
+        <pre class="code sm" data-cc="tmpl">while (เงื่อนไข)
+{
+   // ชุดคำสั่งที่ต้องการทำซ้ำ
+}</pre>
+        <pre class="code sm frag" data-cc="frag">int i = 0;
+while (i &lt; 10)
+{
+   digitalWrite(13, HIGH);
+   delay(500);
+   digitalWrite(13, LOW);
+   delay(500);
+   i++;
+}</pre>
+        <p class="small frag">เงื่อนไขจริง → ทำ → กลับไปตรวจใหม่ จนเงื่อนไขเป็นเท็จจึงออก · <b>ลืม i++</b> = วนไม่รู้จบ!</p>
+      </div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup> · เพิ่มการประกาศ <code>int</code> หน้า i=0 ให้โค้ดสมบูรณ์</div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="คำสั่ง while(1)">
+  <div class="body">
+    <div class="kicker reveal">คำสั่ง while(1)</div>
+    <h2 class="title reveal d1">1 = จริงตลอดไป → วนไม่รู้จบ</h2>
+    <div class="row center">
+      <div class="reveal d2" style="flex:0 0 620px"><svg class="fc" viewBox="0 0 560 300" role="img" aria-label="ผังงานคำสั่ง while(1)"><path class="a" d="M300 0 L300 86"/><rect class="s " x="140.0" y="86.0" width="320" height="84" rx="6"/><text><tspan x="300" y="111.8">ชุดคำสั่ง</tspan><tspan x="300" y="144.2">ที่ทำซ้ำ</tspan></text><path class="a" d="M300 170 L300 230 L70 230 L70 50 L296 50"/><text x="300" y="275" class="lbl">ไม่มีทางออก วนตลอดไป</text></svg></div>
+      <div style="flex:1">
+        <pre class="code lg reveal d3" data-cc="tmpl">while (1)
+{
+   // ชุดคำสั่งที่ต้องการทำซ้ำ
+}</pre>
+        <p class="small frag" style="margin-top:20px">ในโปรแกรม Arduino หน้าที่นี้คือ <b>loop()</b> นั่นเอง<br><span class="extra">เสริม</span> main() ของ Arduino ใช้ <code>for (;;)</code> ซึ่งวนไม่รู้จบเหมือนกัน แล้วเรียก loop() ซ้ำ ๆ<sup class="ref"><a href="#refs">[4]</a></sup></p>
+      </div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [4]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2" data-title="คำสั่ง do-while">
+  <div class="body" style="top:118px">
+    <div class="kicker">คำสั่ง do-while (ทำก่อน 1 รอบ แล้วจึงตรวจ)</div>
+    <div class="row" style="gap:40px;margin-top:10px">
+      <div style="flex:0 0 700px"><svg class="fc" viewBox="0 0 640 470" role="img" aria-label="ผังงานคำสั่ง do-while"><path class="a" d="M280 0 L280 74"/><rect class="s " x="120.0" y="76.0" width="320" height="80" rx="6"/><text><tspan x="280" y="99.8">ชุดคำสั่ง</tspan><tspan x="280" y="132.2">ที่ทำซ้ำ</tspan></text><path class="a" d="M280 156 L280 216"/><polygon class="s dec " points="280,216.0 440.0,268 280,320.0 120.0,268"/><text x="280" y="268">เงื่อนไข</text><path class="a" d="M120 268 L60 268 L60 40 L276 40"/><text x="100" y="244" class="lbl yes">จริง</text><path class="a" d="M440 268 L580 268 L580 450"/><text x="545" y="244" class="lbl no">เท็จ</text></svg></div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:16px">
+        <pre class="code sm" data-cc="frag">int i = 0;
+do
+{
+   digitalWrite(13, HIGH);
+   delay(500);
+   digitalWrite(13, LOW);
+   delay(500);
+   i++;
+} while (i &lt; 10);</pre>
+        <div class="fix frag"><b class="t">แก้จากต้นฉบับ</b> หนังสือเขียน <code>} while(i&lt;10)</code> <b>ขาด ;</b> ท้ายบรรทัด do-while ต้องปิดด้วย <code>;</code> เสมอ (คอมไพล์ไม่ผ่านถ้าขาด)</div>
+      </div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [14]</a></sup> · ตรวจด้วยคอมไพเลอร์ avr-gcc แล้ว</div>
+  </div>
+</section>
+
+<section class="slide sec-2 act" data-title="🙋 while กับ do-while ต่างกันตรงไหน">
+  <div class="body">
+    <div><span class="act-badge">🙋 ทายก่อนเฉลย</span><span class="act-meta">ชูนิ้ว 1–4</span></div>
+    <h2 class="title" style="font-size:54px;margin-bottom:18px">ถ้า i เริ่มที่ 10 LED กะพริบกี่ครั้ง?</h2>
+    <div class="row">
+      <div style="flex:1"><pre class="code" data-cc="frag">int i = 10;
+while (i &lt; 10) {
+   blink();   // กะพริบ 1 ครั้ง
+   i++;
+}</pre>
+        <div class="vote one" data-answer="0" style="margin-top:12px"><button type="button" class="opt"><b>1</b> 0</button><button type="button" class="opt"><b>2</b> 1</button><button type="button" class="opt"><b>3</b> 10</button><button type="button" class="opt"><b>4</b> ไม่รู้จบ</button><button type="button" class="reveal">เฉลย</button>
+          <div class="why">ตรวจก่อน: 10 &lt; 10 เท็จ → <b>ไม่ทำเลย</b></div></div></div>
+      <div style="flex:1"><pre class="code" data-cc="frag">int i = 10;
+do {
+   blink();   // กะพริบ 1 ครั้ง
+   i++;
+} while (i &lt; 10);</pre>
+        <div class="vote one" data-answer="1" style="margin-top:12px"><button type="button" class="opt"><b>1</b> 0</button><button type="button" class="opt"><b>2</b> 1</button><button type="button" class="opt"><b>3</b> 10</button><button type="button" class="opt"><b>4</b> ไม่รู้จบ</button><button type="button" class="reveal">เฉลย</button>
+          <div class="why">ทำก่อน 1 รอบ แล้วตรวจ 11 &lt; 10 เท็จ → ออก = <b>1 ครั้ง</b></div></div></div>
+    </div>
+    <div class="src">blink() สมมติว่าเป็นฟังก์ชันรองที่ทำให้ LED กะพริบ 1 ครั้ง (เรียนใน 2.3)</div>
+  </div>
+</section>
+
+<section class="slide sec-2 act watch" data-title="🎬 คำสั่งวนซ้ำใน Arduino">
+  <div class="body">
+    <div><span class="act-badge vd">🎬 ดูคลิป</span><span class="act-meta">6 นาที · ดูแล้วเติมตาราง</span></div>
+    <h2 class="title" style="font-size:56px;margin-bottom:18px">for · while · do while</h2>
+    <div class="row" style="gap:36px">
+      <div class="vwrap"><div data-video="z1IpuLuMna0" data-title="สอน Arduino Tutorial: คำสั่งทำงานซ้ำ วน loop" data-credit="maxtic maxtic" data-len="6:18"></div></div>
+      <div class="vside">
+        <div class="qbox"><h3>📝 เติมในสมุด</h3><ol>
+          <li>ถ้ารู้จำนวนรอบแน่นอน ใช้ ______</li>
+          <li>ถ้าต้องทำอย่างน้อย 1 รอบ ใช้ ______</li>
+        </ol></div>
+        <div class="note" style="font-size:24px">คลิปสาธิตบนบอร์ดจริง บทนี้ยังไม่ต้องทดลอง ดูหลักการทำงานของคำสั่งก่อน</div>
+      </div>
+    </div>
+    <div class="src">วิดีโอ <sup class="ref"><a href="#videos">[V4]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-2 act" data-title="📝 ไล่โค้ด: for เพิ่มทีละ 3">
+  <div class="body">
+    <div><span class="act-badge">📝 ไล่โค้ดบนกระดาษ</span><span class="act-meta">รายบุคคล · 4 นาที · แล้วสุ่มเลขที่ออกมาเขียนบนกระดาน</span></div>
+    <h2 class="title" style="font-size:52px;margin-bottom:10px">เขียนตารางไล่ค่า แล้วตอบคำถาม</h2>
+    <div class="row">
+      <div style="flex:1">
+        <pre class="code" data-cc="frag">int sum = 0;
+for (int i = 1; i &lt;= 10; i += 3)
+{
+   sum = sum + i;
+}</pre>
+        <ol class="steps small" style="margin-top:10px;font-size:30px"><li>วนกี่รอบ</li><li>จบแล้ว sum เท่ากับเท่าไร</li></ol>
+      </div>
+      <div style="flex:1">
+        <table class="t trace compact" style="width:100%">
+          <tr><th>รอบ</th><th>i</th><th>i &lt;= 10 ?</th><th>sum</th></tr>
+          <tr class="frag"><td>1</td><td>1</td><td>จริง</td><td>1</td></tr>
+          <tr class="frag"><td>2</td><td>4</td><td>จริง</td><td>5</td></tr>
+          <tr class="frag"><td>3</td><td>7</td><td>จริง</td><td>12</td></tr>
+          <tr class="frag"><td>4</td><td>10</td><td>จริง</td><td>22</td></tr>
+          <tr class="frag"><td>—</td><td>13</td><td>เท็จ</td><td>22</td></tr>
+        </table>
+        <p class="frag" style="margin:8px 0"><b>4 รอบ</b> · sum = <b>22</b></p>
+        <div style="display:flex;gap:20px"><div data-timer="240" class="sm"></div><div data-picker="40"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide sec-2 act" data-title="✏️ เขียนโค้ดจากผังงาน">
+  <div class="body" style="top:118px">
+    <div><span class="act-badge">✏️ เขียนโค้ดจากผังงาน</span><span class="act-meta">จับคู่ · 8 นาที · เขียนลงกระดาษ</span></div>
+    <div class="row" style="gap:30px;margin-top:8px">
+      <div style="flex:0 0 640px"><svg class="fc" viewBox="0 0 760 820" role="img" aria-label="ผังงานกดสวิตช์แล้ว LED ติด"><rect class="s term " x="240.0" y="3.0" width="200" height="58" rx="29.0"/><text x="340" y="32">เริ่ม</text><path class="a" d="M340 61 L340 86"/><rect class="s " x="110.0" y="87.0" width="460" height="62" rx="6"/><text x="340" y="118">LED = ขา 13 · SW = ขา 2</text><path class="a" d="M340 149 L340 174"/><rect class="s " x="110.0" y="168.0" width="460" height="76" rx="6"/><text><tspan x="340" y="189.8">ขา LED → OUTPUT</tspan><tspan x="340" y="222.2">ขา SW → INPUT_PULLUP</tspan></text><path class="a" d="M340 244 L340 300"/><polygon class="s dec " points="340,300.0 510.0,362 340,424.0 170.0,362"/><text><tspan x="340" y="345.8">อ่านขา SW</tspan><tspan x="340" y="378.2">ได้ LOW ?</tspan></text><path class="a" d="M170 362 L130 362 L130 460"/><text x="165" y="338" class="lbl yes">ใช่</text><path class="a" d="M510 362 L560 362 L560 460"/><text x="525" y="338" class="lbl no">ไม่ใช่</text><rect class="s " x="20.0" y="454.0" width="220" height="76" rx="6"/><text><tspan x="130" y="475.8">LED ติด</tspan><tspan x="130" y="508.2">(HIGH)</tspan></text><rect class="s " x="450.0" y="454.0" width="220" height="76" rx="6"/><text><tspan x="560" y="475.8">LED ดับ</tspan><tspan x="560" y="508.2">(LOW)</tspan></text><path class="a nohead" d="M130 530 L130 590 L560 590 L560 530"/><path class="a" d="M340 590 L340 640 L720 640 L720 272 L344 272"/><text x="700" y="690" class="lbl">วนซ้ำ (loop)</text></svg></div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:12px">
+        <p class="small" style="margin:0">เขียนโปรแกรม Arduino ตามผังงานนี้ (กดสวิตช์ขา 2 → LED ขา 13 ติด ปล่อย → ดับ)</p>
+        <pre class="code sm cols2 frag good" data-cc="full">#define LED 13
+#define SW 2
+void setup()
+{
+  pinMode(LED, OUTPUT);
+  pinMode(SW, INPUT_PULLUP);
+}
+void loop()
+{
+  if (digitalRead(SW) == LOW)
+  {
+    digitalWrite(LED, HIGH);
+  }
+  else
+  {
+    digitalWrite(LED, LOW);
+  }
+}</pre>
+        <div class="note frag" style="font-size:24px"><span class="extra">เสริม</span> INPUT_PULLUP: ไม่กด อ่านได้ HIGH · กด (ต่อลงกราวด์) อ่านได้ <b>LOW</b><sup class="ref"><a href="#refs">[15]</a></sup></div>
+        <div data-timer="480" class="sm" style="align-self:flex-start"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide sec-2 act" data-title="🎲 ฝึกคิด 2.2">
+  <div class="body">
+    <div><span class="act-badge">🎲 ฝึกคิด 2.2</span><span class="act-meta">คุยกับเพื่อนข้าง ๆ 2 นาที แล้วสุ่มเลขที่ตอบ</span></div>
+    <h2 class="title" style="font-size:56px">ตอบให้ได้ก่อนไปหัวข้อ 2.3</h2>
+    <div class="row">
+      <ol class="steps" style="flex:1.6">
+        <li>โครงสร้างโปรแกรม Arduino มี 2 ฟังก์ชันหลักอะไร ทำงานต่างกันอย่างไร</li>
+        <li><code>=</code> กับ <code>==</code> ต่างกันอย่างไร</li>
+        <li>while กับ do-while ต่างกันอย่างไร</li>
+        <li>อาร์เรย์ <code>int x[5];</code> สมาชิกตัวสุดท้ายคืออะไร</li>
+      </ol>
+      <div style="flex:1;display:flex;flex-direction:column;gap:20px;align-items:flex-start"><div data-timer="120" class="sm"></div><div data-picker="40"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2.3 การสร้างฟังก์ชันรองขึ้นใช้เอง ============ -->
+<section class="slide section sec-3" data-tag="2.3 ฟังก์ชันรอง" data-title="2.3 การสร้างฟังก์ชันรองขึ้นใช้เอง">
+  <div class="big-no">2.3</div>
+  <div class="body center">
+    <div class="label reveal">หัวข้อที่ 2.3</div>
+    <h2 class="reveal d1">การสร้างฟังก์ชันรอง<br>ขึ้นใช้เอง</h2>
+    <p class="lead reveal d2">เขียนครั้งเดียว เรียกใช้ได้หลายครั้ง</p>
+  </div>
+</section>
+
+<section class="slide sec-3" data-title="ทำไมต้องสร้างฟังก์ชันรอง">
+  <div class="body">
+    <div class="kicker reveal">ฟังก์ชันรอง</div>
+    <h2 class="title reveal d1">ภาษาซีมีฟังก์ชันให้ใช้อยู่แล้ว แต่…</h2>
+    <div class="grid g3">
+      <div class="box tint reveal d2"><div class="icon">🔁</div><h3>งานที่ทำซ้ำบ่อย</h3><p class="small">เขียนรวมไว้ที่เดียว แล้วเรียกชื่อใช้</p></div>
+      <div class="box tint reveal d3"><div class="icon">🧩</div><h3>แยกงานเป็นส่วน</h3><p class="small">โปรแกรมหลักสั้น อ่านง่าย</p></div>
+      <div class="box tint reveal d4"><div class="icon">🛠️</div><h3>แก้ไขง่าย</h3><p class="small">แก้ในฟังก์ชันเดียว ทุกจุดที่เรียกใช้เปลี่ยนตาม</p></div>
+    </div>
+    <p class="reveal d5" style="margin-top:26px">การวางตำแหน่งฟังก์ชันรองทำได้ <b>2 แบบ</b>: วางก่อน หรือ วางหลัง ฟังก์ชันที่เรียกใช้</p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-3" data-title="วางก่อน vs วางหลัง (รูป 2-3)">
+  <div class="body">
+    <div class="kicker reveal">รูปที่ 2-3 โครงสร้างการจัดวางฟังก์ชันรองในภาษาซี</div>
+    <h2 class="title reveal d1" style="margin-bottom:8px">วางไว้ตรงไหนดี?</h2>
+    <div class="row" style="gap:50px">
+      <div class="reveal d2" style="flex:1">
+        <div class="struct" style="width:auto">
+          <div class="blk head" style="background:var(--blue-soft);border-color:var(--blue)">หัวโปรแกรม</div>
+          <div class="blk bodyp">ตัวโปรแกรม<div class="blk subf">ฟังก์ชันรอง</div><div class="blk setup">setup( )</div><div class="blk loop">loop( )</div></div>
+        </div>
+        <h3 style="text-align:center;font:500 36px var(--font-display);margin:10px 0 4px">1. วางก่อน</h3>
+        <p class="small" style="text-align:center;margin:0">✔ ไม่ต้องประกาศรูปแบบ<br>✘ setup, loop ถูกดันไปท้าย หายาก</p>
+      </div>
+      <div class="frag" style="flex:1">
+        <div class="struct" style="width:auto">
+          <div class="blk head" style="background:var(--blue-soft);border-color:var(--blue)">หัวโปรแกรม<div class="blk proto" style="margin-top:8px">ประกาศรูปแบบฟังก์ชันรอง</div></div>
+          <div class="blk bodyp">ตัวโปรแกรม<div class="blk setup">setup( )</div><div class="blk loop">loop( )</div><div class="blk subf">ฟังก์ชันรอง</div></div>
+        </div>
+        <h3 style="text-align:center;font:500 36px var(--font-display);margin:10px 0 4px">2. วางหลัง</h3>
+        <p class="small" style="text-align:center;margin:0">✔ setup, loop อยู่บนสุดเสมอ แก้ง่าย<br>ต้องประกาศรูปแบบ (Prototype) ไว้ที่หัวโปรแกรม</p>
+      </div>
+    </div>
+    <div class="src">วาดใหม่จาก <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-3" data-title="เทียบโค้ด วางก่อน กับ วางหลัง">
+  <div class="body" style="top:112px">
+    <div class="kicker">ตัวอย่าง: ไฟ 3 ดวง 3 จังหวะ เขียน 2 แบบ ทำงานเหมือนกัน</div>
+    <div class="row" style="gap:24px;margin-top:6px">
+      <div style="flex:1"><div class="tiny">วางก่อนฟังก์ชันที่เรียกใช้</div><pre class="code sm cols2" data-cc="full" data-hl="4-21">#define LED1 2
+#define LED2 3
+#define LED3 4
+void pattern1(void)
+{
+  digitalWrite(LED1,HIGH);
+  digitalWrite(LED2,LOW);
+  digitalWrite(LED3,LOW);
+}
+void pattern2(void)
+{
+  digitalWrite(LED1,LOW);
+  digitalWrite(LED2,HIGH);
+  digitalWrite(LED3,LOW);
+}
+void pattern3(void)
+{
+  digitalWrite(LED1,LOW);
+  digitalWrite(LED2,LOW);
+  digitalWrite(LED3,HIGH);
+}
+void setup()
+{
+  pinMode(LED1,OUTPUT);
+  pinMode(LED2,OUTPUT);
+  pinMode(LED3,OUTPUT);
+}
+void loop()
+{
+  pattern1();  delay(200);
+  pattern2();  delay(200);
+  pattern3();  delay(200);
+}</pre></div>
+      <div style="flex:1"><div class="tiny">วางหลังฟังก์ชันที่เรียกใช้</div><pre class="code sm cols2" data-cc="full" data-hl="4-6" data-hl2="19-33">#define LED1 2
+#define LED2 3
+#define LED3 4
+void pattern1(void);
+void pattern2(void);
+void pattern3(void);
+void setup()
+{
+  pinMode(LED1,OUTPUT);
+  pinMode(LED2,OUTPUT);
+  pinMode(LED3,OUTPUT);
+}
+void loop()
+{
+  pattern1();  delay(200);
+  pattern2();  delay(200);
+  pattern3();  delay(200);
+}
+void pattern1(void){
+  digitalWrite(LED1,HIGH);
+  digitalWrite(LED2,LOW);
+  digitalWrite(LED3,LOW);
+}
+void pattern2(void){
+  digitalWrite(LED1,LOW);
+  digitalWrite(LED2,HIGH);
+  digitalWrite(LED3,LOW);
+}
+void pattern3(void){
+  digitalWrite(LED1,LOW);
+  digitalWrite(LED2,LOW);
+  digitalWrite(LED3,HIGH);
+}</pre></div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup> · สีเหลือง = ประกาศรูปแบบ (มี ; ปิดท้าย)</div>
+  </div>
+</section>
+
+<section class="slide sec-3" data-title="การประกาศรูปแบบฟังก์ชัน (Prototype)">
+  <div class="body">
+    <div class="kicker reveal">Prototype</div>
+    <h2 class="title reveal d1">บอกคอมไพเลอร์ล่วงหน้า “จะมีฟังก์ชันนี้นะ”</h2>
+    <div class="row center reveal d2">
+      <pre class="code lg" data-cc="frag" style="flex:0 0 720px">void pattern1(void);   // prototype</pre>
+      <ul class="pts small"><li>หน้าตาเหมือนบรรทัดแรกของฟังก์ชัน</li><li><b>มี ; ปิดท้าย</b></li><li>วางไว้ที่หัวโปรแกรม</li></ul>
+    </div>
+    <div class="note frag" style="margin-top:28px"><span class="extra">เสริม</span> Arduino IDE สร้าง prototype ให้อัตโนมัติสำหรับไฟล์ .ino<sup class="ref"><a href="#refs">[10]</a></sup> บางครั้งลืมเขียนก็ยังคอมไพล์ผ่าน แต่<b>ควรเขียนเองเสมอ</b> เพราะภาษาซีมาตรฐานและโปรแกรมอื่นไม่ได้สร้างให้</div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [10]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-3" data-title="ฟังก์ชันรอง 4 ประเภท">
+  <div class="body">
+    <div class="kicker reveal">ฟังก์ชันรองที่เขียนขึ้นใช้เองมี 4 ประเภท</div>
+    <h2 class="title reveal d1" style="margin-bottom:20px">ดู 2 คำถาม: “รับค่า?” และ “ส่งคืนค่า?”</h2>
+    <div class="fn4 reveal d2">
+      <div class="hd"></div><div class="hd">ไม่ส่งคืนค่า (void หน้าชื่อ)</div><div class="hd">ส่งคืนค่า (ชนิดข้อมูลหน้าชื่อ)</div>
+      <div class="hd">ไม่รับค่า<br>(void ในวงเล็บ)</div>
+      <div class="c"><b>① ไม่รับ ไม่ส่งคืน</b><br><code>void pattern1(void)</code></div>
+      <div class="c"><b>③ ไม่รับ แต่ส่งคืน</b><br><code>byte readSW(void)</code></div>
+      <div class="hd">รับค่า<br>(ตัวแปรในวงเล็บ)</div>
+      <div class="c"><b>② รับ แต่ไม่ส่งคืน</b><br><code>void send2port(byte data)</code></div>
+      <div class="c"><b>④ รับและส่งคืน</b><br><code>double Thermistor(int RawADC)</code></div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-3" data-title="① ไม่รับค่า และไม่ส่งคืนค่า">
+  <div class="body" style="top:112px">
+    <div class="kicker">① ฟังก์ชันที่ไม่รับค่าและไม่ส่งคืนค่า</div>
+    <div class="row" style="gap:30px;margin-top:6px">
+      <pre class="code sm cols2" data-ln data-cc="full" data-hl="4-6,15-17" data-hl2="19-24" style="flex:0 0 1000px">#define LED1 2
+#define LED2 3
+#define LED3 4
+void pattern1(void);
+void pattern2(void);
+void pattern3(void);
+void setup()
+{
+  pinMode(LED1,OUTPUT);
+  pinMode(LED2,OUTPUT);
+  pinMode(LED3,OUTPUT);
+}
+void loop()
+{
+  pattern1();  delay(200);
+  pattern2();  delay(200);
+  pattern3();  delay(200);
+}
+void pattern1(void)
+{
+  digitalWrite(LED1,HIGH);
+  digitalWrite(LED2,LOW);
+  digitalWrite(LED3,LOW);
+}
+void pattern2(void)
+{
+  digitalWrite(LED1,LOW);
+  digitalWrite(LED2,HIGH);
+  digitalWrite(LED3,LOW);
+}
+void pattern3(void)
+{
+  digitalWrite(LED1,LOW);
+  digitalWrite(LED2,LOW);
+  digitalWrite(LED3,HIGH);
+}</pre>
+      <div class="cards grid" style="flex:1;gap:12px">
+        <div class="box frag"><h3>กฎ</h3><p><b>ไม่รับค่า</b> → (void) หลังชื่อ · <b>ไม่ส่งคืนค่า</b> → void หน้าชื่อ</p></div>
+        <div class="box frag"><h3>บรรทัด 4–6</h3><p>ประกาศรูปแบบ (มี ; ปิดท้าย)</p></div>
+        <div class="box frag"><h3>บรรทัด 15–17</h3><p>เรียกใช้ด้วยชื่อ + ( ) ว่างเปล่า เพราะไม่ส่งค่าเข้าไป</p></div>
+        <div class="box frag"><h3>บรรทัด 19–24</h3><p>ตัวฟังก์ชัน pattern1 · บรรทัด 25–30 และ 31–36 คือ pattern2, pattern3</p></div>
+        <div class="fix frag" style="font-size:24px"><b class="t">แก้จากต้นฉบับ</b> หนังสือพิมพ์ “บรรทัดที่ 25-30, บรรทัดที่ 25-30, บรรทัดที่ 31-36” ซ้ำ ที่ถูกคือ 25–30 และ 31–36</div>
+      </div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-3" data-title="② รับค่า แต่ไม่ส่งคืนค่า">
+  <div class="body" style="top:112px">
+    <div class="kicker">② ฟังก์ชันที่รับค่าแต่ไม่ส่งคืนค่า · send2port</div>
+    <div class="row" style="gap:28px;margin-top:6px">
+      <pre class="code xs" data-ln data-cc="full" data-hl="6,17-20" data-hl2="22-28" style="flex:0 0 900px">#define LED1 2
+#define LED2 3
+#define LED3 4
+#define LED4 5
+char LED_pin[] = {LED1,LED2,LED3,LED4};
+void send2port(byte data);
+void setup()
+{
+  Serial.begin(9600);
+  for(char i=0;i&lt;4;i++)
+  {
+    pinMode(LED_pin[i],OUTPUT);
+  }
+}
+void loop()
+{
+  send2port(0B1000);delay(200);
+  send2port(0B0100);delay(200);
+  send2port(0B0010);delay(200);
+  send2port(0B0001);delay(200);
+}
+void send2port(byte data)
+{
+  digitalWrite(LED_pin[0],(data &amp; 1 )? HIGH:LOW);
+  digitalWrite(LED_pin[1],(data &amp; 2 )? HIGH:LOW);
+  digitalWrite(LED_pin[2],(data &amp; 4 )? HIGH:LOW);
+  digitalWrite(LED_pin[3],(data &amp; 8 )? HIGH:LOW);
+}</pre>
+      <div class="cards grid" style="flex:1;gap:12px">
+        <div class="box frag"><h3>กฎ</h3><p><b>รับค่า</b> → ชนิด + ชื่อตัวแปรในวงเล็บ เช่น (byte data)</p></div>
+        <div class="box frag"><h3>บรรทัด 17–20</h3><p><code>send2port(0B1000)</code> ส่งเลขฐานสอง 1000 (= 8) เข้าไปเก็บในตัวแปร data</p></div>
+        <div class="box frag"><h3>บรรทัด 22–28</h3><p>นำ data มาใช้ด้วย if-else แบบย่อ (? :) แทน if-else ยาว ๆ</p></div>
+      </div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup> · <code>0B</code> นำหน้า = เลขฐานสอง</div>
+  </div>
+</section>
+
+<section class="slide sec-3" data-title="send2port ทำงานอย่างไร">
+  <div class="body">
+    <div class="kicker reveal">ไล่ send2port(0B1000) ทีละบรรทัด</div>
+    <h2 class="title reveal d1" style="margin-bottom:16px">data = 1000₂ ตรวจทีละบิตด้วย &amp;</h2>
+    <table class="t trace" style="width:100%">
+      <tr><th>บรรทัด</th><th>data &amp; ?</th><th>ผล</th><th>ขาที่สั่ง</th><th class="th">LED</th></tr>
+      <tr class="frag"><td>24</td><td>1000 &amp; 0001</td><td>0 (เท็จ)</td><td>LED_pin[0] = ขา 2</td><td class="th"><i class="led"></i> ดับ</td></tr>
+      <tr class="frag"><td>25</td><td>1000 &amp; 0010</td><td>0 (เท็จ)</td><td>LED_pin[1] = ขา 3</td><td class="th"><i class="led"></i> ดับ</td></tr>
+      <tr class="frag"><td>26</td><td>1000 &amp; 0100</td><td>0 (เท็จ)</td><td>LED_pin[2] = ขา 4</td><td class="th"><i class="led"></i> ดับ</td></tr>
+      <tr class="frag"><td>27</td><td>1000 &amp; 1000</td><td>8 (จริง)</td><td>LED_pin[3] = ขา 5</td><td class="th"><i class="led on"></i> ติด</td></tr>
+    </table>
+    <p class="note frag" style="margin-top:20px">ในภาษาซี ค่าที่<b>ไม่เป็นศูนย์</b> ถือว่า “จริง” · บิตที่ 0 → ขา 2, บิตที่ 3 → ขา 5</p>
+  </div>
+</section>
+
+<section class="slide sec-3 act" data-title="🐞 ไฟวิ่งทิศไหน?">
+  <div class="body" style="top:118px">
+    <div><span class="act-badge">🐞 พิสูจน์หนังสือ</span><span class="act-meta">กลุ่ม · 4 นาที · ใช้ผลจากสไลด์ก่อน</span></div>
+    <h2 class="title" style="font-size:50px;margin-bottom:12px">หนังสือบอกว่าโค้ดขั้นสูง “ให้ผลแบบเดียวกัน” กับขั้นพื้นฐาน จริงไหม?</h2>
+    <div class="row" style="gap:30px">
+      <table class="t compact ledt" style="flex:1">
+        <tr><th>จังหวะ</th><th>พื้นฐาน</th><th>ขั้นสูง (ส่งค่า)</th><th>ขั้นสูงติดขา</th></tr>
+        <tr><td>1</td><td>ขา 2</td><td class="mono">0B1000</td><td class="frag">ขา 5</td></tr>
+        <tr><td>2</td><td>ขา 3</td><td class="mono">0B0100</td><td class="frag">ขา 4</td></tr>
+        <tr><td>3</td><td>ขา 4</td><td class="mono">0B0010</td><td class="frag">ขา 3</td></tr>
+        <tr><td>4</td><td>ขา 5</td><td class="mono">0B0001</td><td class="frag">ขา 2</td></tr>
+      </table>
+      <div style="flex:1;display:flex;flex-direction:column;gap:14px">
+        <div class="vote one" data-answer="1"><button type="button" class="opt"><b>1</b> เหมือนกันทุกจังหวะ</button><button type="button" class="opt"><b>2</b> ไฟวิ่งกลับทิศ</button><button type="button" class="opt"><b>3</b> ไฟติดพร้อมกันหมด</button><button type="button" class="reveal">เฉลย</button>
+          <div class="why">ขั้นสูงวิ่ง ขา 5 → 4 → 3 → 2 <b>กลับทิศ</b>กับพื้นฐาน (2 → 3 → 4 → 5)</div></div>
+        <div class="fix frag" style="font-size:25px"><b class="t">แก้จากต้นฉบับ</b> ถ้าต้องการให้วิ่งทิศเดียวกับแบบพื้นฐานจริง ต้องส่ง <code>0B0001</code>, <code>0B0010</code>, <code>0B0100</code>, <code>0B1000</code> ตามลำดับ (ตรวจด้วยการคำนวณทีละบิตแล้ว)</div>
+        <div data-timer="240" class="sm"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide sec-3" data-title="③ ไม่รับค่า แต่ส่งคืนค่า">
+  <div class="body" style="top:112px">
+    <div class="kicker">③ ฟังก์ชันที่ไม่รับค่าแต่ส่งคืนค่า · readSW</div>
+    <div class="row" style="gap:28px;margin-top:6px">
+      <pre class="code xs" data-ln data-cc="full" data-hl="4,13" data-hl2="19-27" style="flex:0 0 680px">#define LED 2
+#define SW1 3
+#define SW2 4
+byte readSW(void);
+void setup()
+{
+  pinMode(LED,OUTPUT);
+  pinMode(SW1,INPUT_PULLUP);
+  pinMode(SW2,INPUT_PULLUP);
+}
+void loop()
+{
+  byte x=readSW();
+  if(x==1)
+    digitalWrite(LED,HIGH);
+  else if(x==2)
+    digitalWrite(LED,LOW);
+}
+byte readSW(void)
+{
+  byte Status=0;
+  if(digitalRead(SW1)==LOW)
+    Status=1;
+  else if(digitalRead(SW2)==LOW)
+    Status=2;
+  return Status;
+}</pre>
+      <div class="cards grid" style="flex:1;gap:12px">
+        <div class="box frag"><h3>กฎ</h3><p><b>ส่งคืนค่า</b> → ใส่<b>ชนิดข้อมูล</b>ที่จะส่งคืนหน้าชื่อ (byte) · ใช้ <code>return</code> ส่งค่าออก</p></div>
+        <div class="box frag"><h3>บรรทัด 13</h3><p>ค่าที่ readSW() ส่งคืน ถูกเก็บในตัวแปร x (ชนิด byte รับได้พอดี)</p></div>
+        <div class="box frag"><h3>บรรทัด 21–26</h3><p>กด SW1 → ส่งคืน 1 · กด SW2 → 2 · ไม่กด → 0</p></div>
+        <div class="box tint frag"><h3>ผล</h3><p>กด SW1 = LED ติด · กด SW2 = LED ดับ</p></div>
+      </div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [15]</a></sup> · INPUT_PULLUP: กดสวิตช์แล้วอ่านได้ LOW</div>
+  </div>
+</section>
+
+<section class="slide sec-3" data-title="④ รับค่า และส่งคืนค่า">
+  <div class="body" style="top:112px">
+    <div class="kicker">④ ฟังก์ชันที่รับค่าและส่งคืนค่า · แปลงค่าเทอร์มิสเตอร์ NTC เป็นอุณหภูมิ</div>
+    <pre class="code xs" data-ln data-cc="full" data-hl="2,9" data-hl2="15-22" style="margin-top:6px">#define NTC A5
+double Thermistor(int RawADC);
+void setup()
+{
+  Serial.begin(9600);
+}
+void loop()
+{
+  float Temp=Thermistor(analogRead(NTC));
+  Serial.print("Temperature is : ");
+  Serial.print(Temp);
+  Serial.println(" 'C");
+  delay(1000);
+}
+double Thermistor(int RawADC)
+{
+  double Cal;
+  Cal = log(10000.0/((1024.0/RawADC-1)));
+  Cal = 1 / (0.001129148 + (0.000234125 + (0.0000000876741 * Cal * Cal ))* Cal );
+  Cal = Cal - 273.15;            // Convert Kelvin to Celcius
+  return Cal;
+}</pre>
+    <div class="grid g3" style="gap:16px;margin-top:14px">
+      <div class="box frag" style="padding:12px 18px"><p class="small" style="margin:0"><b>บรรทัด 2</b> รับค่า int RawADC · ส่งคืน double</p></div>
+      <div class="box frag" style="padding:12px 18px"><p class="small" style="margin:0"><b>บรรทัด 9</b> ส่งค่าที่อ่านจากขา A5 เข้าไป รับผลไว้ที่ Temp</p></div>
+      <div class="box frag" style="padding:12px 18px"><p class="small" style="margin:0"><b>บรรทัด 15–22</b> คำนวณแล้ว <code>return</code> ค่าอุณหภูมิ</p></div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup> · หนังสือพิมพ์เลขบรรทัด 10 ซ้ำ จึงเรียงเลขบรรทัดใหม่ ฟังก์ชันจึงอยู่บรรทัด 15–22 (หนังสือเขียน 14–21)</div>
+  </div>
+</section>
+
+<section class="slide sec-3" data-title="Thermistor คำนวณอะไร">
+  <div class="body">
+    <div class="kicker reveal">ข้างในฟังก์ชัน Thermistor <span class="extra">เสริม</span></div>
+    <h2 class="title reveal d1" style="margin-bottom:16px">ค่า ADC → ความต้านทาน → อุณหภูมิ</h2>
+    <div class="row">
+      <ol class="steps small reveal d2" style="flex:1.3">
+        <li>บรรทัด 18: หา ln(ความต้านทานของ NTC) จากค่า ADC (วงจรแบ่งแรงดันกับตัวต้านทาน 10 kΩ)</li>
+        <li>บรรทัด 19: สมการ Steinhart–Hart ได้อุณหภูมิเป็นเคลวิน<sup class="ref"><a href="#refs">[13]</a></sup></li>
+        <li>บรรทัด 20: ลบ 273.15 เป็นองศาเซลเซียส</li>
+      </ol>
+      <table class="t compact frag" style="flex:1">
+        <tr><th>analogRead</th><th>ผลที่ return</th></tr>
+        <tr><td class="mono">100</td><td class="mono">84.65 °C</td></tr>
+        <tr><td class="mono">512</td><td class="mono">25.00 °C</td></tr>
+        <tr><td class="mono">800</td><td class="mono">-1.75 °C</td></tr>
+      </table>
+    </div>
+    <div class="fix frag" style="margin-top:18px"><b class="t">อธิบายเพิ่มจากต้นฉบับ</b> หนังสือบอกว่ารับค่า double ด้วยตัวแปร float แล้ว “ข้อมูลหายไปบางส่วน” บน Uno / Nano <b>ไม่หาย</b> เพราะ double มีขนาดเท่ากับ float (4 ไบต์)<sup class="ref"><a href="#refs">[5]</a></sup> จะหายเฉพาะบอร์ดที่ double เป็น 8 ไบต์</div>
+    <div class="src">ตารางคำนวณด้วยสูตรในบรรทัด 18–20 (ไม่ต้องจำสูตร) <sup class="ref"><a href="#refs">[1] [13]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-3 act" data-title="🧩 จับคู่ชนิดฟังก์ชัน">
+  <div class="body" style="top:118px">
+    <div><span class="act-badge">🧩 จับคู่</span><span class="act-meta">กลุ่ม · 4 นาที · ตอบเป็นหมายเลข ①–④</span></div>
+    <h2 class="title" style="font-size:52px;margin-bottom:14px">ฟังก์ชันเหล่านี้เป็นชนิดที่เท่าไร?</h2>
+    <table class="t left compact race" style="width:100%">
+      <tr><th>ข้อ</th><th>บรรทัดประกาศรูปแบบ</th><th>ชนิด</th></tr>
+      <tr><td>1</td><td class="mono">void beep(void);</td><td class="ans frag">① ไม่รับ ไม่ส่งคืน</td></tr>
+      <tr><td>2</td><td class="mono">int add(int a, int b);</td><td class="ans frag">④ รับและส่งคืน</td></tr>
+      <tr><td>3</td><td class="mono">void setSpeed(byte s);</td><td class="ans frag">② รับ ไม่ส่งคืน</td></tr>
+      <tr><td>4</td><td class="mono">float readTemp(void);</td><td class="ans frag">③ ไม่รับ แต่ส่งคืน</td></tr>
+      <tr><td>5</td><td class="mono">boolean isEven(int n);</td><td class="ans frag">④ รับและส่งคืน</td></tr>
+      <tr><td>6</td><td class="mono">void showNumber(int n);</td><td class="ans frag">② รับ ไม่ส่งคืน</td></tr>
+    </table>
+    <div class="row" style="margin-top:12px;align-items:flex-end">
+      <div data-timer="240" class="sm" style="flex:0 0 auto"></div>
+      <div data-board="6"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2.4 ขอบเขตของตัวแปร ============ -->
+<section class="slide section sec-4" data-tag="2.4 ขอบเขตของตัวแปร" data-title="2.4 ขอบเขตของตัวแปร">
+  <div class="big-no">2.4</div>
+  <div class="body center">
+    <div class="label reveal">หัวข้อที่ 2.4</div>
+    <h2 class="reveal d1">ขอบเขตของตัวแปร</h2>
+    <p class="lead reveal d2">ตัวแปรนี้ ฟังก์ชันไหน “มองเห็น” และใช้ได้บ้าง</p>
+  </div>
+</section>
+
+<section class="slide sec-4" data-title="global กับ local">
+  <div class="body">
+    <div class="kicker reveal">ขอบเขตตัวแปร 2 แบบ ขึ้นกับตำแหน่งที่ประกาศ</div>
+    <h2 class="title reveal d1">โกลบอล กับ โลคอล</h2>
+    <div class="grid g2">
+      <div class="box green reveal d2"><div class="icon">🌏</div><h3 style="color:#0f8a6c">โกลบอล (global)</h3><p class="small">ประกาศ<b>นอกฟังก์ชัน</b> (หัวโปรแกรม)<br>ทุกฟังก์ชันมองเห็น ใช้ได้หมด</p></div>
+      <div class="box sun reveal d3"><div class="icon">🏠</div><h3 style="color:#a26a00">โลคอล (local)</h3><p class="small">ประกาศ<b>ในฟังก์ชัน</b><br>ใช้ได้เฉพาะในฟังก์ชันนั้น นอกฟังก์ชันมองไม่เห็น</p></div>
+    </div>
+    <p class="note reveal d4" style="margin-top:24px">🏫 เปรียบเทียบ: ประกาศหน้าเสาธง (global) ทุกห้องได้ยิน · ประกาศในห้องเรียน (local) ได้ยินเฉพาะห้องนั้น</p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [11]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-4" data-title="ตัวอย่างขอบเขตตัวแปร">
+  <div class="body" style="top:112px">
+    <div class="kicker">ตัวอย่างการประกาศตัวแปรในขอบเขตที่ต่างกัน</div>
+    <div class="row" style="gap:30px;margin-top:6px">
+      <pre class="code sm" data-ln data-cc="full" data-hl="1-2" data-hl2="10" style="flex:0 0 760px">byte LED1=2;
+byte LED2=3;
+void setup()
+{
+  pinMode(LED1,OUTPUT);
+  pinMode(LED2,OUTPUT);
+}
+void loop()
+{
+  int i;
+  for(i=0;i&lt;10;i++)
+  {
+    digitalWrite(LED1,HIGH);delay(100);
+    digitalWrite(LED1,LOW);delay(100);
+  }
+  for(i=0;i&lt;10;i++)
+  {
+    digitalWrite(LED2,HIGH);delay(100);
+    digitalWrite(LED2,LOW);delay(100);
+  }
+}</pre>
+      <div class="cards grid" style="flex:1;gap:14px">
+        <div class="box green frag"><h3>บรรทัด 1–2 · global</h3><p>LED1, LED2 อยู่นอกฟังก์ชัน → setup() ใช้กับ pinMode และ loop() ใช้กับ digitalWrite ได้</p></div>
+        <div class="box sun frag"><h3>บรรทัด 10 · local</h3><p>i อยู่ใน loop() → ใช้นับรอบได้เฉพาะใน loop() · setup() มองไม่เห็น i</p></div>
+        <div class="box frag"><h3>ผลการทำงาน</h3><p>LED1 กะพริบ 10 ครั้ง แล้ว LED2 กะพริบ 10 ครั้ง วนซ้ำ</p></div>
+      </div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-4 act" data-title="🙋 ใครมองเห็นตัวแปรไหน">
+  <div class="body" style="top:118px">
+    <div><span class="act-badge">🙋 โหวต</span><span class="act-meta">ใช้โค้ดจากสไลด์ก่อน · ชูมือ ✔ ใช้ได้ / ✘ ใช้ไม่ได้</span></div>
+    <h2 class="title" style="font-size:52px;margin-bottom:14px">ถ้าเพิ่มบรรทัดนี้ คอมไพล์ผ่านไหม?</h2>
+    <div class="vrow"><div class="sit"><span class="no">1</span>ใน setup() เขียน <code>digitalWrite(LED2, HIGH);</code></div>
+      <div class="vote pair" data-answer="0"><button type="button" class="opt">✔ ผ่าน</button><button type="button" class="opt">✘ ไม่ผ่าน</button><button type="button" class="reveal">เฉลย</button>
+        <div class="why">LED2 เป็น <b>global</b> ทุกฟังก์ชันใช้ได้</div></div></div>
+    <div class="vrow"><div class="sit"><span class="no">2</span>ใน setup() เขียน <code>i = 0;</code></div>
+      <div class="vote pair" data-answer="1"><button type="button" class="opt">✔ ผ่าน</button><button type="button" class="opt">✘ ไม่ผ่าน</button><button type="button" class="reveal">เฉลย</button>
+        <div class="why">i เป็น <b>local</b> ของ loop() · setup() มองไม่เห็น → error “'i' was not declared in this scope”</div></div></div>
+    <div class="vrow"><div class="sit"><span class="no">3</span>ย้าย <code>int i;</code> ไปไว้บรรทัดที่ 3 (นอกฟังก์ชัน) แล้วใช้ i ใน setup()</div>
+      <div class="vote pair" data-answer="0"><button type="button" class="opt">✔ ผ่าน</button><button type="button" class="opt">✘ ไม่ผ่าน</button><button type="button" class="reveal">เฉลย</button>
+        <div class="why">กลายเป็น <b>global</b> ทุกฟังก์ชันใช้ได้ (แต่ควรใช้ local เมื่อทำได้ กันฟังก์ชันอื่นแก้ค่าโดยไม่ตั้งใจ<sup class="ref"><a href="#refs">[11]</a></sup>)</div></div></div>
+  </div>
+</section>
+
+<!-- ============ 2.5 struct และ union ============ -->
+<section class="slide section sec-5" data-tag="2.5 struct และ union" data-title="2.5 การประกาศตัวแปรแบบสตรัคเจอร์และยูเนียน">
+  <div class="big-no">2.5</div>
+  <div class="body center">
+    <div class="label reveal">หัวข้อที่ 2.5</div>
+    <h2 class="reveal d1">สตรัคเจอร์ (Structure)<br>และยูเนียน (Union)</h2>
+    <p class="lead reveal d2">จัดกลุ่มตัวแปรหลายชนิดไว้ด้วยกัน</p>
+  </div>
+</section>
+
+<section class="slide sec-5" data-title="ทำไมต้องจัดกลุ่มตัวแปร">
+  <div class="body">
+    <div class="kicker reveal">ตัวแปรเยอะ สับสน</div>
+    <h2 class="title reveal d1">รวมตัวแปรต่างชนิดไว้ในชื่อเดียว</h2>
+    <div class="grid g2">
+      <div class="box tint reveal d2"><h3>1. สตรัคเจอร์ (struct)</h3><p class="small">ตัวแปรย่อยแต่ละตัว<b>มีที่เก็บของตัวเอง</b><br>ใช้พร้อมกันได้ทุกตัว</p></div>
+      <div class="box rose reveal d3"><h3 style="color:var(--rose)">2. ยูเนียน (union)</h3><p class="small">ตัวแปรย่อยทุกตัว<b>ใช้ที่เก็บเดียวกัน</b><br>ใช้ได้ทีละตัว ตัวล่าสุดทับตัวก่อน</p></div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [12]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-5" data-title="struct: การประกาศและการใช้งาน">
+  <div class="body">
+    <div class="kicker reveal">การประกาศตัวแปรแบบสตรัคเจอร์</div>
+    <h2 class="title reveal d1" style="margin-bottom:18px">ประกาศ “แม่แบบ” แล้วสร้างตัวแปร</h2>
+    <div class="row">
+      <div style="flex:1"><div class="tiny">การประกาศ</div><pre class="code reveal d2" data-cc="tmpl">struct ชื่อสตรัคเจอร์
+{
+   ชนิดตัวแปร ชื่อตัวแปรที่1;
+   ชนิดตัวแปร ชื่อตัวแปรที่2;
+   ...
+};</pre></div>
+      <div style="flex:1"><div class="tiny">การใช้งาน</div><pre class="code reveal d3" data-cc="tmpl">ชื่อสตรัคเจอร์ ชื่อตัวแปรใหม่ = {ค่าเริ่มต้นตัวที่1, 2, ...};</pre>
+        <p class="small frag" style="margin-top:16px">เรียกตัวแปรย่อยด้วย <b>จุด</b>: <code>data.a</code> <code>data.b</code></p></div>
+    </div>
+    <div class="note frag" style="margin-top:18px">อย่าลืม <code>;</code> หลัง <code>}</code> ของ struct</div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-5" data-title="ตัวอย่าง struct">
+  <div class="body" style="top:112px">
+    <div class="kicker">ตัวอย่าง struct และผลการรัน (รูป 2-4)</div>
+    <div class="row" style="gap:30px;margin-top:6px">
+      <pre class="code sm" data-ln data-cc="full" data-hl="1-6" data-hl2="7" style="flex:0 0 620px">struct VALUE
+{
+  byte a;
+  int b;
+  float c;
+};
+VALUE data={123,12345,123.45};
+void setup()
+{
+  Serial.begin(9600);
+  Serial.println(data.a);
+  Serial.println(data.b);
+  Serial.println(data.c);
+}
+void loop()
+{
+}</pre>
+      <div style="flex:1;display:flex;flex-direction:column;gap:16px">
+        <div class="serial frag"><div class="bar">Serial Monitor</div><div class="out">123
+12345
+123.45</div></div>
+        <div class="box frag" style="padding:12px 20px"><p class="small" style="margin:0"><b>บรรทัด 1–6</b> แม่แบบชื่อ VALUE มี 3 ตัวแปรต่างชนิด · <b>บรรทัด 7</b> สร้างตัวแปร data แล้วใส่ค่าเริ่มต้นครบทุกตัว</p></div>
+        <div class="fix frag" style="font-size:24px"><b class="t">ปรับจากต้นฉบับ</b> หนังสือว่า “เปลี่ยนชื่อจาก VALUE เป็น data” ที่จริง <b>VALUE คือชื่อชนิด</b> (แม่แบบ) ส่วน <b>data คือตัวแปร</b>ที่สร้างจากแม่แบบนั้น จะสร้างหลายตัวก็ได้</div>
+      </div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup> · ผลรันวาดใหม่แทนภาพจากโปรแกรมจำลองในหนังสือ</div>
+  </div>
+</section>
+
+<section class="slide sec-5" data-title="struct ในหน่วยความจำ">
+  <div class="body">
+    <div class="kicker reveal">struct VALUE ในหน่วยความจำ (Uno / Nano) <span class="extra">เสริม</span></div>
+    <h2 class="title reveal d1">แต่ละตัวแปรมีช่องของตัวเอง</h2>
+    <div class="mem reveal d2" style="justify-content:center">
+      <div class="cell" style="background:var(--orange-soft)">123<small>a · 1 ไบต์</small></div>
+      <div class="cell" style="width:300px;background:var(--blue-soft)">12345<small>b · 2 ไบต์</small></div>
+      <div class="cell" style="width:600px;background:var(--green-soft)">123.45<small>c · 4 ไบต์</small></div>
+    </div>
+    <p class="lead reveal d3" style="margin-top:40px;text-align:center">รวม 1 + 2 + 4 = <b>7 ไบต์</b> · แก้ตัวหนึ่ง ตัวอื่นไม่เปลี่ยน</p>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[5] [6]</a></sup> · ตรวจ sizeof ด้วยคอมไพเลอร์ avr-gcc แล้ว (บอร์ดอื่นอาจมีช่องว่างคั่น ขนาดจึงต่างไป)</div>
+  </div>
+</section>
+
+<section class="slide sec-5" data-title="union: การประกาศ และตัวอย่างที่ 1">
+  <div class="body" style="top:112px">
+    <div class="kicker">การประกาศตัวแปรแบบยูเนียน · ตัวอย่างที่ 1 กำหนดค่าแล้วใช้ทันที (รูป 2-5)</div>
+    <div class="row" style="gap:30px;margin-top:6px">
+      <pre class="code sm" data-ln data-cc="full" data-hl="1" data-hl2="11-13" style="flex:0 0 760px">union VALUE
+{
+  byte a;
+  int b;
+  float c;
+};
+VALUE data;
+void setup()
+{
+  Serial.begin(9600);
+  data.a=123;    Serial.println(data.a);
+  data.b=12345;  Serial.println(data.b);
+  data.c=123.45; Serial.println(data.c);
+}
+void loop()
+{
+}</pre>
+      <div style="flex:1;display:flex;flex-direction:column;gap:16px">
+        <div class="serial frag"><div class="bar">Serial Monitor</div><div class="out">123
+12345
+123.45</div></div>
+        <div class="box frag" style="padding:12px 20px"><p class="small" style="margin:0">ใส่ค่าแล้ว<b>พิมพ์ทันที</b> ค่าจึงถูกทุกบรรทัด · บรรทัด 12 ค่า data.b <b>ทับ</b> data.a ซึ่งไม่ได้ใช้แล้ว</p></div>
+        <div class="fix frag" style="font-size:24px"><b class="t">แก้จากต้นฉบับ</b> หนังสือเรียก data.b และ data.c ว่า “ตัวแปรตัวแรก” ที่ถูกคือ<b>ตัวที่ 2</b> และ<b>ตัวที่ 3</b> · ยูเนียนกำหนดค่าเริ่มต้นได้เฉพาะ<b>สมาชิกตัวแรก</b> เช่น <code>VALUE data = {123};</code><sup class="ref"><a href="#refs">[12]</a></sup></div>
+      </div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [12]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-5 act" data-title="🙋 union ตัวอย่างที่ 2: ทำไมได้ 102">
+  <div class="body" style="top:112px">
+    <div><span class="act-badge">🙋 ทายก่อนเฉลย</span><span class="act-meta">ใส่ค่าครบ 3 ตัวก่อน แล้วค่อยพิมพ์ (รูป 2-6)</span></div>
+    <div class="row" style="gap:30px;margin-top:10px">
+      <pre class="code sm" data-ln data-cc="full" data-hl="10-12" data-hl2="14-16" style="flex:0 0 600px">union VALUE
+{
+  byte a;
+  int b;
+  float c;
+};
+VALUE data;
+void setup()
+{
+  data.a=123;
+  data.b=12345;
+  data.c=123.45;
+  Serial.begin(9600);
+  Serial.println(data.a);
+  Serial.println(data.b);
+  Serial.println(data.c);
+}
+void loop()
+{
+}</pre>
+      <div style="flex:1;display:flex;flex-direction:column;gap:14px">
+        <p class="small" style="margin:0">Serial Monitor จะแสดงอะไร?</p>
+        <div class="vote one" data-answer="2"><button type="button" class="opt"><b>1</b> 123 · 12345 · 123.45</button><button type="button" class="opt"><b>2</b> 0 · 0 · 123.45</button><button type="button" class="opt"><b>3</b> 102 · -6554 · 123.45</button><button type="button" class="opt"><b>4</b> 123.45 · 123.45 · 123.45</button><button type="button" class="reveal">เฉลย</button>
+          <div class="why">c ใส่ล่าสุด <b>ทับ</b>ที่เก็บของ a และ b · a กับ b จึงอ่านได้ “ชิ้นส่วน” ของ 123.45 ไปดูทีละไบต์ในสไลด์ถัดไป</div></div>
+        <div class="serial frag"><div class="bar">Serial Monitor</div><div class="out">102
+-6554
+123.45</div></div>
+      </div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1]</a></sup> · ผลตรงกับรูป 2-6 ในหนังสือ (ตรวจด้วยการคำนวณแล้ว)</div>
+  </div>
+</section>
+
+<section class="slide sec-5" data-title="union ในหน่วยความจำ ทีละขั้น">
+  <div class="body">
+    <div class="kicker reveal">ยูเนียนใช้ 4 ไบต์ร่วมกัน (Uno / Nano เก็บไบต์ต่ำไว้ก่อน) <span class="extra">เสริม</span></div>
+    <h2 class="title reveal d1" style="margin-bottom:14px">ดูทีละไบต์ (เลขฐาน 16)</h2>
+    <table class="t trace compact" style="width:100%">
+      <tr><th>หลังบรรทัด</th><th>ไบต์ 0</th><th>ไบต์ 1</th><th>ไบต์ 2</th><th>ไบต์ 3</th><th class="th">ความหมาย</th></tr>
+      <tr class="frag"><td>7 VALUE data;</td><td>00</td><td>00</td><td>00</td><td>00</td><td class="th">ตัวแปร global เริ่มต้นเป็น 0</td></tr>
+      <tr class="frag"><td>10 data.a=123;</td><td>7B</td><td>00</td><td>00</td><td>00</td><td class="th">123 = 7B</td></tr>
+      <tr class="frag"><td>11 data.b=12345;</td><td>39</td><td>30</td><td>00</td><td>00</td><td class="th">12345 = 3039 ทับไบต์ 0–1</td></tr>
+      <tr class="frag"><td>12 data.c=123.45;</td><td>66</td><td>E6</td><td>F6</td><td>42</td><td class="th">123.45 (float) = 42F6E666 ทับทั้ง 4 ไบต์</td></tr>
+    </table>
+    <div class="grid g3 frag" style="gap:16px;margin-top:16px">
+      <div class="box orange" style="padding:12px 18px"><p class="small" style="margin:0"><b>a</b> อ่านไบต์ 0 = 66₁₆ = <b>102</b></p></div>
+      <div class="box blue" style="padding:12px 18px"><p class="small" style="margin:0"><b>b</b> อ่านไบต์ 0–1 = E666₁₆ = 58982 → int มีเครื่องหมาย = <b>-6554</b></p></div>
+      <div class="box green" style="padding:12px 18px"><p class="small" style="margin:0"><b>c</b> อ่านครบ 4 ไบต์ = <b>123.45</b></p></div>
+    </div>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[6] [12]</a></sup> · 58982 − 65536 = −6554 · บอร์ด 32 บิตที่ int มี 4 ไบต์จะได้ค่า b ต่างไป · ภาษา C++ ถือว่าการอ่านสมาชิกที่ไม่ได้เขียนล่าสุดไม่รับประกันผล ใช้เพื่อศึกษาเท่านั้น</div>
+  </div>
+</section>
+
+<section class="slide sec-5" data-title="เปรียบเทียบ struct กับ union">
+  <div class="body">
+    <div class="kicker reveal">สรุป 2.5</div>
+    <h2 class="title reveal d1">struct กับ union ต่างกันอย่างไร</h2>
+    <table class="t left reveal d2" style="width:100%">
+      <tr><th></th><th>struct</th><th>union</th></tr>
+      <tr><td>ที่เก็บข้อมูล</td><td>แยกกัน ตัวละช่อง</td><td>ใช้ช่องเดียวกัน</td></tr>
+      <tr><td>ขนาด (ตัวอย่าง VALUE)</td><td>1 + 2 + 4 = 7 ไบต์</td><td>เท่าตัวที่ใหญ่สุด = 4 ไบต์</td></tr>
+      <tr><td>ใช้พร้อมกัน</td><td>✔ ได้ทุกตัว</td><td>✘ ได้ทีละตัว (ตัวล่าสุด)</td></tr>
+      <tr><td>ค่าเริ่มต้น</td><td>กำหนดได้ทุกตัว <code>{123,12345,123.45}</code></td><td>กำหนดได้เฉพาะตัวแรก <code>{123}</code></td></tr>
+    </table>
+    <div class="src">ที่มา: <sup class="ref"><a href="#refs">[1] [12]</a></sup></div>
+  </div>
+</section>
+
+<section class="slide sec-5 act" data-title="🎲 ฝึกคิด 2.3–2.5">
+  <div class="body">
+    <div><span class="act-badge">🎲 ฝึกคิด 2.3–2.5</span><span class="act-meta">คุยกับเพื่อนข้าง ๆ 2 นาที แล้วสุ่มเลขที่ตอบ</span></div>
+    <h2 class="title" style="font-size:56px">ตอบให้ได้ก่อนทำแบบฝึกหัด</h2>
+    <div class="row">
+      <ol class="steps" style="flex:1.6">
+        <li>ถ้าวางฟังก์ชันรอง<b>หลัง</b> loop() ต้องเขียนอะไรเพิ่มที่หัวโปรแกรม</li>
+        <li><code>int add(int a, int b)</code> เป็นฟังก์ชันชนิดใด</li>
+        <li>ตัวแปร global กับ local ต่างกันอย่างไร</li>
+        <li>struct กับ union ต่างกันอย่างไร</li>
+      </ol>
+      <div style="flex:1;display:flex;flex-direction:column;gap:20px;align-items:flex-start"><div data-timer="120" class="sm"></div><div data-picker="40"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ปิดบท ============ -->
+<section class="slide sec-0 act" data-tag="ฝึกทักษะ" data-title="✏️ ทำแบบฝึกหัด">
+  <div class="body center" style="text-align:center">
+    <div><span class="act-badge">✏️ แบบฝึกหัด</span><span class="act-meta">รายบุคคล · 20 นาที · ที่เหลือเป็นการบ้าน</span></div>
+    <h2 class="title">ได้เวลาฝึกฝีมือแล้ว!</h2>
+    <div class="grid g2" style="gap:40px;max-width:1300px;margin:0 auto">
+      <a class="box tint" href="exercises.html" style="text-decoration:none;color:inherit"><div class="icon">✏️</div><h3>แบบฝึกหัด 5 ชุด</h3><p class="small">ผังงาน ตัวแปร ตัวดำเนินการ ลูป ฟังก์ชัน · ตรวจทันที พิมพ์ใบงาน A4 ได้</p></a>
+      <div class="box" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px"><div data-timer="1200"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide sec-0" data-tag="สรุปบทเรียน" data-title="สรุปบทเรียน">
+  <div class="body">
+    <div class="kicker reveal">สรุป</div>
+    <h2 class="title reveal d1" style="margin-bottom:22px">สิ่งที่เราได้เรียนในบทที่ 2</h2>
+    <div class="cards grid g2" style="gap:16px">
+      <div class="box orange reveal d2"><h3 style="color:var(--orange)">2.1 ขั้นตอนพัฒนาโปรแกรม</h3><p>วิเคราะห์ → ออกแบบ (อัลกอริทึม ผังงาน) → เขียน → ทดสอบ → เอกสาร</p></div>
+      <div class="box tint reveal d2"><h3>2.2 ภาษาซี</h3><p>setup / loop · ตัวแปร ชนิดข้อมูล · ตัวดำเนินการ 5 กลุ่ม · if switch for while do-while</p></div>
+      <div class="box blue reveal d3"><h3 style="color:var(--blue)">2.3 ฟังก์ชันรอง</h3><p>วางก่อน / วางหลัง + prototype · 4 ชนิดตาม “รับค่า?” “ส่งคืนค่า?”</p></div>
+      <div class="box green reveal d4"><h3 style="color:#0f8a6c">2.4 ขอบเขตตัวแปร</h3><p>global ทุกฟังก์ชันใช้ได้ · local ใช้ได้ในฟังก์ชันที่ประกาศ</p></div>
+      <div class="box rose reveal d5"><h3 style="color:var(--rose)">2.5 struct / union</h3><p>struct ช่องใครช่องมัน · union ใช้ช่องเดียวกัน</p></div>
+      <div class="box sun reveal d5"><h3 style="color:#a26a00">บทถัดไป</h3><p>เครื่องมือแปลงภาษาซีเป็นภาษาเครื่อง และโปรแกรมจำลอง → ได้ลองรันโค้ดจริง</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide sec-0 act" data-title="📱 แบบทดสอบหลังเรียน">
+  <div class="body center" style="text-align:center">
+    <div><span class="act-badge">📱 แบบทดสอบหลังเรียน</span><span class="act-meta">รายบุคคล · 15 นาที</span></div>
+    <h2 class="title">ข้อสอบชุดเดิม ดูซิว่าเก่งขึ้นแค่ไหน</h2>
+    <p>เปิด <b>แบบทดสอบ</b> → เลือก “<b>หลังเรียน</b>” → ทำ 20 ข้อ → กดส่ง → พิมพ์ใบคะแนนส่ง Google Classroom</p>
+    <p class="small"><a href="quiz.html">quiz.html</a></p>
+    <div style="margin-top:20px"><div data-timer="900"></div></div>
+  </div>
+</section>
+
+<section class="slide sec-0" data-tag="หมายเหตุสำหรับครู" data-title="จุดที่ปรับจากต้นฉบับ (1)">
+  <div class="body" style="top:112px">
+    <h2 class="title" style="font-size:52px;margin-bottom:12px">จุดที่แก้หรืออธิบายเพิ่มจากหนังสือ (1/2)</h2>
+    <table class="t left compact notes" style="width:100%">
+      <tr><th>หน้า</th><th>หนังสือ</th><th>ในสไลด์</th></tr>
+      <tr><td>17</td><td>หัวข้อเรื่องมี 2.1–2.3</td><td>เนื้อหาในบทมีถึง 2.5 จึงสอนครบ 5 หัวข้อ</td></tr>
+      <tr><td>21</td><td>“ภาษาเครื่องเป็นเลขฐาน 16 ทั้งหมด”</td><td>ภาษาเครื่องคือรหัส 0/1 เลขฐาน 16 เป็นวิธีเขียนย่อ</td></tr>
+      <tr><td>21</td><td>อัลกอริทึมข้อ 5 “เขียนลอจิก 2” · ผังงานไม่มีขั้นกำหนดโหมดขา</td><td>ลอจิก 0 · เพิ่มกล่อง pinMode</td></tr>
+      <tr><td>23</td><td>โค้ดขั้นสูง “ให้ผลแบบเดียวกัน” กับพื้นฐาน</td><td>ไฟวิ่งกลับทิศ (5→2) ต้องส่ง 0B0001 → 0B1000 จึงเหมือนกัน</td></tr>
+      <tr><td>24</td><td>double 64 บิต ±1.7E±308 · ตัวแรกของชื่อเป็นตัวอักษรเท่านั้น</td><td>Uno/Nano/Mega double = 4 ไบต์ · ขึ้นต้นด้วย _ ได้</td></tr>
+      <tr><td>25</td><td><code>i-10; n-&amp;i;</code> · <code>int x[3,3]</code> <code>x[0,1]</code></td><td><code>i=10; n=&amp;i;</code> · <code>int x[3][3]</code> <code>x[0][1]</code></td></tr>
+    </table>
+    <div class="src">โค้ดทุกชิ้นในสไลด์ตรวจด้วยคอมไพเลอร์ avr-gcc ของ Arduino IDE (บอร์ด Uno) · ใช้ตัวสะกด “ฟังก์ชัน” ตามพจนานุกรม</div>
+  </div>
+</section>
+
+<section class="slide sec-0" data-title="จุดที่ปรับจากต้นฉบับ (2)">
+  <div class="body" style="top:112px">
+    <h2 class="title" style="font-size:52px;margin-bottom:12px">จุดที่แก้หรืออธิบายเพิ่มจากหนังสือ (2/2)</h2>
+    <table class="t left compact notes" style="width:100%">
+      <tr><th>หน้า</th><th>หนังสือ</th><th>ในสไลด์</th></tr>
+      <tr><td>27</td><td><code>= =</code></td><td><code>==</code></td></tr>
+      <tr><td>29–33</td><td>เรียก if/for/while ว่า “ฟังก์ชั่น” · <code>(SW1==LOW)</code></td><td>คำสั่งควบคุม · <code>digitalRead(SW1)==LOW</code></td></tr>
+      <tr><td>33</td><td><code>} while(i&lt;10)</code></td><td><code>} while(i&lt;10);</code></td></tr>
+      <tr><td>36</td><td>“บรรทัดที่ 25-30, บรรทัดที่ 25-30, 31-36”</td><td>25–30 และ 31–36</td></tr>
+      <tr><td>39</td><td>เลขบรรทัด 10 ซ้ำ · รับ double ด้วย float ข้อมูลหาย</td><td>เรียงเลขใหม่ (ฟังก์ชันอยู่ 15–22) · บน Uno ไม่หายเพราะขนาดเท่ากัน</td></tr>
+      <tr><td>41–43</td><td>“เปลี่ยนชื่อ VALUE เป็น data” · data.b, data.c “ตัวแรก”</td><td>VALUE = ชื่อชนิด, data = ตัวแปร · ตัวที่ 2 และ 3</td></tr>
+    </table>
+    <div class="src">โค้ดทุกชิ้นในสไลด์ตรวจด้วยคอมไพเลอร์ avr-gcc ของ Arduino IDE (บอร์ด Uno) · ใช้ตัวสะกด “ฟังก์ชัน” ตามพจนานุกรม</div>
+  </div>
+</section>
+
+<section class="slide sec-0" id="refs" data-tag="เอกสารอ้างอิง" data-title="เอกสารอ้างอิง (1)">
+  <div class="body" style="font-size:23px;line-height:1.4">
+    <h2 class="title" style="font-size:56px;margin-bottom:16px">เอกสารอ้างอิง</h2>
+    <ol style="margin:0;padding-left:56px">
+      <li style="margin-bottom:8px">ประภาส สุวรรณเพชร. <i>เรียนรู้และลองเล่น Arduino เบื้องต้น</i>, บทที่ 2 การเขียนโปรแกรมภาษาซีสำหรับไมโครคอนโทรลเลอร์. (เอกสารต้นฉบับของบทเรียนนี้)</li>
+      <li style="margin-bottom:8px">Wikipedia. <i>Flowchart</i> (หัวข้อ Common symbols อ้างอิง ANSI และ ISO 5807:1985). https://en.wikipedia.org/wiki/Flowchart</li>
+      <li style="margin-bottom:8px">Arduino. <i>Language Reference: setup() และ loop()</i>. https://docs.arduino.cc/language-reference/ (ต้นฉบับ github.com/arduino/reference-en)</li>
+      <li style="margin-bottom:8px">Arduino. <i>ArduinoCore-avr: cores/arduino/main.cpp</i>. https://github.com/arduino/ArduinoCore-avr/blob/master/cores/arduino/main.cpp</li>
+      <li style="margin-bottom:8px">Arduino. <i>Language Reference: Data Types — byte, int, float, double</i>. https://docs.arduino.cc/language-reference/</li>
+      <li style="margin-bottom:8px">GCC Wiki. <i>avr-gcc: ABI — Type Layout (Endianess: Little; int 2; double 4)</i>. https://gcc.gnu.org/wiki/avr-gcc</li>
+      <li style="margin-bottom:8px">cppreference.com. <i>Identifier (C language)</i>. https://en.cppreference.com/w/c/language/identifier</li>
+      <li style="margin-bottom:8px">cppreference.com. <i>Array declaration — Multidimensional arrays</i>. https://en.cppreference.com/w/c/language/array</li>
+      <li style="margin-bottom:8px">cppreference.com. <i>Arithmetic operators (C)</i> — การหารจำนวนเต็มและค่าล้นของ unsigned. https://en.cppreference.com/w/c/language/operator_arithmetic</li>
+    </ol>
+  </div>
+</section>
+
+<section class="slide sec-0" data-title="เอกสารอ้างอิง (2)">
+  <div class="body" style="font-size:23px;line-height:1.4">
+    <h2 class="title" style="font-size:56px;margin-bottom:16px">เอกสารอ้างอิง (ต่อ)</h2>
+    <ol start="10" style="margin:0;padding-left:56px">
+      <li style="margin-bottom:8px">Arduino. <i>Arduino CLI: Sketch build process</i> (Prototypes are generated for all function definitions in .ino files). https://arduino.github.io/arduino-cli/latest/sketch-build-process/</li>
+      <li style="margin-bottom:8px">Arduino. <i>Language Reference: Variable Scope</i>. https://docs.arduino.cc/language-reference/</li>
+      <li style="margin-bottom:8px">cppreference.com. <i>Union declaration</i>. https://en.cppreference.com/w/cpp/language/union</li>
+      <li style="margin-bottom:8px">Wikipedia. <i>Steinhart–Hart equation</i>. https://en.wikipedia.org/wiki/Steinhart–Hart_equation</li>
+      <li style="margin-bottom:8px">Arduino. <i>Language Reference: Control Structure (if, switch...case, for, while, do...while)</i>. https://docs.arduino.cc/language-reference/</li>
+      <li style="margin-bottom:8px">Arduino. <i>Built-in Examples: Input Pullup Serial</i>. https://docs.arduino.cc/built-in-examples/digital/InputPullupSerial/</li>
+      <li style="margin-bottom:8px">Arduino. <i>Language Reference: switch...case</i> (falling-through เมื่อไม่มี break). https://docs.arduino.cc/language-reference/</li>
+      <li style="margin-bottom:8px">cppreference.com. <i>Pointer declaration (C)</i>. https://en.cppreference.com/w/c/language/pointer</li>
+      <li style="margin-bottom:8px">Microchip. <i>AVR Instruction Set Manual</i> (DS40002198), คำสั่ง LDI. https://ww1.microchip.com/downloads/en/DeviceDoc/AVR-InstructionSet-Manual-DS40002198.pdf</li>
+    </ol>
+    <div class="box" style="margin-top:14px;padding:14px 26px;font-size:21px">ผังงาน แผนภาพ และหน้าจอ Serial Monitor ทุกภาพวาดขึ้นใหม่ · โค้ดจากหนังสือพิมพ์ใหม่พร้อมแก้จุดผิด</div>
+    <p class="tiny" style="margin-top:10px">เข้าถึงแหล่งข้อมูลออนไลน์เมื่อ 24 ตุลาคม 2569</p>
+  </div>
+</section>
+
+<section class="slide sec-0" id="videos" data-title="วิดีโอประกอบการสอน">
+  <div class="body" style="font-size:25px;line-height:1.45">
+    <h2 class="title" style="font-size:56px;margin-bottom:16px">วิดีโอประกอบการสอน (YouTube)</h2>
+    <ol style="margin:0;padding-left:70px;list-style:none">
+      <li style="margin-bottom:10px"><b>[V1]</b> Lipda Pola. (2561, 15 กันยายน). <i>วิทยาการคำนวณ EP8 อัลกอริทึม ตอน อัลกอริทึมคืออะไร</i>. https://www.youtube.com/watch?v=7ITAF0CkPwg</li>
+      <li style="margin-bottom:10px"><b>[V2]</b> BorntoDev. (2565, 25 เมษายน). <i>Ep.2 สรุป Flowchart แบบรวบรัดภายใน 3 นาที</i>. https://www.youtube.com/watch?v=ThpK8B9Xjsg</li>
+      <li style="margin-bottom:10px"><b>[V3]</b> NoneTech. (2563, 27 มีนาคม). <i>Void Setup และ Void Loop มันแตกต่างกันอย่างไร แล้วทำงานแบบไหน??</i>. https://www.youtube.com/watch?v=IGLs5c0LG38</li>
+      <li style="margin-bottom:10px"><b>[V4]</b> maxtic maxtic. (2561, 29 มีนาคม). <i>#9 สอน Arduino Tutorial: Arduino คำสั่งทำงานซ้ำ วน loop</i>. https://www.youtube.com/watch?v=z1IpuLuMna0</li>
+    </ol>
+    <p class="tiny" style="margin-top:14px">ฝังจากช่องผู้เผยแพร่โดยตรง ไม่ได้ดาวน์โหลดหรือตัดต่อ · ตรวจว่ายังเปิดดูได้เมื่อ 24 ตุลาคม 2569 · ครูควรดูก่อนสอนทุกครั้ง เพราะคลิปอาจถูกลบหรือย้าย · วิดีโอเล่นได้เมื่อเปิดผ่านเว็บ (GitHub Pages)</p>
+  </div>
+</section>
+
+</main>
+</div>
+<script src="../assets/js/code.js"></script>
+<script src="../assets/js/sims.js"></script>
+<script src="../assets/js/deck.js"></script>
+</body>
+</html>

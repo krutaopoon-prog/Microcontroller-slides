@@ -1,0 +1,119 @@
+/* ===========================================
+   CODE — กล่องโค้ดภาษาซี กล่อง Serial Monitor และผังงาน (ใช้ได้ทั้งสไลด์และหน้าเอกสาร)
+   ฟอนต์โค้ด Courier Prime: เลข 0 ไม่มีขีดทับ ไม่มีจุดกลาง (เหมือน Courier ในหนังสือ)
+   =========================================== */
+:root {
+    --font-code: 'Courier Prime', 'Sarabun', monospace;
+    --code-k: #3b6fd4;      /* คำสั่ง if for while return */
+    --code-t: #00878f;      /* ชนิดข้อมูล int byte void */
+    --code-n: #c2561a;      /* ตัวเลข HIGH LOW */
+    --code-s: #2e8a50;      /* สตริง */
+    --code-c: #8a8494;      /* คอมเมนต์ */
+    --code-p: #b8364d;      /* #define #include */
+}
+
+pre.code {
+    font-family: var(--font-code);
+    font-size: 30px;
+    line-height: 1.38;
+    color: var(--ink);
+    background: #fff;
+    border: 2px solid var(--line);
+    border-radius: 20px;
+    padding: 16px 26px;
+    margin: 0;
+    white-space: pre;
+    overflow: hidden;
+    tab-size: 4;
+    text-align: left;
+    font-variant-numeric: normal;
+}
+pre.code.sm { font-size: 25px; line-height: 1.32; padding: 12px 20px; }
+pre.code.xs { font-size: 21px; line-height: 1.28; padding: 10px 16px; }
+pre.code.lg { font-size: 36px; }
+pre.code.bad { border-color: var(--rose); background: #fff8f9; }
+pre.code.good { border-color: var(--green); background: #f7fdf9; }
+pre.code.cols2 { column-count: 2; column-gap: 40px; column-rule: 2px dashed var(--line); }
+pre.code .l { break-inside: avoid; display: block; padding: 0 8px; margin: 0 -8px; border-radius: 8px; }
+pre.code.ln .l::before {
+    content: attr(data-n);
+    display: inline-block;
+    width: 2.2em;
+    margin-right: .8em;
+    text-align: right;
+    color: var(--code-c);
+    border-right: 2px solid var(--line);
+    padding-right: .5em;
+}
+pre.code .l.hl { background: var(--sun-soft); }
+pre.code .l.hl2 { background: var(--teal-soft); }
+pre.code .l.err { background: var(--rose-soft); }
+pre.code .k { color: var(--code-k); font-weight: 700; }
+pre.code .t { color: var(--code-t); font-weight: 700; }
+pre.code .n { color: var(--code-n); }
+pre.code .s { color: var(--code-s); }
+pre.code .c { color: var(--code-c); font-style: italic; font-family: var(--font-code); }
+pre.code .p { color: var(--code-p); font-weight: 700; }
+pre.code .f { color: #6b3fa0; }
+code.c, .slide code {
+    font-family: var(--font-code);
+    font-weight: 700;
+    background: var(--cream);
+    border-radius: 8px;
+    padding: 0 .25em;
+    font-variant-numeric: normal;
+}
+
+/* --- Serial Monitor (แทนภาพผลรันจากโปรแกรมจำลอง) --- */
+.serial {
+    background: #1f2430;
+    color: #7ee29a;
+    font: 700 34px/1.4 var(--font-code);
+    border-radius: 18px;
+    padding: 0 0 14px;
+    overflow: hidden;
+    min-width: 360px;
+}
+.serial .bar { background: #343b4a; color: #c9cfdb; font: 500 22px var(--font-display); padding: 6px 18px; margin-bottom: 10px; }
+.serial .out { padding: 0 22px; white-space: pre; }
+
+/* --- ตารางไล่โค้ด (trace table) --- */
+table.t.trace td { font-family: var(--font-code); font-weight: 700; }
+table.t.trace td.th { font-family: var(--font-body); font-weight: 400; }
+
+/* --- แผนภาพหน่วยความจำ (union / struct) --- */
+.mem { display: flex; gap: 0; font-family: var(--font-code); }
+.mem .cell { width: 150px; text-align: center; border: 3px solid var(--ink); margin-left: -3px; background: #fff; padding: 8px 0; font-size: 34px; font-weight: 700; }
+.mem .cell small { display: block; font: 400 20px var(--font-body); color: var(--ink-soft); }
+
+/* --- ผังงาน SVG ---
+   <svg class="fc" viewBox="…"> + <rect class="s term" rx=…> / <rect class="s"> / <polygon class="s dec"> / <circle class="s con">
+   ลูกศร <path class="a" d="…"/> (หัวลูกศรสร้างอัตโนมัติด้วย code.js) ป้าย <text class="lbl"> */
+svg.fc { overflow: visible; display: block; width: 100%; height: auto; }
+svg.fc .s { fill: #fff; stroke: var(--sec, var(--teal)); stroke-width: 4; stroke-linejoin: round; }
+svg.fc .s.term { fill: var(--sec-soft, var(--teal-soft)); }
+svg.fc .s.dec { fill: var(--sun-soft); stroke: #c58a00; }
+svg.fc .s.io { fill: var(--blue-soft); stroke: var(--blue); }
+svg.fc .s.sub { fill: #fff; }
+svg.fc .s.err { stroke: var(--rose); fill: var(--rose-soft); }
+svg.fc .s.new { stroke: var(--green); fill: var(--green-soft); stroke-dasharray: 10 6; }
+svg.fc .ln { stroke: var(--sec, var(--teal)); stroke-width: 4; fill: none; }
+svg.fc text { font: 500 26px 'Kanit', sans-serif; fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
+svg.fc text.code { font: 700 25px var(--font-code); }
+svg.fc text.lbl { font: 500 22px 'Kanit', sans-serif; fill: var(--ink-soft); }
+svg.fc text.yes { fill: var(--green); }
+svg.fc text.no { fill: var(--rose); }
+svg.fc .a { stroke: var(--ink); stroke-width: 3.5; fill: none; marker-end: url(#fc-ah); }
+svg.fc .a.nohead { marker-end: none; }
+
+/* --- หน้าเอกสาร (แบบฝึกหัด / แบบทดสอบ / เฉลย) --- */
+body.doc pre.code { font-size: 15px; line-height: 1.4; padding: 8px 12px; border-radius: 10px; margin: 6px 0; overflow-x: auto; }
+body.doc pre.code.ln .l::before { width: 1.8em; }
+body.doc code.c { font-size: .95em; }
+body.doc svg.fc { max-width: 100%; height: auto; }
+body.doc svg.fc text { font-size: 26px; }
+@media print {
+    pre.code { border-color: #999; background: #fff !important; }
+    pre.code .l.hl, pre.code .l.hl2, pre.code .l.err { background: #eee !important; }
+    code.c { background: none !important; }
+}
